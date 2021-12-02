@@ -15,12 +15,19 @@
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
+    "@reduxjs/toolkit": "latest",
+    "@superfluid-finance/sdk-redux": "^0.1.0",
+    "ethers": "latest",
+    "graphql": "latest",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
   },
   "devDependencies": {
+    "@types/node": "latest",
     "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@types/react-redux": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "typescript": "latest"
