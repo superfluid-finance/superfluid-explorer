@@ -15,13 +15,19 @@
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
+    "@mui/x-data-grid": "latest",
     "@reduxjs/toolkit": "latest",
-    "@superfluid-finance/sdk-redux": "^0.1.0",
+    "@superfluid-finance/sdk-redux": "^0.1.2",
     "ethers": "latest",
     "graphql": "latest",
+    "lodash": "latest",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-redux": "latest",
+    "redux": "latest",
+    "next-redux-wrapper": "latest",
+    "redux-persist": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",
