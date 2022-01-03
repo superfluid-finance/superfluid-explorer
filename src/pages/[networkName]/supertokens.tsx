@@ -1,7 +1,6 @@
 import {DataGrid, GridColDef, GridRowsProp} from "@mui/x-data-grid";
-import {useListSuperTokensQuery} from "@superfluid-finance/sdk-redux";
 import {useRouter} from "next/router";
-import {findNetwork, networksByName} from "../../redux/store";
+import {findNetwork, networksByName, sfApi} from "../../redux/store";
 
 const columns: GridColDef[] = [
   {field: 'address', headerName: 'Address', width: 150},
@@ -21,7 +20,7 @@ const SuperTokensPage = () => {
     throw Error(`Network ${networkName} not found. TODO(KK): error page`)
   }
 
-  const {data: pagedResult} = useListSuperTokensQuery({
+  const {data: pagedResult} = sfApi.useListSuperTokensQuery({
     chainId: network.chainId, // TODO(KK): Ugly...
     isListed: undefined,
     skip: 0,

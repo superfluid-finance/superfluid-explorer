@@ -1,7 +1,7 @@
 import {Breadcrumbs, Link, Container, Typography, Box, Tabs, Tab} from "@mui/material";
 import {useRouter} from "next/router";
 import {ReactNode, useState} from "react";
-import {useListSuperTokensQuery} from "@superfluid-finance/sdk-redux";
+import {sfApi} from "../../../redux/store";
 
 const SuperTokenPage = () => {
   const router = useRouter()
@@ -12,7 +12,7 @@ const SuperTokenPage = () => {
 
   // TODO(KK): Bit annoying to type out so many things...
   // TODO(KK): aliasing "data" is a bit annoying...
-  const { data: pagedResult, error } = useListSuperTokensQuery({
+  const { data: pagedResult, error } = sfApi.useListSuperTokensQuery({
     chainId: Number(network), // TODO(KK): Ugly...
     isListed: undefined,
     skip: 0,

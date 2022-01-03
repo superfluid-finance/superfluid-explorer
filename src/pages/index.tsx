@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import AppLink from '../components/AppLink';
 import ProTip from '../components/ProTip';
 import Copyright from '../components/Copyright';
-import { asdf } from "@superfluid-finance/sdk-redux"
 
 const Home: NextPage = () => {
   return (
