@@ -9,6 +9,7 @@ import createEmotionCache from '../utils/createEmotionCache';
 import {Provider} from "react-redux";
 import {store, wrapper} from "../redux/store";
 import SfAppBar from "../components/SfAppBar";
+import {Button} from "@mui/material";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();

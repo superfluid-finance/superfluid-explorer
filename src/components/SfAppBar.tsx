@@ -1,9 +1,14 @@
 import * as React from "react";
-import {AppBar, Button, Menu, MenuItem, Toolbar} from "@mui/material";
+import {AppBar, Button, Menu, MenuItem, Stack, Toolbar} from "@mui/material";
 import {chainIds, networks} from "../redux/store";
 import AppLink from "./AppLink";
 
 const SfAppBar = () => {
+  // Disable for prerendering.
+  if (typeof window === 'undefined') {
+    return <></>;
+  }
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -25,6 +30,7 @@ const SfAppBar = () => {
           onClick={openMenu}
           onMouseEnter={openMenu}
           size="medium"
+          variant="contained"
         >
           Network
         </Button>
@@ -38,7 +44,7 @@ const SfAppBar = () => {
             onMouseLeave: closeMenu
           }}
         >
-          {networks.map(network => (<AppLink href={`/${network.name}/supertokens`}><MenuItem>{network.name}</MenuItem></AppLink>))}
+          {networks.map(network => (<AppLink key={network.chainId} href={`/${network.name}/supertokens`}><MenuItem>{network.name}</MenuItem></AppLink>))}
         </Menu>
       </Toolbar>
     </AppBar>

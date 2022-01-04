@@ -7,6 +7,9 @@ const SuperTokenPage = () => {
   const router = useRouter()
   const { network, address } = router.query;
 
+  if (typeof window === 'undefined') {
+    return <></>;
+  }
 
   // TODO(KK): useGetSuperTokenQuery
 
