@@ -24,12 +24,14 @@ const AccountsPage = () => {
   } : skipToken);
 
   const columns: GridColDef[] = [
-    {field: 'id', headerName: 'Address', flex: 1, renderCell: (params: GridRenderCellParams) => (
+    {
+      field: 'id', headerName: 'Address', flex: 1, renderCell: (params: GridRenderCellParams) => (
         <AppLink href={`/${networkName}/accounts/${params.id}`}
         >
           {params.id}
         </AppLink>
-      ),},
+      ),
+    },
   ];
 
   const rows = queryResult.data ? queryResult.data.data.map(x => ({
@@ -37,13 +39,14 @@ const AccountsPage = () => {
   })) : [];
 
   return (
-    <Box sx={{height: 1000, width: '100%'}}>
+    <Box sx={{ width: '100%'}}>
       {
         queryResult.error && <QueryError error={queryResult.error}/>
       }
       {queryResult.data && (
         <div style={{minHeight: 256, width: "100%"}}>
-          <AppDataGrid columns={columns} rows={rows} queryResult={queryResult} setPaging={setPaging}/>
+          <AppDataGrid columns={columns} rows={rows} queryResult={queryResult} setPaging={setPaging} setOrdering={x => {
+          }}/>
         </div>
       )}
     </Box>

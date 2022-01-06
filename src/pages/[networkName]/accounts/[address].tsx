@@ -5,6 +5,7 @@ import {findNetwork, sfApi} from "../../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import AccountStreams from "../../../components/AccountStreams";
 import AppLink from "../../../components/AppLink";
+import AccountIndexes from "../../../components/AccountIndexes";
 
 const getAddress = (address: unknown): string => {
   if (typeof address === "string") {
@@ -74,6 +75,7 @@ const AccountPage = () => {
       <Typography variant="h5" component="h2">
         Indexes
       </Typography>
+      {(network && queryResult.data) && <AccountIndexes network={network} account={queryResult.data}/>}
 
     </TabPanel>
     <TabPanel value={value} index={3}>

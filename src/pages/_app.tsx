@@ -10,6 +10,7 @@ import {Provider} from "react-redux";
 import {store, wrapper} from "../redux/store";
 import SfAppBar from "../components/SfAppBar";
 import {Button} from "@mui/material";
+import {FC} from "react";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -30,12 +31,25 @@ export function MyApp(props: MyAppProps) {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline/>
         <Provider store={store}>
-          {/*<SfAppBar/>*/}
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </Provider>
       </ThemeProvider>
     </CacheProvider>
   );
 }
 
+const Layout: FC = ({ children }) => {
+  return (
+    <>
+      <SfAppBar/>
+      <main>{children}</main>
+    </>
+  )
+}
+
 export default wrapper.withRedux(MyApp);
+
+
+

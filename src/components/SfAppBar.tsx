@@ -1,14 +1,10 @@
 import * as React from "react";
-import {AppBar, Button, Menu, MenuItem, Stack, Toolbar} from "@mui/material";
-import {chainIds, networks} from "../redux/store";
+import {AppBar, Button, Menu, MenuItem, Toolbar} from "@mui/material";
+import {networks} from "../redux/store";
 import AppLink from "./AppLink";
+import AppSearch from "./AppSearch";
 
 const SfAppBar = () => {
-  // Disable for prerendering.
-  if (typeof window === 'undefined') {
-    return <></>;
-  }
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -22,6 +18,7 @@ const SfAppBar = () => {
   return (
     <AppBar position="static">
       <Toolbar>
+        <AppSearch />
         <Button
           id="network-menu"
           aria-controls="network-menu"

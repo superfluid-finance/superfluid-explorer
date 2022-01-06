@@ -20,21 +20,10 @@ const AccountStreams: FC<Props> = ({ network, account }): ReactElement => {
     {field: 'token', headerName: "Token", flex: 1, sortable: false},
   ];
 
+  const [incomingStreamOrdering, setIncomingStreamOrdering] = useState<Ordering<StreamOrderBy> | undefined>(undefined);
   const [incomingStreamPaging, setIncomingStreamPaging] = useState<SkipPaging>(createSkipPaging({
     take: 10
   }));
-  const [outgoingStreamPaging, setOutgoingStreamPaging] = useState<SkipPaging>(createSkipPaging({
-    take: 10
-  }));
-  const [incomingStreamOrdering, setIncomingStreamOrdering] = useState<Ordering<StreamOrderBy> | undefined>(undefined);
-  const [outgoingStreamOrdering, setOutgoingStreamOrdering] = useState<Ordering<StreamOrderBy> | undefined>(undefined);
-
-  const outgoingStreamColumns: GridColDef[] = [
-    {field: 'id', hide: true, flex: 1},
-    {field: 'receiver', headerName: "Receiver", sortable: false, flex: 1},
-    {field: 'currentFlowRate', headerName: "Flow Rate", sortable: true, flex: 1},
-    {field: 'token', headerName: "Token", sortable: false, flex: 1},
-  ];
 
   const incomingStreamsQuery = sfApi.useStreamsQuery({
     chainId: network.chainId,
@@ -51,6 +40,18 @@ const AccountStreams: FC<Props> = ({ network, account }): ReactElement => {
     currentFlowRate: x.currentFlowRate,
     token: x.token
   })) : [];
+
+  const [outgoingStreamOrdering, setOutgoingStreamOrdering] = useState<Ordering<StreamOrderBy> | undefined>(undefined);
+  const [outgoingStreamPaging, setOutgoingStreamPaging] = useState<SkipPaging>(createSkipPaging({
+    take: 10
+  }));
+
+  const outgoingStreamColumns: GridColDef[] = [
+    {field: 'id', hide: true, flex: 1},
+    {field: 'receiver', headerName: "Receiver", sortable: false, flex: 1},
+    {field: 'currentFlowRate', headerName: "Flow Rate", sortable: true, flex: 1},
+    {field: 'token', headerName: "Token", sortable: false, flex: 1},
+  ];
 
   const outgoingStreamsQuery = sfApi.useStreamsQuery({
     chainId: network.chainId,

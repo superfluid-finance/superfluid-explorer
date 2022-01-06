@@ -76,8 +76,8 @@ const AppDataGridPagination: FC<PaginationProps> = ({paging, hasNextPage, setPag
   const page = (paging.skip / pageSize) + 1;
   return (
     <Pagination
-      color="primary"
       count={hasNextPage ? page + 1 : page}
+      disabled={(page === 1 && !hasNextPage)}
       page={page}
       onChange={(event, value) => setPaging({
         skip: (value - 1) * pageSize,
