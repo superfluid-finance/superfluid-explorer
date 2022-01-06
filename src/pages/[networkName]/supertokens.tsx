@@ -1,6 +1,7 @@
 import {DataGrid, GridColDef, GridRowsProp} from "@mui/x-data-grid";
 import {useRouter} from "next/router";
 import {findNetwork, networksByName, sfApi} from "../../redux/store";
+import {skipToken} from "@reduxjs/toolkit/query";
 
 const columns: GridColDef[] = [
   {field: 'id', headerName: 'Address', width: 150},
@@ -8,22 +9,13 @@ const columns: GridColDef[] = [
 ];
 
 const SuperTokensPage = () => {
-  // Disable for prerendering.
-  if (typeof window === 'undefined') {
-    return <></>;
-  }
-
   const router = useRouter()
+
   const {networkName} = router.query;
 
-  const network = findNetwork(networkName);
-  if (!network) {
-    throw Error(`Network ${networkName} not found. TODO(KK): error page`)
-  }
-
-  const {data: pagedResult} = sfApi.useTokensQuery({
-    chainId: network.chainId, // TODO(KK): Ugly...
-  });
+  const {data: pagedResult} = sfApi.useTokensQuery(typeof networkName === "string" ? {
+    chainId: findNetwork(networkName).chainId, // TODO(KK): Ugly...
+  } : skipToken);
 
   const rows = pagedResult ? pagedResult.data.map(x => ({
     id: x.id, // TODO(KK): "id" could be named "address"...
@@ -32,7 +24,9 @@ const SuperTokensPage = () => {
 
   return (
     <div style={{height: 300, width: '100%'}}>
-      <DataGrid rows={rows} columns={columns}/>
+      <DataGrid rows={rows} columns={columns} onRowClick={async (params) => {
+        await router.push(`/${networkName}/supertokens/${params.id}`);
+      }}/>
     </div>);
 }
 

@@ -1,6 +1,7 @@
 import {Breadcrumbs, Link, Container, Typography, Box, Tabs, Tab} from "@mui/material";
 import {useRouter} from "next/router";
 import {ReactNode, useState} from "react";
+import AppLink from "../../../components/AppLink";
 import {sfApi} from "../../../redux/store";
 
 const SuperTokenPage = () => {
@@ -24,11 +25,6 @@ const SuperTokenPage = () => {
     skip: window !== undefined
   });
 
-  console.log({
-    error,
-    pagedResult
-  })
-
   const [value, setValue] = useState(0);
 
   function a11yProps(index: number) {
@@ -47,18 +43,15 @@ const SuperTokenPage = () => {
   return (
     <Container>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" href="/">
-          Networks
-        </Link>
-        <Link underline="hover" color="inherit" href="/">
+        <AppLink underline="hover" color="inherit" href={`/${network}`}>
           {network}
-        </Link>
-        <Link underline="hover" color="inherit" href="/">
+        </AppLink>
+        <AppLink underline="hover" color="inherit" href={`/${network}/supertokens`}>
           Super Tokens
-        </Link>
-        <Link underline="hover" color="inherit" href="/">
+        </AppLink>
+        <AppLink underline="hover" color="inherit" href={`/${network}/supertokens/${address}`}>
           { address }
-        </Link>
+        </AppLink>
       </Breadcrumbs>
       <Typography variant="h1">
         { address }

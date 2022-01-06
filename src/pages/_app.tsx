@@ -30,7 +30,7 @@ export function MyApp(props: MyAppProps) {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline/>
         <Provider store={store}>
-          <SfAppBar/>
+          {/*<SfAppBar/>*/}
           <Component {...pageProps} />
         </Provider>
       </ThemeProvider>

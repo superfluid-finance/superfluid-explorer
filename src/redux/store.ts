@@ -20,6 +20,7 @@ export const {sfApi} = initializeSfApiSlice((options) =>
     },
   })
 );
+
 export const {sfTransactions} = initializeSfTransactionSlice();
 
 export const store = configureStore({
@@ -82,13 +83,21 @@ export const networks: Network[] = [
 export const networksByName = new Map(networks.map(x => [x.name.toLowerCase(), x]))
 export const networksByChainId = new Map(networks.map(x => [x.chainId, x]))
 
-export const findNetwork = (x: unknown): Network | undefined => {
+export const findNetwork = (x: unknown): Network => {
   // if (typeof x === "number") {
   //   return networksByChainId.get(x);
   // }
 
+  let network: Network | undefined = undefined;
+
   if (typeof x === "string") {
-    return networksByName.get(x.toLowerCase());
+    network = networksByName.get(x.toLowerCase());
+  }
+
+  if (network) {
+    return network;
+  } else {
+    throw Error(`Network ${x} not found. TODO(KK): error page`)
   }
 }
 
