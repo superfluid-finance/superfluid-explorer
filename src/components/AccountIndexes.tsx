@@ -11,10 +11,10 @@ import {Card, Typography} from "@mui/material";
 
 interface Props {
   network: Network,
-  account: Account
+  accountAddress: string
 }
 
-const AccountIndexes: FC<Props> = ({network, account}): ReactElement => {
+const AccountIndexes: FC<Props> = ({network, accountAddress}): ReactElement => {
   const [indexSubscriptionPaging, setIndexSubscriptionPaging] = useState<SkipPaging>(createSkipPaging({
     take: 10
   }));
@@ -23,7 +23,7 @@ const AccountIndexes: FC<Props> = ({network, account}): ReactElement => {
     chainId: network.chainId,
     pagination: indexSubscriptionPaging,
     filter: {
-      subscriber: account.id
+      subscriber: accountAddress
     },
     order: indexSubscriptionOrdering
   })
@@ -36,23 +36,29 @@ const AccountIndexes: FC<Props> = ({network, account}): ReactElement => {
     chainId: network.chainId,
     pagination: publishedIndexPaging,
     filter: {
-      publisher: account.id
+      publisher: accountAddress
     },
     order: publishedIndexOrdering
   })
 
   return <>
+    <Typography variant="h5" component="h2">
+      Indexes
+    </Typography>
     <Card>
       <Typography variant="h5" component="h3">
         Publications
       </Typography>
-      <PublishedIndexDataGrid network={network} queryResult={publishedIndexQuery} setPaging={setPublishedIndexPaging} ordering={publishedIndexOrdering} setOrdering={setPublishedIndexOrdering} />
+      <PublishedIndexDataGrid network={network} queryResult={publishedIndexQuery} setPaging={setPublishedIndexPaging}
+                              ordering={publishedIndexOrdering} setOrdering={setPublishedIndexOrdering}/>
     </Card>
     <Card>
       <Typography variant="h5" component="h3">
         Subscriptions
       </Typography>
-    <IndexSubscriptionDataGrid network={network} queryResult={indexSubscriptionQuery} setPaging={setIndexSubscriptionPaging} ordering={indexSubscriptionOrdering} setOrdering={setIndexSubscriptionOrdering}/>
+      <IndexSubscriptionDataGrid network={network} queryResult={indexSubscriptionQuery}
+                                 setPaging={setIndexSubscriptionPaging} ordering={indexSubscriptionOrdering}
+                                 setOrdering={setIndexSubscriptionOrdering}/>
     </Card>
   </>
 }

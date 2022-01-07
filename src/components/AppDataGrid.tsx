@@ -23,55 +23,50 @@ export const AppDataGrid: FC<Props> = ({
                                          ordering,
                                          setOrdering
                                        }): ReactElement => {
-  if (queryResult.data) {
-    const paging = queryResult.data.paging as SkipPaging;
-    const hasNextPage = !!queryResult.data?.nextPaging;
 
-    const sortModel: GridSortModel = ordering ? [{
-      field: ordering.orderBy,
-      sort: ordering.orderDirection,
-    }] : [];
-
-    // TODO(KK): pass props
-    return (
-      <DataGrid
-        autoHeight={true}
-        disableColumnFilter={true}
-        pagination={true}
-        rows={rows}
-        columns={columns}
-        paginationMode="server"
-        components={{
-          // Header: () => (<Box sx={{float: "right"}}><AppDataGridPagination paging={paging} hasNextPage={hasNextPage}
-          //                                                                  setPaging={setPaging}/></Box>),
-          Pagination: () =>
-            AppDataGridPagination({
-              paging,
-              hasNextPage,
-              setPaging
-            }),
-        }}
-        loading={queryResult.isFetching}
-        disableSelectionOnClick={true}
-        sortingMode={"server"}
-        sortModel={sortModel}
-        onSortModelChange={(sortModel) => setOrdering(sortModel[0] ? {
-          orderBy: sortModel[0].field,
-          orderDirection: sortModel[0].sort! // TODO(KK): Forbidden
-        } : undefined)}
-      />)
-  } else {
-    return (<p>Loading...</p>)
-  }
+  return (
+    <DataGrid
+      autoHeight={true}
+      disableColumnFilter={true}
+      pagination={true}
+      rows={rows}
+      columns={columns}
+      paginationMode="server"
+      components={{
+        // Header: () => (<Box sx={{float: "right"}}><AppDataGridPagination paging={paging} hasNextPage={hasNextPage}
+        //                                                                  setPaging={setPaging}/></Box>),
+        Pagination: () =>
+          AppDataGridPagination({
+            paging: queryResult.data?.paging as SkipPaging,
+            hasNextPage: !!queryResult.data?.nextPaging,
+            setPaging
+          }),
+      }}
+      loading={queryResult.isFetching}
+      disableSelectionOnClick={true}
+      sortingMode={"server"}
+      sortModel={ordering ? [{
+        field: ordering.orderBy,
+        sort: ordering.orderDirection,
+      }] : []}
+      onSortModelChange={(sortModel) => setOrdering(sortModel[0] ? {
+        orderBy: sortModel[0].field,
+        orderDirection: sortModel[0].sort! // TODO(KK): Forbidden
+      } : undefined)}
+    />)
 }
 
 interface PaginationProps {
-  paging: SkipPaging,
+  paging?: SkipPaging,
   hasNextPage: boolean,
   setPaging: (paging: SkipPaging) => void
 }
 
 const AppDataGridPagination: FC<PaginationProps> = ({paging, hasNextPage, setPaging}) => {
+  if (!paging) {
+    return (<></>);
+  }
+
   const pageSize = paging.take;
   const page = (paging.skip / pageSize) + 1;
   return ((page == 1 && !hasNextPage) ? <></> :

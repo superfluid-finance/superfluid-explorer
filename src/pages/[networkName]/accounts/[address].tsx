@@ -57,11 +57,7 @@ const AccountPage = () => {
       </Tabs>
     </Box>
     <TabPanel value={value} index={0}>
-
-      <Typography variant="h5" component="h2">
-        Overview
-      </Typography>
-      {(network && queryResult.data) && <AccountOverview network={network} account={queryResult.data}/>}
+      {(network && address) && <AccountOverview network={network} accountAddress={getAddress(address)}/>}
 
     </TabPanel>
     <TabPanel value={value} index={1}>
@@ -69,15 +65,13 @@ const AccountPage = () => {
       <Typography variant="h5" component="h2">
         Streams
       </Typography>
-      {(network && queryResult.data) && <AccountStreams network={network} account={queryResult.data}/>}
+      {(network && address) && <AccountStreams network={network} accountAddress={getAddress(address)}/>}
 
     </TabPanel>
     <TabPanel value={value} index={2}>
 
-      <Typography variant="h5" component="h2">
-        Indexes
-      </Typography>
-      {(network && queryResult.data) && <AccountIndexes network={network} account={queryResult.data}/>}
+
+      {(network && address) && <AccountIndexes network={network} accountAddress={getAddress(address)}/>}
 
     </TabPanel>
     <TabPanel value={value} index={3}>

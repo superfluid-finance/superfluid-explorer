@@ -5,16 +5,16 @@ import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
 import {StreamOrderBy} from "@superfluid-finance/sdk-core/src/subgraph/entities/stream/stream";
 import AppLink from "./AppLink";
-import {Button, Card, Dialog, Typography} from "@mui/material";
+import {Box, Button, Card, Dialog, Typography} from "@mui/material";
 import {StreamDetailsDialog} from "./StreamDetails";
 import FlowingBalance from "./FlowingBalance";
 
 interface Props {
   network: Network,
-  account: Account
+  accountAddress: string
 }
 
-const AccountStreams: FC<Props> = ({network, account}): ReactElement => {
+const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
   // TODO(KK): cast sort field to orderby type
 
   const incomingStreamColumns: GridColDef[] = [
@@ -53,7 +53,7 @@ const AccountStreams: FC<Props> = ({network, account}): ReactElement => {
   const incomingStreamsQuery = sfApi.useStreamsQuery({
     chainId: network.chainId,
     filter: {
-      receiver: account.id
+      receiver: accountAddress
     },
     pagination: incomingStreamPaging,
     order: incomingStreamOrdering
@@ -81,7 +81,7 @@ const AccountStreams: FC<Props> = ({network, account}): ReactElement => {
   const outgoingStreamsQuery = sfApi.useStreamsQuery({
     chainId: network.chainId,
     filter: {
-      sender: account.id
+      sender: accountAddress
     },
     pagination: outgoingStreamPaging,
     order: outgoingStreamOrdering
@@ -91,7 +91,7 @@ const AccountStreams: FC<Props> = ({network, account}): ReactElement => {
 
   // TODO(KK): get rid of anys
 
-  return (<>
+  return (<Box>
     <Card>
       <Typography variant="h5" component="h3">
         Incoming
@@ -108,7 +108,7 @@ const AccountStreams: FC<Props> = ({network, account}): ReactElement => {
                    setPaging={setOutgoingStreamPaging} ordering={outgoingStreamOrdering}
                    setOrdering={(x: any) => setOutgoingStreamOrdering(x)}/>
     </Card>
-  </>);
+  </Box>);
 }
 
 export default AccountStreams;

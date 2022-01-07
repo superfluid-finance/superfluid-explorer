@@ -11,12 +11,12 @@ import {
   IndexSubscriptionOrderBy
 } from "@superfluid-finance/sdk-core/src/subgraph/entities/indexSubscription/indexSubscription";
 import AccountTokenSnapshotDataGrid from "./AccountTokenSnapshotDataGrid";
-import {Card} from "@mui/material";
+import {Card, Typography} from "@mui/material";
 
 const AccountOverview: FC<{
   network: Network,
-  account: Account
-}> = ({network, account}): ReactElement => {
+  accountAddress: string
+}> = ({network, accountAddress}): ReactElement => {
   const [accountTokenSnapshotPaging, setAccountTokenSnapshotPaging] = useState<SkipPaging>(createSkipPaging({
     take: 10
   }));
@@ -25,19 +25,20 @@ const AccountOverview: FC<{
     chainId: network.chainId,
     pagination: accountTokenSnapshotPaging,
     filter: {
-      account: account.id
+      account: accountAddress
     },
     order: accountTokenSnapshotOrdering
   })
 
   return (<>
-    {
-      accountTokenSnapshotsQuery.data && (<Card><AccountTokenSnapshotDataGrid queryResult={accountTokenSnapshotsQuery}
-                                                                              setPaging={setAccountTokenSnapshotPaging}
-                                                                              ordering={accountTokenSnapshotOrdering}
-                                                                              setOrdering={setAccountTokenSnapshotOrdering}/></Card>)
-    }
-  </>);
+    <Typography variant="h5" component="h2">
+      Overview
+    </Typography>
+    <Card>
+      <AccountTokenSnapshotDataGrid queryResult={accountTokenSnapshotsQuery}
+                                    setPaging={setAccountTokenSnapshotPaging}
+                                    ordering={accountTokenSnapshotOrdering}
+                                    setOrdering={setAccountTokenSnapshotOrdering}/></Card></>)
 }
 
 export default AccountOverview;
