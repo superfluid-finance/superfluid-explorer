@@ -1,27 +1,36 @@
 import {FC} from "react";
 import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef} from "@mui/x-data-grid";
-import {Index, IndexSubscription, Ordering, PagedResult, SkipPaging} from "@superfluid-finance/sdk-core";
+import {Index, Ordering, PagedResult, SkipPaging} from "@superfluid-finance/sdk-core";
 import {IndexOrderBy} from "@superfluid-finance/sdk-core/src/subgraph/entities/index";
+import {IndexPublicationDetailsDialog} from "./IndexPublicationDetails";
+import {Network} from "../redux/store";
 
 interface Props {
+  network: Network,
   queryResult: {
     isFetching: boolean
     data?: PagedResult<Index>
   }
   setPaging: (paging: SkipPaging) => void;
-  ordering?: Ordering<IndexOrderBy>;
+  ordering: Ordering<IndexOrderBy> | undefined;
   setOrdering: (ordering?: Ordering<IndexOrderBy>) => void;
 }
 
-const columns: GridColDef[] = [
-  {field: 'id', hide: true, flex: 1}
-];
+const PublishedIndexDataGrid: FC<Props> = ({network, queryResult, setPaging, ordering, setOrdering}) => {
+  const columns: GridColDef[] = [
+    {field: 'id', hide: true, flex: 1},
+    {field: 'token', headerName: "Token", sortable: true, flex: 1},
+    {field: 'totalUnits', headerName: "Total Units", sortable: true, flex: 1},
+    {field: 'totalAmountDistributedUntilUpdatedAt', headerName: "Total Distributed", sortable: true, flex: 1},
+    {
+      field: 'details', headerName: "Details", flex: 1, sortable: false, renderCell: (cellParams) => (
+        <IndexPublicationDetailsDialog network={network} indexId={cellParams.id.toString()}/>
+      )
+    }
+  ];
 
-const PublishedIndexDataGrid: FC<Props> = ({queryResult, setPaging, ordering, setOrdering}) => {
-  const rows = queryResult.data ? queryResult.data.data.map((x: Index) => ({
-    id: x.id
-  })) : [];
+  const rows: Index[] = queryResult.data ? queryResult.data.data : [];
 
   return (<AppDataGrid columns={columns} rows={rows} queryResult={queryResult} setPaging={setPaging} ordering={ordering}
                        setOrdering={x => setOrdering(x as any)}/>);

@@ -12,7 +12,7 @@ interface Props {
     data?: PagedResult<IndexSubscription>
   }
   setPaging: (paging: SkipPaging) => void;
-  ordering?: Ordering<IndexSubscriptionOrderBy>;
+  ordering: Ordering<IndexSubscriptionOrderBy> | undefined;
   setOrdering: (ordering?: Ordering<IndexSubscriptionOrderBy>) => void;
 }
 

@@ -83,11 +83,6 @@ const AppSearch: FC = () => {
       <Dialog onClose={handleClose} open={open}>
         <DialogTitle>Search</DialogTitle>
         <DialogContent>
-          <DialogContent>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContent>
-
           <TextField autoFocus fullWidth id="outlined-search" label="Search field" type="search"
                      onChange={(e) => setSearchTerm(e.currentTarget.value)}/>
           <List>

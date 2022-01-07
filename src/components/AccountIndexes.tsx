@@ -44,7 +44,7 @@ const AccountIndexes: FC<Props> = ({network, account}): ReactElement => {
   return <>
     <div style={{height: 640, width: "100%"}}>
       <p>Published Indexes</p>
-      <PublishedIndexDataGrid queryResult={publishedIndexQuery} setPaging={setPublishedIndexPaging} ordering={publishedIndexOrdering} setOrdering={setPublishedIndexOrdering} />
+      <PublishedIndexDataGrid network={network} queryResult={publishedIndexQuery} setPaging={setPublishedIndexPaging} ordering={publishedIndexOrdering} setOrdering={setPublishedIndexOrdering} />
     </div>
     <p>Index Subscriptions</p>
     <IndexSubscriptionDataGrid queryResult={indexSubscriptionQuery} setPaging={setIndexSubscriptionPaging} ordering={indexSubscriptionOrdering} setOrdering={setIndexSubscriptionOrdering}/>
