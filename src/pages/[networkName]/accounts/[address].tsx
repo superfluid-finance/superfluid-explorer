@@ -6,6 +6,7 @@ import {skipToken} from "@reduxjs/toolkit/query";
 import AccountStreams from "../../../components/AccountStreams";
 import AppLink from "../../../components/AppLink";
 import AccountIndexes from "../../../components/AccountIndexes";
+import AccountOverview from "../../../components/AccountOverview";
 
 const getAddress = (address: unknown): string => {
   if (typeof address === "string") {
@@ -60,7 +61,7 @@ const AccountPage = () => {
       <Typography variant="h5" component="h2">
         Overview
       </Typography>
-
+      {(network && queryResult.data) && <AccountOverview network={network} account={queryResult.data}/>}
 
     </TabPanel>
     <TabPanel value={value} index={1}>

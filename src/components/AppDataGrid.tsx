@@ -74,15 +74,15 @@ interface PaginationProps {
 const AppDataGridPagination: FC<PaginationProps> = ({paging, hasNextPage, setPaging}) => {
   const pageSize = paging.take;
   const page = (paging.skip / pageSize) + 1;
-  return (
-    <Pagination
-      count={hasNextPage ? page + 1 : page}
-      disabled={(page === 1 && !hasNextPage)}
-      page={page}
-      onChange={(event, value) => setPaging({
-        skip: (value - 1) * pageSize,
-        take: paging.take
-      })}
-    />
+  return ((page == 1 && !hasNextPage) ? <></> :
+      <Pagination
+        count={hasNextPage ? page + 1 : page}
+        disabled={(page === 1 && !hasNextPage)}
+        page={page}
+        onChange={(event, value) => setPaging({
+          skip: (value - 1) * pageSize,
+          take: paging.take
+        })}
+      />
   );
 };
