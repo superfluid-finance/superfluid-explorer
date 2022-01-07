@@ -5,7 +5,7 @@ import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
 import {StreamOrderBy} from "@superfluid-finance/sdk-core/src/subgraph/entities/stream/stream";
 import AppLink from "./AppLink";
-import {Button, Dialog} from "@mui/material";
+import {Button, Card, Dialog, Typography} from "@mui/material";
 import {StreamDetailsDialog} from "./StreamDetails";
 import FlowingBalance from "./FlowingBalance";
 
@@ -92,18 +92,22 @@ const AccountStreams: FC<Props> = ({network, account}): ReactElement => {
   // TODO(KK): get rid of anys
 
   return (<>
-    <>INCOMING</>
-    <div style={{height: 640, width: "100%"}}>
+    <Card>
+      <Typography variant="h5" component="h3">
+        Incoming
+      </Typography>
       <AppDataGrid columns={incomingStreamColumns} rows={incomingStreamRows} queryResult={incomingStreamsQuery}
                    setPaging={setIncomingStreamPaging} ordering={incomingStreamOrdering}
                    setOrdering={(x: any) => setIncomingStreamOrdering(x)}/>
-    </div>
-    <p>OUTGOING</p>
-    <div style={{height: 640, width: "100%"}}>
+    </Card>
+    <Card>
+      <Typography variant="h5" component="h3">
+        Outgoing
+      </Typography>
       <AppDataGrid columns={outgoingStreamColumns} rows={outgoingStreamRows} queryResult={outgoingStreamsQuery}
                    setPaging={setOutgoingStreamPaging} ordering={outgoingStreamOrdering}
                    setOrdering={(x: any) => setOutgoingStreamOrdering(x)}/>
-    </div>
+    </Card>
   </>);
 }
 

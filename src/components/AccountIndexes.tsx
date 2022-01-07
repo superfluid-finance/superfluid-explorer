@@ -1,13 +1,13 @@
 import {Network, sfApi} from "../redux/store";
 import {Account, createSkipPaging, Ordering, SkipPaging} from "@superfluid-finance/sdk-core";
 import {FC, ReactElement, useState} from "react";
-import {AppDataGrid} from "./AppDataGrid";
 import IndexSubscriptionDataGrid from "./IndexSubscriptionDataGrid";
 import {IndexOrderBy} from "@superfluid-finance/sdk-core/src/subgraph/entities/index";
 import {
   IndexSubscriptionOrderBy
 } from "@superfluid-finance/sdk-core/src/subgraph/entities/indexSubscription/indexSubscription";
 import PublishedIndexDataGrid from "./PublishedIndexDataGrid";
+import {Card, Typography} from "@mui/material";
 
 interface Props {
   network: Network,
@@ -24,7 +24,8 @@ const AccountIndexes: FC<Props> = ({network, account}): ReactElement => {
     pagination: indexSubscriptionPaging,
     filter: {
       subscriber: account.id
-    }
+    },
+    order: indexSubscriptionOrdering
   })
 
   const [publishedIndexPaging, setPublishedIndexPaging] = useState<SkipPaging>(createSkipPaging({
@@ -33,21 +34,26 @@ const AccountIndexes: FC<Props> = ({network, account}): ReactElement => {
   const [publishedIndexOrdering, setPublishedIndexOrdering] = useState<Ordering<IndexOrderBy> | undefined>(undefined);
   const publishedIndexQuery = sfApi.useIndexesQuery({
     chainId: network.chainId,
-    pagination: indexSubscriptionPaging,
+    pagination: publishedIndexPaging,
     filter: {
       publisher: account.id
     },
     order: publishedIndexOrdering
   })
 
-
   return <>
-    <div style={{height: 640, width: "100%"}}>
-      <p>Published Indexes</p>
+    <Card>
+      <Typography variant="h5" component="h3">
+        Publications
+      </Typography>
       <PublishedIndexDataGrid network={network} queryResult={publishedIndexQuery} setPaging={setPublishedIndexPaging} ordering={publishedIndexOrdering} setOrdering={setPublishedIndexOrdering} />
-    </div>
-    <p>Index Subscriptions</p>
-    <IndexSubscriptionDataGrid queryResult={indexSubscriptionQuery} setPaging={setIndexSubscriptionPaging} ordering={indexSubscriptionOrdering} setOrdering={setIndexSubscriptionOrdering}/>
+    </Card>
+    <Card>
+      <Typography variant="h5" component="h3">
+        Subscriptions
+      </Typography>
+    <IndexSubscriptionDataGrid network={network} queryResult={indexSubscriptionQuery} setPaging={setIndexSubscriptionPaging} ordering={indexSubscriptionOrdering} setOrdering={setIndexSubscriptionOrdering}/>
+    </Card>
   </>
 }
 

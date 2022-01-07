@@ -5,8 +5,11 @@ import {IndexSubscription, Ordering, PagedResult, SkipPaging} from "@superfluid-
 import {
   IndexSubscriptionOrderBy
 } from "@superfluid-finance/sdk-core/src/subgraph/entities/indexSubscription/indexSubscription";
+import {Network} from "../redux/store";
+import {IndexSubscriptionDetailsDialog} from "./IndexSubscriptionDetails";
 
 interface Props {
+  network: Network,
   queryResult: {
     isFetching: boolean
     data?: PagedResult<IndexSubscription>
@@ -16,14 +19,23 @@ interface Props {
   setOrdering: (ordering?: Ordering<IndexSubscriptionOrderBy>) => void;
 }
 
-const columns: GridColDef[] = [
-  {field: 'id', hide: true, flex: 1}
-];
+const IndexSubscriptionDataGrid: FC<Props> = ({network, queryResult, setPaging, ordering, setOrdering}) => {
+  const columns: GridColDef[] = [
+    {field: 'id', hide: true},
+    {field: 'publisher', headerName: "Publisher", flex: 1},
+    {field: 'token', headerName: "Token", flex: 1},
+    {field: 'approved', headerName: "Approved", flex: 1},
+    {field: 'units', headerName: "Total Index Units", flex: 1},
+    {field: 'totalAmountReceivedUntilUpdatedAt', headerName: "Total Amount Received", flex: 1},
+    {field: 'units', headerName: "Subscription Units", flex: 1},
+    {
+      field: 'details', headerName: "Details", flex: 1, sortable: false, renderCell: (cellParams) => (
+        <IndexSubscriptionDetailsDialog network={network} indexSubscriptionId={cellParams.id.toString()}/>
+      )
+    }
+  ];
 
-const IndexSubscriptionDataGrid: FC<Props> = ({queryResult, setPaging, ordering, setOrdering}) => {
-  const rows = queryResult.data ? queryResult.data.data.map((x: IndexSubscription) => ({
-    id: x.id
-  })) : [];
+  const rows: IndexSubscription[] = queryResult.data ? queryResult.data.data : [];
 
   return (<AppDataGrid columns={columns} rows={rows} queryResult={queryResult} setPaging={setPaging} ordering={ordering}
                        setOrdering={x => setOrdering(x as any)}/>);

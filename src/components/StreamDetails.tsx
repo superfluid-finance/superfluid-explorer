@@ -1,9 +1,28 @@
 import {FC, forwardRef, ReactElement, Ref, useState} from "react";
 import {Network, sfApi} from "../redux/store";
-import {createSkipPaging, Ordering, SkipPaging, StreamPeriodOrderBy} from "@superfluid-finance/sdk-core";
+import {
+  createSkipPaging,
+  IndexSubscription,
+  Ordering,
+  SkipPaging, Stream,
+  StreamPeriodOrderBy
+} from "@superfluid-finance/sdk-core";
 import Container from "@mui/material/Container";
 import StreamPeriodDataGrid from "./StreamPeriodDataGrid";
-import {AppBar, Box, Button, Dialog, Grid, IconButton, Slide, TextField, Toolbar, Typography} from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  Card,
+  Dialog,
+  Grid,
+  IconButton,
+  List, ListItem, ListItemText,
+  Slide,
+  TextField,
+  Toolbar,
+  Typography
+} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import {TransitionProps} from "@mui/material/transitions";
 import {AppDataGrid} from "./AppDataGrid";
@@ -19,6 +38,8 @@ const StreamDetails: FC<Props> = ({network, streamId}) => {
     id: streamId
   });
 
+  const stream: Stream | undefined | null = streamQuery.data
+
   const [streamPeriodPaging, setStreamPeriodPaging] = useState<SkipPaging>(createSkipPaging())
   const [streamPeriodOrdering, setStreamPeriodOrdering] = useState<Ordering<StreamPeriodOrderBy> | undefined>()
   const streamPeriodListQuery = sfApi.useStreamPeriodsQuery({
@@ -31,24 +52,37 @@ const StreamDetails: FC<Props> = ({network, streamId}) => {
   });
 
   return (<Container>
-    {streamQuery.data && (<><Grid container spacing={2}>
-      <Grid item xs={8}>
-        Sender
-      </Grid>
-      <Grid item xs={4}>
-        {streamQuery.data.sender}
-      </Grid>
-      <Grid item xs={8}>
-        Receiver
-      </Grid>
-      <Grid item xs={4}>
-        {streamQuery.data.receiver}
-      </Grid></Grid></>)}
-    <div style={{height: 640, width: "100%"}}>
-      <StreamPeriodDataGrid queryResult={streamPeriodListQuery} setPaging={setStreamPeriodPaging}
-                            ordering={streamPeriodOrdering} setOrdering={setStreamPeriodOrdering}/>
-    </div>
-
+    <Typography variant="h2">
+      Stream Details
+    </Typography>
+    {stream && (<>
+      <Card>
+        <List>
+          <ListItem divider>
+            <ListItemText primary="Token" secondary={stream.token}/>
+          </ListItem>
+          <ListItem divider>
+            <ListItemText primary="Sender" secondary={stream.sender}/>
+          </ListItem>
+          <ListItem divider>
+            <ListItemText primary="Receiver" secondary={stream.receiver}/>
+          </ListItem>
+          <ListItem divider>
+            <ListItemText primary="Current Flow Rate" secondary={stream.currentFlowRate}/>
+          </ListItem>
+          <ListItem>
+            <ListItemText primary="Created At" secondary={new Date(stream.createdAtTimestamp * 1000).toDateString()}/>
+          </ListItem>
+        </List>
+      </Card>
+      <Card>
+        <Typography variant="h3">
+          Stream Periods
+        </Typography>
+        <StreamPeriodDataGrid queryResult={streamPeriodListQuery} setPaging={setStreamPeriodPaging}
+                              ordering={streamPeriodOrdering} setOrdering={setStreamPeriodOrdering}/>
+      </Card>
+    </>)}
   </Container>)
 };
 

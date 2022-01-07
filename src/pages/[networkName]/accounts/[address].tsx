@@ -44,7 +44,7 @@ const AccountPage = () => {
         </AppLink>
       </Breadcrumbs>
     }
-    <Typography variant="h1">
+    <Typography variant="h2" component="h1">
       {address}
     </Typography>
     <Box sx={{borderBottom: 1, borderColor: 'divider'}}>

@@ -34,7 +34,7 @@ const columns: GridColDef[] = [
         {...{
           balance: streamPeriod.totalAmountStreamed ?? "0",
           balanceTimestamp: streamPeriod.startedAtTimestamp,
-          flowRate: streamPeriod.flowRate
+          flowRate: streamPeriod.stoppedAtTimestamp ? "0" : streamPeriod.flowRate
         }}
       />)
     }
