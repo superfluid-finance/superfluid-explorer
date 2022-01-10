@@ -1,78 +1,122 @@
-import {FC, ReactElement, useEffect, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {
-  Box,
-  Modal,
   Button,
   TextField,
   Typography,
   DialogContent,
   Dialog,
   DialogTitle,
-  ListItem,
-  List
+  InputAdornment, Card, ListItem, List
 } from "@mui/material";
 import {useRouter} from "next/router";
-import {findNetwork, Network, networks, sfApi} from "../redux/store";
-import {Account, Token} from "@superfluid-finance/sdk-core";
+import {Network, networks, sfApi} from "../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {ethers} from "ethers";
+import {gql} from "graphql-request";
+import SearchIcon from "@mui/icons-material/Search";
+import AccountAddress from "./AccountAddress";
+import SuperTokenAddress from "./SuperTokenAddress";
+import {PossibleErrors} from "@superfluid-finance/sdk-redux";
+import QueryError from "./QueryError";
+import Box from "@mui/material/Box";
+import {BoxProps} from "@mui/material/Box/Box";
 
-const AppSearch: FC = () => {
-  // return <TextField id="outlined-search" label="Search field" type="search" />
+const searchByAddressDocument = gql`
+  query Search($addressId: ID, $addressString: String) {
+    tokensByAddress: tokens(where: {id: $addressId}) {
+      id
+    }
+    tokensByUnderlyingAddress: tokens(where: {underlyingToken: $addressString}) {
+      id
+    }
+    accounts(where: {id: $addressId}) {
+      id
+    }
+  }
+`;
+
+type SubgraphSearchResult = {
+  tokensByAddress: {
+    id: string
+  }[],
+  tokensByUnderlyingAddress: {
+    id: string
+  }[],
+  accounts: {
+    id: string
+  }[],
+}
+
+type NetworkSearchResult = {
+  network: Network,
+  error?: PossibleErrors,
+  tokens: {
+    id: string
+  }[],
+  accounts: {
+    id: string
+  }[]
+}
+
+const useSearchHook = (address: string): NetworkSearchResult[] => {
+  const isSearchTermAddress = ethers.utils.isAddress(address);
+  const chainResults: NetworkSearchResult[] = [];
+
+  networks.forEach(network => {
+    const queryState = sfApi.useAdHocSubgraphQuery(isSearchTermAddress ? {
+      chainId: network.chainId,
+      document: searchByAddressDocument,
+      variables: {
+        addressId: address.toLowerCase(),
+        addressString: address.toLowerCase()
+      }
+    } : skipToken);
+
+    if (!!queryState.data) {
+      const queryResult = queryState.data as SubgraphSearchResult;
+      chainResults.push({
+        network: network,
+        error: queryState.error,
+        tokens: queryResult.tokensByAddress.concat(queryResult.tokensByUnderlyingAddress),
+        accounts: queryResult.accounts
+      });
+    }
+  });
+
+  if (!isSearchTermAddress) {
+    return [];
+  }
+
+  return chainResults;
+}
+
+const AppSearch: FC<BoxProps> = (boxProps) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const router = useRouter()
-  const {networkName} = router.query;
+
   const [searchTerm, setSearchTerm] = useState("");
-  const [accounts, setAccounts] = useState<({ network: Network } & Account)[]>([]);
-  const [tokens, setTokens] = useState<({ network: Network } & Token)[]>([]);
 
-  const network = typeof networkName === "string" ? findNetwork(networkName) : undefined;
-  const isAddress = ethers.utils.isAddress(searchTerm);
-
-  const accountsQuery = sfApi.useAccountsQuery((network && isAddress) ? {
-    chainId: network.chainId,
-    filter: {
-      id: searchTerm
+  useEffect(() => {
+    const handleRouteChange = () => {
+      handleClose();
     }
-  } : skipToken);
-  const tokensQuery = sfApi.useTokensQuery((network && isAddress) ? {
-    chainId: network.chainId,
-    filter: {
-      id: searchTerm
-    }
-  } : skipToken);
 
-  // const [triggerAccountsQuery, accountsQueryResult] = sfApi.useLazyAccountsQuery();
-  // const [triggerTokensQuery, tokensQueryResult] = sfApi.useLazyTokensQuery();
-  //
-  //
-  //
-  // useEffect(() => {
-  //   const accountQueryResults = networks.map((network) => {
-  //     return triggerAccountsQuery({
-  //       chainId: network.chainId,
-  //       filter: {
-  //         id: searchTerm
-  //       }
-  //     })
-  //   })
-  //
-  //   const tokenQueryResults = networks.map((network) => {
-  //     return triggerAccountsQuery({
-  //       chainId: network.chainId,
-  //       filter: {
-  //         id: searchTerm
-  //       }
-  //     })
-  //   })
-  //
-  // }, [searchTerm])
+    router.events.on('routeChangeStart', handleRouteChange)
+
+    // If the component is unmounted, unsubscribe
+    // from the event with the `off` method:
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [])
+
+  const networkSearchResults = useSearchHook(searchTerm);
 
   return (
-    <>
+    <Box {...boxProps} >
       <Button id="search-button"
               aria-controls="network-menu"
               aria-haspopup="true"
@@ -80,26 +124,39 @@ const AppSearch: FC = () => {
               onClick={handleOpen}
               size="medium"
               variant="contained">Search</Button>
-      <Dialog onClose={handleClose} open={open}>
+      <Dialog
+        fullWidth
+        maxWidth="lg"
+        onClose={handleClose} open={open}>
         <DialogTitle>Search</DialogTitle>
         <DialogContent>
-          <TextField autoFocus fullWidth id="outlined-search" label="Search field" type="search"
+          <TextField autoFocus fullWidth id="outlined-search" type="search"
+                     InputProps={{
+                       startAdornment: (
+                         <InputAdornment position="start">
+                           <SearchIcon/>
+                         </InputAdornment>
+                       ),
+                     }}
+                     variant="outlined"
                      onChange={(e) => setSearchTerm(e.currentTarget.value)}/>
-          <List>
-            {
-              accountsQuery.data ? accountsQuery.data.data.map(x => (<ListItem>{x.id}</ListItem>)) :
-                <ListItem>No accounts.</ListItem>
-            }
-          </List>
-          <List>
-            {
-              tokensQuery.data ? tokensQuery.data.data.map(x => (<ListItem>{x.id}</ListItem>)) :
-                <ListItem>No tokens.</ListItem>
-            }
-          </List>
+          {
+            networkSearchResults.map(x => (<Box key={x.network.chainId}>
+              <Typography variant="h3">
+                {x.network.name}
+              </Typography>
+              {x.error ? <QueryError error={x.error}/> : <Card sx={{p: 2}}>
+                <List>
+                  {x.accounts.map(account => <ListItem key={`${x.network.chainId}_${account.id}`}><AccountAddress network={x.network} address={account.id}/></ListItem>)}
+                  {x.tokens.map(token => <ListItem key={`${x.network.chainId}_${token.id}`}><SuperTokenAddress network={x.network} address={token.id}/></ListItem>)}
+                </List>
+              </Card>
+              }
+            </Box>))
+          }
         </DialogContent>
       </Dialog>
-    </>
+    </Box>
   );
 }
 

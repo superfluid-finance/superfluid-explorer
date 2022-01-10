@@ -19,30 +19,30 @@ const SfAppBar = () => {
     <AppBar position="static">
       <Toolbar>
         <AppSearch />
-        <Button
-          id="network-menu"
-          aria-controls="network-menu"
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={openMenu}
-          onMouseEnter={openMenu}
-          size="medium"
-          variant="contained"
-        >
-          Network
-        </Button>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={closeMenu}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-            onMouseLeave: closeMenu
-          }}
-        >
-          {networks.map(network => (<AppLink key={network.chainId} href={`/${network.name}/supertokens`}><MenuItem>{network.name}</MenuItem></AppLink>))}
-        </Menu>
+        {/*<Button*/}
+        {/*  id="network-menu"*/}
+        {/*  aria-controls="network-menu"*/}
+        {/*  aria-haspopup="true"*/}
+        {/*  aria-expanded={open ? 'true' : undefined}*/}
+        {/*  onClick={openMenu}*/}
+        {/*  onMouseEnter={openMenu}*/}
+        {/*  size="medium"*/}
+        {/*  variant="contained"*/}
+        {/*>*/}
+        {/*  Network*/}
+        {/*</Button>*/}
+        {/*<Menu*/}
+        {/*  id="basic-menu"*/}
+        {/*  anchorEl={anchorEl}*/}
+        {/*  open={open}*/}
+        {/*  onClose={closeMenu}*/}
+        {/*  MenuListProps={{*/}
+        {/*    'aria-labelledby': 'basic-button',*/}
+        {/*    onMouseLeave: closeMenu*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  {networks.map(network => (<AppLink key={network.chainId} href={`/${network.name}/supertokens`}><MenuItem>{network.name}</MenuItem></AppLink>))}*/}
+        {/*</Menu>*/}
       </Toolbar>
     </AppBar>
   );
