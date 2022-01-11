@@ -24,6 +24,9 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import {TransitionProps} from "@mui/material/transitions";
 import IndexUpdatedEventDataGrid from "./IndexUpdatedEventDataGrid";
+import DetailsDialog from "./DetailsDialog";
+import SuperTokenAddress from "./SuperTokenAddress";
+import AccountAddress from "./AccountAddress";
 
 interface Props {
   network: Network;
@@ -49,7 +52,7 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
     order: indexUpdatedEventPagingOrdering
   });
 
-  const index: Index | undefined | null  = indexQuery.data
+  const index: Index | undefined | null = indexQuery.data
 
   return (<Container>
     <Typography variant="h2">
@@ -60,10 +63,11 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
         <Card>
           <List>
             <ListItem divider>
-              <ListItemText primary="Token" secondary={index.token}/>
+              <ListItemText primary="Token" secondary={<SuperTokenAddress network={network} address={index.token}/>}/>
             </ListItem>
             <ListItem divider>
-              <ListItemText primary="Publisher" secondary={index.publisher} />
+              <ListItemText primary="Publisher"
+                            secondary={<AccountAddress network={network} address={index.publisher}/>}/>
             </ListItem>
             <ListItem divider>
               <ListItemText primary="Total Units" secondary={index.totalUnits}/>
@@ -88,15 +92,6 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
 
 export default IndexPublicationDetails;
 
-const Transition = forwardRef(function Transition(
-  props: TransitionProps & {
-    children: ReactElement;
-  },
-  ref: Ref<unknown>,
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 export const IndexPublicationDetailsDialog: FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
 
@@ -113,26 +108,9 @@ export const IndexPublicationDetailsDialog: FC<Props> = (props) => {
       <Button variant="outlined" onClick={handleClickOpen}>
         Details
       </Button>
-      <Dialog
-        fullScreen
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-      >
-        <AppBar sx={{position: 'relative'}}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon/>
-            </IconButton>
-          </Toolbar>
-        </AppBar>
+      <DetailsDialog open={open} handleClose={handleClose}>
         <IndexPublicationDetails {...props} />
-      </Dialog>
+      </DetailsDialog>
     </Box>
   );
 }

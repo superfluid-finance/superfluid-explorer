@@ -58,7 +58,7 @@ const SuperTokenPage: FC = () => {
           <ListItem divider>
             <ListItemText secondary="Symbol" primary={superToken.symbol}/>
           </ListItem>
-          <ListItem divider>
+          <ListItem>
             <ListItemText secondary="Underlying Token Address" primary={superToken.underlyingAddress}/>
           </ListItem>
         </List> : <CircularProgress/>}

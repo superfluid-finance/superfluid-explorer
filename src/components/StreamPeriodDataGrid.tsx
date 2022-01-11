@@ -9,6 +9,7 @@ import {
   StreamPeriodOrderBy
 } from "@superfluid-finance/sdk-core";
 import FlowingBalance from "./FlowingBalance";
+import FlowRate from "./FlowRate";
 
 interface Props {
   queryResult: {
@@ -22,7 +23,7 @@ interface Props {
 
 const columns: GridColDef[] = [
   {field: 'id', hide: true, sortable: false, flex: 1},
-  {field: 'flowRate', headerName: "Flow Rate", sortable: true, flex: 1},
+  {field: 'flowRate', headerName: "Flow Rate", sortable: true, flex: 1, renderCell: params => (<FlowRate flowRate={params.value} />)},
   {
     field: 'totalAmountStreamed',
     headerName: "Total Amount Streamed",

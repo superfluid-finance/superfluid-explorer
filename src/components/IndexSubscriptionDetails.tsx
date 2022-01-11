@@ -27,6 +27,10 @@ import IndexUpdatedEventDataGrid from "./IndexUpdatedEventDataGrid";
 import SubscriptionUnitsUpdatedEventDataGrid from "./SubscriptionUnitsUpdatedEventDataGrid";
 import {BigNumber} from "ethers";
 import {skipToken} from "@reduxjs/toolkit/query";
+import DetailsDialog from "./DetailsDialog";
+import IndexPublicationDetails from "./IndexPublicationDetails";
+import SuperTokenAddress from "./SuperTokenAddress";
+import AccountAddress from "./AccountAddress";
 
 interface Props {
   network: Network;
@@ -70,13 +74,16 @@ const IndexSubscriptionDetails: FC<Props> = ({network, indexSubscriptionId}) => 
         <Card>
           <List>
             <ListItem divider>
-              <ListItemText primary="Token" secondary={indexSubscription.token}/>
+              <ListItemText primary="Token"
+                            secondary={<SuperTokenAddress network={network} address={indexSubscription.token}/>}/>
             </ListItem>
             <ListItem divider>
-              <ListItemText primary="Publisher" secondary={indexSubscription.publisher}/>
+              <ListItemText primary="Publisher"
+                            secondary={<AccountAddress network={network} address={indexSubscription.publisher}/>}/>
             </ListItem>
             <ListItem>
-              <ListItemText primary="Subscriber" secondary={indexSubscription.subscriber}/>
+              <ListItemText primary="Subscriber"
+                            secondary={<AccountAddress network={network} address={indexSubscription.subscriber}/>}/>
             </ListItem>
             <ListItem>
               <ListItemText primary="Total Units Received" secondary={calculateUnitsReceived(
@@ -84,7 +91,7 @@ const IndexSubscriptionDetails: FC<Props> = ({network, indexSubscriptionId}) => 
                 BigNumber.from(indexSubscription.totalAmountReceivedUntilUpdatedAt),
                 BigNumber.from(indexSubscription.indexValueUntilUpdatedAt),
                 Number(indexSubscription.units)
-                ).toString()}/>
+              ).toString()}/>
             </ListItem>
           </List>
         </Card>
@@ -92,25 +99,17 @@ const IndexSubscriptionDetails: FC<Props> = ({network, indexSubscriptionId}) => 
           <Typography variant="h3">
             Distributions
           </Typography>
-          <SubscriptionUnitsUpdatedEventDataGrid indexSubscription={indexSubscription} queryResult={subscriptionUnitsUpdatedEventQuery}
-                                     setPaging={setSubscriptionUnitsUpdatedEventPaging}
-                                     ordering={subscriptionUnitsUpdatedEventPagingOrdering}
-                                     setOrdering={setSubscriptionUnitsUpdatedEventOrdering}/>
+          <SubscriptionUnitsUpdatedEventDataGrid indexSubscription={indexSubscription}
+                                                 queryResult={subscriptionUnitsUpdatedEventQuery}
+                                                 setPaging={setSubscriptionUnitsUpdatedEventPaging}
+                                                 ordering={subscriptionUnitsUpdatedEventPagingOrdering}
+                                                 setOrdering={setSubscriptionUnitsUpdatedEventOrdering}/>
         </Card>
       </>)}
   </Container>)
 };
 
 export default IndexSubscriptionDetails;
-
-const Transition = forwardRef(function Transition(
-  props: TransitionProps & {
-    children: ReactElement;
-  },
-  ref: Ref<unknown>,
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 export const IndexSubscriptionDetailsDialog: FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
@@ -128,26 +127,9 @@ export const IndexSubscriptionDetailsDialog: FC<Props> = (props) => {
       <Button variant="outlined" onClick={handleClickOpen}>
         Details
       </Button>
-      <Dialog
-        fullScreen
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-      >
-        <AppBar sx={{position: 'relative'}}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon/>
-            </IconButton>
-          </Toolbar>
-        </AppBar>
+      <DetailsDialog open={open} handleClose={handleClose}>
         <IndexSubscriptionDetails {...props} />
-      </Dialog>
+      </DetailsDialog>
     </Box>
   );
 }

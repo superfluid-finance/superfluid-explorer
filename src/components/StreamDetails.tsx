@@ -5,7 +5,7 @@ import {
   IndexSubscription,
   Ordering,
   SkipPaging, Stream,
-  StreamPeriodOrderBy
+  StreamPeriodOrderBy, SuperToken
 } from "@superfluid-finance/sdk-core";
 import Container from "@mui/material/Container";
 import StreamPeriodDataGrid from "./StreamPeriodDataGrid";
@@ -26,6 +26,9 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import {TransitionProps} from "@mui/material/transitions";
 import {AppDataGrid} from "./AppDataGrid";
+import DetailsDialog from "./DetailsDialog";
+import AccountAddress from "./AccountAddress";
+import SuperTokenAddress from "./SuperTokenAddress";
 
 interface Props {
   network: Network;
@@ -59,13 +62,13 @@ const StreamDetails: FC<Props> = ({network, streamId}) => {
       <Card>
         <List>
           <ListItem divider>
-            <ListItemText primary="Token" secondary={stream.token}/>
+            <ListItemText primary="Token" secondary={<SuperTokenAddress network={network} address={stream.token} />}/>
           </ListItem>
           <ListItem divider>
-            <ListItemText primary="Sender" secondary={stream.sender}/>
+            <ListItemText primary="Sender" secondary={<AccountAddress network={network} address={stream.sender} />}/>
           </ListItem>
           <ListItem divider>
-            <ListItemText primary="Receiver" secondary={stream.receiver}/>
+            <ListItemText primary="Receiver" secondary={<AccountAddress network={network} address={stream.receiver} />}/>
           </ListItem>
           <ListItem divider>
             <ListItemText primary="Current Flow Rate" secondary={stream.currentFlowRate}/>
@@ -86,16 +89,6 @@ const StreamDetails: FC<Props> = ({network, streamId}) => {
   </Container>)
 };
 
-
-const Transition = forwardRef(function Transition(
-  props: TransitionProps & {
-    children: ReactElement;
-  },
-  ref: Ref<unknown>,
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 export const StreamDetailsDialog: FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
 
@@ -112,27 +105,9 @@ export const StreamDetailsDialog: FC<Props> = (props) => {
       <Button variant="outlined" onClick={handleClickOpen}>
         Details
       </Button>
-      <Dialog
-        fullScreen
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-      >
-        <AppBar sx={{position: 'relative'}}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon/>
-            </IconButton>
-          </Toolbar>
-        </AppBar>
+      <DetailsDialog open={open} handleClose={handleClose}>
         <StreamDetails {...props} />
-      </Dialog>
+      </DetailsDialog>
     </Box>
   );
 }
-
