@@ -1,125 +1,97 @@
-import {Breadcrumbs, Link, Container, Typography, Box, Tabs, Tab} from "@mui/material";
+import {FC, useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {ReactNode, useState} from "react";
-import AppLink from "../../../components/AppLink";
-import {sfApi} from "../../../redux/store";
+import {findNetwork, sfApi} from "../../../redux/store";
+import {skipToken} from "@reduxjs/toolkit/query";
+import {Card, CircularProgress, Container, List, ListItem, ListItemText, Typography} from "@mui/material";
+import {Box} from "@mui/system";
+import {Token} from "@superfluid-finance/sdk-core";
+import NetworkDisplay from "../../../components/NetworkDisplay";
+import {getFramework} from "@superfluid-finance/sdk-redux/dist/module/sdkReduxConfig"; // TODO(KK): Think through the import
 
-const SuperTokenPage = () => {
+const SuperTokenPage: FC = () => {
   const router = useRouter()
-  const { network, address } = router.query;
+  const {networkName, address} = router.query;
 
-  if (typeof window === 'undefined') {
-    return <></>;
-  }
+  const network = typeof networkName === "string" ? findNetwork(networkName) : undefined;
+  const queryState = sfApi.useTokenQuery(network ? {
+    chainId: network.chainId,
+    id: getAddress(address)
+  } : skipToken);
 
-  // TODO(KK): useGetSuperTokenQuery
+  const superToken: Token | null | undefined = queryState.data;
 
-  // TODO(KK): Bit annoying to type out so many things...
-  // TODO(KK): aliasing "data" is a bit annoying...
-  const { data: pagedResult, error } = sfApi.useListSuperTokensQuery({
-    chainId: Number(network), // TODO(KK): Ugly...
-    isListed: undefined,
-    skip: 0,
-    take: 10
-  }, {
-    skip: window !== undefined
-  });
+  const [totalSupply, setTotalSupply] = useState<string | undefined>();
 
-  const [value, setValue] = useState(0);
+  // useEffect(() => {
+  //   if (network) {
+  //     getFramework(network.chainId).then(x => x.loadSuperToken(getAddress(address))).then(async (x) => {
+  //       setTotalSupply(x.totalSupply(await getFramework(network.chainId).))
+  //     })
+  //   }
+  // }, [network])
+  //
+  // const web3Token = network ? getFramework(network.chainId). : ;
 
-  function a11yProps(index: number) {
-    return {
-      id: `tab-${index}`,
-      'aria-controls': `tabpanel-${index}`,
-    };
-  }
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
 
-  const superToken = pagedResult ? pagedResult.data[0] : null;
+  // const queryState = sfApi.useListEventsQuery(network ? {
+  //   chainId: network.chainId,
+  //
+  // } : skipToken);
 
-  return (
-    <Container>
-      <Breadcrumbs aria-label="breadcrumb">
-        <AppLink underline="hover" color="inherit" href={`/${network}`}>
-          {network}
-        </AppLink>
-        <AppLink underline="hover" color="inherit" href={`/${network}/supertokens`}>
-          Super Tokens
-        </AppLink>
-        <AppLink underline="hover" color="inherit" href={`/${network}/supertokens/${address}`}>
-          { address }
-        </AppLink>
-      </Breadcrumbs>
-      <Typography variant="h1">
-        { address }
+  return (<Container>
+    <Box>
+      <Typography variant="h2" component="h1">
+        Super Token
       </Typography>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Overview" {...a11yProps(0)} />
-          <Tab label="Streams" {...a11yProps(1)} />
-          <Tab label="Indexes" {...a11yProps(2)} />
-          <Tab label="Events" {...a11yProps(3)} />
-        </Tabs>
-      </Box>
-      <TabPanel value={value} index={0}>
+      <Card>
+        {(network && superToken) ? <List>
+          <ListItem divider>
+            <ListItemText primary={superToken.name} secondary="Name"/>
+          </ListItem>
+          <ListItem divider>
+            <ListItemText secondary="Network" primary={<NetworkDisplay network={network}/>}/>
+          </ListItem>
+          <ListItem divider>
+            <ListItemText secondary="Address" primary={superToken.id}/>
+          </ListItem>
+          <ListItem divider>
+            <ListItemText secondary="Symbol" primary={superToken.symbol}/>
+          </ListItem>
+          <ListItem divider>
+            <ListItemText secondary="Underlying Token Address" primary={superToken.underlyingAddress}/>
+          </ListItem>
+        </List> : <CircularProgress/>}
+      </Card>
 
-        <Typography variant="h5" component="h2">
-          Overview
-        </Typography>
-
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-
-        <Typography variant="h5" component="h2">
-          Streams
-        </Typography>
-
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-
-        <Typography variant="h5" component="h2">
-          Indexes
-        </Typography>
-
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-
-        <Typography variant="h5" component="h2">
-          Events
-        </Typography>
-
-      </TabPanel>
-    </Container>
-  )
+      {/*<Card>*/}
+      {/*  {(network && superToken) ? <List>*/}
+      {/*    <ListItem divider>*/}
+      {/*      <ListItemText primary={superToken.name} secondary="Name"/>*/}
+      {/*    </ListItem>*/}
+      {/*    <ListItem divider>*/}
+      {/*      <ListItemText secondary="Network" primary={<NetworkDisplay network={network}/>}/>*/}
+      {/*    </ListItem>*/}
+      {/*    <ListItem divider>*/}
+      {/*      <ListItemText secondary="Address" primary={superToken.id}/>*/}
+      {/*    </ListItem>*/}
+      {/*    <ListItem divider>*/}
+      {/*      <ListItemText secondary="Symbol" primary={superToken.symbol}/>*/}
+      {/*    </ListItem>*/}
+      {/*    <ListItem divider>*/}
+      {/*      <ListItemText secondary="Underlying Token Address" primary={superToken.underlyingAddress}/>*/}
+      {/*    </ListItem>*/}
+      {/*  </List> : <CircularProgress/>}*/}
+      {/*</Card>*/}
+    </Box>
+  </Container>);
 }
 
-interface TabPanelProps {
-  children?: ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
+const getAddress = (address: unknown): string => {
+  if (typeof address === "string") {
+    return address;
+  }
+  throw Error(`Address ${address} not found. TODO(KK): error page`)
 }
 
 export default SuperTokenPage;

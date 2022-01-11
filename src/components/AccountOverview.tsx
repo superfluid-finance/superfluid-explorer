@@ -35,7 +35,8 @@ const AccountOverview: FC<{
       Overview
     </Typography>
     <Card>
-      <AccountTokenSnapshotDataGrid queryResult={accountTokenSnapshotsQuery}
+      <AccountTokenSnapshotDataGrid network={network}
+                                    queryResult={accountTokenSnapshotsQuery}
                                     setPaging={setAccountTokenSnapshotPaging}
                                     ordering={accountTokenSnapshotOrdering}
                                     setOrdering={setAccountTokenSnapshotOrdering}/></Card></>)

@@ -5,6 +5,7 @@ import {Index, Ordering, PagedResult, SkipPaging} from "@superfluid-finance/sdk-
 import {IndexOrderBy} from "@superfluid-finance/sdk-core/src/subgraph/entities/index";
 import {IndexPublicationDetailsDialog} from "./IndexPublicationDetails";
 import {Network} from "../redux/store";
+import SuperTokenAddress from "./SuperTokenAddress";
 
 interface Props {
   network: Network,
@@ -20,7 +21,7 @@ interface Props {
 const PublishedIndexDataGrid: FC<Props> = ({network, queryResult, setPaging, ordering, setOrdering}) => {
   const columns: GridColDef[] = [
     {field: 'id', hide: true, flex: 1},
-    {field: 'token', headerName: "Token", sortable: true, flex: 1},
+    {field: 'token', headerName: "Token", sortable: true, flex: 1, renderCell: (params) => (<SuperTokenAddress network={network} address={params.value} />)},
     {field: 'totalUnits', headerName: "Total Units", sortable: true, flex: 1},
     {field: 'totalAmountDistributedUntilUpdatedAt', headerName: "Total Distributed", sortable: true, flex: 1},
     {

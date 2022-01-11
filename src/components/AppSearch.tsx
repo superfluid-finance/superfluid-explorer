@@ -20,6 +20,7 @@ import {PossibleErrors} from "@superfluid-finance/sdk-redux";
 import QueryError from "./QueryError";
 import Box from "@mui/material/Box";
 import {BoxProps} from "@mui/material/Box/Box";
+import NetworkDisplay from "./NetworkDisplay";
 
 const searchByAddressDocument = gql`
   query Search($addressId: ID, $addressString: String) {
@@ -141,14 +142,14 @@ const AppSearch: FC<BoxProps> = (boxProps) => {
                      variant="outlined"
                      onChange={(e) => setSearchTerm(e.currentTarget.value)}/>
           {
-            networkSearchResults.map(x => (<Box key={x.network.chainId}>
-              <Typography variant="h3">
-                {x.network.name}
-              </Typography>
+            networkSearchResults.filter(x => x.tokens.length || x.accounts.length).map(x => (<Box key={x.network.chainId}>
+              <NetworkDisplay network={x.network}/>
               {x.error ? <QueryError error={x.error}/> : <Card sx={{p: 2}}>
                 <List>
-                  {x.accounts.map(account => <ListItem key={`${x.network.chainId}_${account.id}`}><AccountAddress network={x.network} address={account.id}/></ListItem>)}
-                  {x.tokens.map(token => <ListItem key={`${x.network.chainId}_${token.id}`}><SuperTokenAddress network={x.network} address={token.id}/></ListItem>)}
+                  {x.accounts.map(account => <ListItem key={`${x.network.chainId}_${account.id}`}><AccountAddress
+                    network={x.network} address={account.id}/></ListItem>)}
+                  {x.tokens.map(token => <ListItem key={`${x.network.chainId}_${token.id}`}><SuperTokenAddress
+                    network={x.network} address={token.id}/></ListItem>)}
                 </List>
               </Card>
               }

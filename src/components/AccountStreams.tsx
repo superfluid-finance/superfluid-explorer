@@ -8,6 +8,7 @@ import AppLink from "./AppLink";
 import {Box, Button, Card, Dialog, Typography} from "@mui/material";
 import {StreamDetailsDialog} from "./StreamDetails";
 import FlowingBalance from "./FlowingBalance";
+import SuperTokenAddress from "./SuperTokenAddress";
 
 interface Props {
   network: Network,
@@ -37,7 +38,7 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
         />)
       }
     },
-    {field: 'token', headerName: "Token", flex: 1, sortable: false},
+    {field: 'token', headerName: "Token", flex: 1, sortable: false, renderCell: (params) => (<SuperTokenAddress network={network} address={params.value} />)},
     {
       field: 'details', headerName: "Details", flex: 1, sortable: false, renderCell: (cellParams) => (
         <StreamDetailsDialog network={network} streamId={cellParams.id.toString()}/>
@@ -70,7 +71,7 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
     {field: 'id', hide: true, flex: 1},
     {field: 'receiver', headerName: "Receiver", sortable: false, flex: 1},
     {field: 'currentFlowRate', headerName: "Flow Rate", sortable: true, flex: 1},
-    {field: 'token', headerName: "Token", sortable: false, flex: 1},
+    {field: 'token', headerName: "Token", sortable: false, flex: 1, renderCell: (params) => (<SuperTokenAddress network={network} address={params.value} />)},
     {
       field: 'details', headerName: "Details", flex: 1, sortable: false, renderCell: (cellParams) => (
         <StreamDetailsDialog network={network} streamId={cellParams.id.toString()}/>
