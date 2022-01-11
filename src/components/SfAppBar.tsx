@@ -19,6 +19,7 @@ const SfAppBar = () => {
     <AppBar position="static">
       <Toolbar>
         <AppSearch />
+
         {/*<Button*/}
         {/*  id="network-menu"*/}
         {/*  aria-controls="network-menu"*/}

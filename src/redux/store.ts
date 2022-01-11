@@ -43,40 +43,57 @@ export const chainIds = [
   4, // RINKEBY
   5, // GOERLI
   42, // KOVAN
-  // 100, // XDAI //TODO(KK): No infura support
+  100, // XDAI //TODO(KK): No infura support
   137, // MATIC
   80001, // MUMBAI
 ];
 
 export type Network = {
   name: string,
-  chainId: number
+  chainId: number,
+  subgraphUrl: string
+}
+
+function ensureDefined<T>(value: T | undefined): T {
+  if (!value) throw Error('Value has to be defined.');
+  return value;
 }
 
 export const networks: Network[] = [
   {
     name: "ropsten",
-    chainId: 3
+    chainId: 3,
+    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_ROPSTEN),
   },
   {
     name: "rinkeby",
-    chainId: 4
+    chainId: 4,
+    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_RINKEBY),
   },
   {
     name: "goerli",
-    chainId: 5
+    chainId: 5,
+    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_GOERLI),
   },
   {
     name: "kovan",
-    chainId: 42
+    chainId: 42,
+    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_KOVAN),
+  },
+  {
+    name: "xDAI",
+    chainId: 100,
+    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_XDAI),
   },
   {
     name: "matic",
-    chainId: 137
+    chainId: 137,
+    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_MATIC),
   },
   {
     name: "mumbai",
-    chainId: 80001
+    chainId: 80001,
+    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_MUMBAI),
   },
 ];
 

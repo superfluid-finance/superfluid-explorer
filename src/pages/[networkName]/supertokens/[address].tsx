@@ -4,9 +4,8 @@ import {findNetwork, sfApi} from "../../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {Card, CircularProgress, Container, List, ListItem, ListItemText, Typography} from "@mui/material";
 import {Box} from "@mui/system";
-import {Token} from "@superfluid-finance/sdk-core";
 import NetworkDisplay from "../../../components/NetworkDisplay";
-import {getFramework} from "@superfluid-finance/sdk-redux/dist/module/sdkReduxConfig"; // TODO(KK): Think through the import
+// import {getFramework} from "@superfluid-finance/sdk-redux/dist/module/sdkReduxConfig"; // TODO(KK): Think through the import
 
 const SuperTokenPage: FC = () => {
   const router = useRouter()

@@ -21,13 +21,14 @@ import QueryError from "./QueryError";
 import Box from "@mui/material/Box";
 import {BoxProps} from "@mui/material/Box/Box";
 import NetworkDisplay from "./NetworkDisplay";
+import _ from "lodash";
 
 const searchByAddressDocument = gql`
-  query Search($addressId: ID, $addressString: String) {
+  query Search($addressId: ID, $addressBytes: Bytes) {
     tokensByAddress: tokens(where: {id: $addressId}) {
       id
     }
-    tokensByUnderlyingAddress: tokens(where: {underlyingToken: $addressString}) {
+    tokensByUnderlyingAddress: tokens(where: {underlyingAddress: $addressBytes}) {
       id
     }
     accounts(where: {id: $addressId}) {
@@ -69,7 +70,7 @@ const useSearchHook = (address: string): NetworkSearchResult[] => {
       document: searchByAddressDocument,
       variables: {
         addressId: address.toLowerCase(),
-        addressString: address.toLowerCase()
+        addressBytes: address.toLowerCase()
       }
     } : skipToken);
 
@@ -78,7 +79,7 @@ const useSearchHook = (address: string): NetworkSearchResult[] => {
       chainResults.push({
         network: network,
         error: queryState.error,
-        tokens: queryResult.tokensByAddress.concat(queryResult.tokensByUnderlyingAddress),
+        tokens: _.uniq(queryResult.tokensByAddress.concat(queryResult.tokensByUnderlyingAddress)),
         accounts: queryResult.accounts
       });
     }
@@ -131,7 +132,11 @@ const AppSearch: FC<BoxProps> = (boxProps) => {
         onClose={handleClose} open={open}>
         <DialogTitle>Search</DialogTitle>
         <DialogContent>
-          <TextField autoFocus fullWidth id="outlined-search" type="search"
+          <TextField sx={{
+            pt: 1
+          }}
+            autoFocus fullWidth id="outlined-search" type="search"
+                     value={searchTerm}
                      InputProps={{
                        startAdornment: (
                          <InputAdornment position="start">

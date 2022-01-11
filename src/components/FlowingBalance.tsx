@@ -1,5 +1,6 @@
 import React, {FC, ReactElement, useEffect, useState} from "react";
 import { ethers} from 'ethers';
+import {Box} from "@mui/material";
 
 const ANIMATION_MINIMUM_STEP_TIME = 100;
 
@@ -8,7 +9,7 @@ const FlowingBalance: FC<{
   balanceTimestamp: number;
   flowRate: string;
   format?: (flowingBalance: string) => string;
-}> = ({ balance, balanceTimestamp, flowRate, format = x => x }): ReactElement => {
+}> = ({ balance, balanceTimestamp, flowRate, format = x => ethers.utils.formatEther(x) }): ReactElement => {
   const [formattedValue, setFormattedValue] = useState("");
   useEffect(() => {
     const balanceBigNumber = ethers.BigNumber.from(balance);
@@ -47,7 +48,9 @@ const FlowingBalance: FC<{
       stopAnimation = true;
     };
   }, [balanceTimestamp]);
-  return <span>{formattedValue}</span>;
+  return <Box component="span" sx={{
+    textOverflow: "ellipsis"
+  }} >{formattedValue}</Box>;
 };
 
 export default FlowingBalance;

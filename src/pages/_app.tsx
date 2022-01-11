@@ -9,8 +9,10 @@ import createEmotionCache from '../utils/createEmotionCache';
 import {Provider} from "react-redux";
 import {store, wrapper} from "../redux/store";
 import SfAppBar from "../components/SfAppBar";
-import {Button} from "@mui/material";
 import {FC} from "react";
+import Box from "@mui/material/Box";
+import "../styles/graphiql.min.css"
+import "../styles/app.css"
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -40,12 +42,16 @@ export function MyApp(props: MyAppProps) {
   );
 }
 
-const Layout: FC = ({ children }) => {
+const Layout: FC = ({children}) => {
   return (
-    <>
+    <Box sx={{
+      display: "flex",
+      flexFlow: "column",
+      height: "100vh"
+    }}>
       <SfAppBar/>
-      <main>{children}</main>
-    </>
+      <Box component="main" sx={{height: "100vh"}}>{children}</Box>
+    </Box>
   )
 }
 

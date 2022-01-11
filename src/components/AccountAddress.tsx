@@ -7,7 +7,7 @@ const AccountAddress: FC<{
   network: Network,
   address: string
 }> = ({network, address}) => {
-  return (<AppLink href={`/${network.name}/accounts/${address}`}>
+  return (<AppLink className="address" href={`/${network.name}/accounts/${address}`}>
     {ethers.utils.getAddress(address)}
   </AppLink>);
 }
