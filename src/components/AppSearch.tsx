@@ -133,7 +133,7 @@ const AppSearch: FC<BoxProps> = (boxProps) => {
         <DialogTitle>Search</DialogTitle>
         <DialogContent>
           <TextField sx={{
-            pt: 1
+            mt: 1
           }}
             autoFocus fullWidth id="outlined-search" type="search"
                      value={searchTerm}
