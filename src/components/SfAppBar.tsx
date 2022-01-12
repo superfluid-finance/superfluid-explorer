@@ -18,7 +18,12 @@ const SfAppBar = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <AppSearch />
+        <AppSearch/>
+        <AppLink href="/subgraph"> <Button sx={{ml: 1}}
+                                           id="search-button"
+                                           size="medium"
+                                           variant="contained">Subgraph</Button></AppLink>
+
 
         {/*<Button*/}
         {/*  id="network-menu"*/}
