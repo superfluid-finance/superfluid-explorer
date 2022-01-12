@@ -1,11 +1,11 @@
-import {FC} from "react";
 import dynamic from "next/dynamic";
+import {NextPage} from "next";
 
 const DynamicLazyComponent = dynamic(() => import('../components/SubgraphExplorer'), {
   ssr: false,
 })
 
-const SubgraphPage: FC = () => {
+const SubgraphPage: NextPage = () => {
   return (<DynamicLazyComponent />);
 }
 

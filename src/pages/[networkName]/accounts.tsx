@@ -8,8 +8,9 @@ import {skipToken} from "@reduxjs/toolkit/query";
 import {createSkipPaging, SkipPaging} from "@superfluid-finance/sdk-core"
 import AppLink from "../../components/AppLink";
 import {AppDataGrid} from "../../components/AppDataGrid";
+import {NextPage} from "next";
 
-const AccountsPage = () => {
+const AccountsPage: NextPage = () => {
   const router = useRouter()
 
   const [paging, setPaging] = useState<SkipPaging>(createSkipPaging({
@@ -51,6 +52,10 @@ const AccountsPage = () => {
       )}
     </Box>
   );
+}
+
+AccountsPage.getInitialProps = () => {
+  return {};
 }
 
 export default AccountsPage;

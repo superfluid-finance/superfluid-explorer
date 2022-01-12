@@ -5,9 +5,11 @@ import {skipToken} from "@reduxjs/toolkit/query";
 import {Card, CircularProgress, Container, List, ListItem, ListItemText, Typography} from "@mui/material";
 import {Box} from "@mui/system";
 import NetworkDisplay from "../../../components/NetworkDisplay";
+import { Token } from "@superfluid-finance/sdk-core";
+import {NextPage} from "next";
 // import {getFramework} from "@superfluid-finance/sdk-redux/dist/module/sdkReduxConfig"; // TODO(KK): Think through the import
 
-const SuperTokenPage: FC = () => {
+const SuperTokenPage: NextPage = () => {
   const router = useRouter()
   const {networkName, address} = router.query;
 
@@ -84,6 +86,10 @@ const SuperTokenPage: FC = () => {
       {/*</Card>*/}
     </Box>
   </Container>);
+}
+
+SuperTokenPage.getInitialProps = () => {
+  return {};
 }
 
 const getAddress = (address: unknown): string => {

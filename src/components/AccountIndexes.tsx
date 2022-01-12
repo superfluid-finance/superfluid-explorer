@@ -2,10 +2,10 @@ import {Network, sfApi} from "../redux/store";
 import {Account, createSkipPaging, Ordering, SkipPaging} from "@superfluid-finance/sdk-core";
 import {FC, ReactElement, useState} from "react";
 import IndexSubscriptionDataGrid from "./IndexSubscriptionDataGrid";
-import {IndexOrderBy} from "@superfluid-finance/sdk-core/src/subgraph/entities/index";
 import {
-  IndexSubscriptionOrderBy
-} from "@superfluid-finance/sdk-core/src/subgraph/entities/indexSubscription/indexSubscription";
+  IndexSubscriptionOrderBy,
+  IndexOrderBy
+} from "@superfluid-finance/sdk-core";
 import PublishedIndexDataGrid from "./PublishedIndexDataGrid";
 import {Card, Typography} from "@mui/material";
 

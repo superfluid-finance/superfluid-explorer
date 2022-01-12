@@ -1,15 +1,11 @@
 import {FC, ReactElement, useState} from "react";
 import {Network, sfApi} from "../redux/store";
 import {
-  Account, AccountTokenSnapshot,
   AccountTokenSnapshotOrderBy,
   createSkipPaging,
   Ordering,
   SkipPaging
 } from "@superfluid-finance/sdk-core";
-import {
-  IndexSubscriptionOrderBy
-} from "@superfluid-finance/sdk-core/src/subgraph/entities/indexSubscription/indexSubscription";
 import AccountTokenSnapshotDataGrid from "./AccountTokenSnapshotDataGrid";
 import {Card, Typography} from "@mui/material";
 

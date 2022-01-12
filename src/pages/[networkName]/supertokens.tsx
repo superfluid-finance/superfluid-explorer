@@ -2,13 +2,14 @@ import {DataGrid, GridColDef, GridRowsProp} from "@mui/x-data-grid";
 import {useRouter} from "next/router";
 import {findNetwork, networksByName, sfApi} from "../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
+import {NextPage} from "next";
 
 const columns: GridColDef[] = [
   {field: 'id', headerName: 'Address', width: 150},
   {field: 'symbol', headerName: 'Symbol', width: 150},
 ];
 
-const SuperTokensPage = () => {
+const SuperTokensPage: NextPage = () => {
   const router = useRouter()
 
   const {networkName} = router.query;

@@ -7,6 +7,8 @@ import AccountStreams from "../../../components/AccountStreams";
 import AppLink from "../../../components/AppLink";
 import AccountIndexes from "../../../components/AccountIndexes";
 import AccountOverview from "../../../components/AccountOverview";
+import {NextPage} from "next";
+import SuperTokenPage from "../supertokens/[address]";
 
 const getAddress = (address: unknown): string => {
   if (typeof address === "string") {
@@ -16,7 +18,7 @@ const getAddress = (address: unknown): string => {
   throw Error(`Address ${address} not found. TODO(KK): error page`)
 }
 
-const AccountPage = () => {
+const AccountPage: NextPage = () => {
   const router = useRouter()
   const {networkName, address} = router.query;
   const [value, setValue] = useState(0);
@@ -83,6 +85,10 @@ const AccountPage = () => {
     </TabPanel>
   </Container>);
 
+}
+
+AccountPage.getInitialProps = () => {
+  return {};
 }
 
 interface TabPanelProps {

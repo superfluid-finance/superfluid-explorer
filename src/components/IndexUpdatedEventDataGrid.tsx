@@ -8,7 +8,7 @@ import {
   PagedResult,
   SkipPaging
 } from "@superfluid-finance/sdk-core";
-import {IndexUpdatedEvent} from "@superfluid-finance/sdk-core/src";
+import {IndexUpdatedEvent} from "@superfluid-finance/sdk-core";
 import {BigNumber} from "ethers";
 
 interface Props {

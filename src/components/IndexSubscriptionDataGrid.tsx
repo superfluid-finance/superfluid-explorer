@@ -1,10 +1,13 @@
 import {FC} from "react";
 import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef} from "@mui/x-data-grid";
-import {IndexSubscription, Ordering, PagedResult, SkipPaging} from "@superfluid-finance/sdk-core";
 import {
-  IndexSubscriptionOrderBy
-} from "@superfluid-finance/sdk-core/src/subgraph/entities/indexSubscription/indexSubscription";
+  IndexSubscription,
+  IndexSubscriptionOrderBy,
+  Ordering,
+  PagedResult,
+  SkipPaging
+} from "@superfluid-finance/sdk-core";
 import {Network} from "../redux/store";
 import {IndexSubscriptionDetailsDialog} from "./IndexSubscriptionDetails";
 import AccountAddress from "./AccountAddress";

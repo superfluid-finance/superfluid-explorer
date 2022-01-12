@@ -1,11 +1,9 @@
 import {Network, sfApi} from "../redux/store";
 import {FC, ReactElement, useState} from "react";
-import {Account, createSkipPaging, Ordering, SkipPaging, Stream, StreamPeriod} from "@superfluid-finance/sdk-core";
+import {createSkipPaging, Ordering, SkipPaging, Stream, StreamOrderBy} from "@superfluid-finance/sdk-core";
 import {AppDataGrid} from "./AppDataGrid";
-import {GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
-import {StreamOrderBy} from "@superfluid-finance/sdk-core/src/subgraph/entities/stream/stream";
-import AppLink from "./AppLink";
-import {Box, Button, Card, Dialog, Typography} from "@mui/material";
+import {GridColDef} from "@mui/x-data-grid";
+import {Box, Card, Typography} from "@mui/material";
 import {StreamDetailsDialog} from "./StreamDetails";
 import FlowingBalance from "./FlowingBalance";
 import SuperTokenAddress from "./SuperTokenAddress";
