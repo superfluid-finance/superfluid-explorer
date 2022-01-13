@@ -5,8 +5,7 @@ import {
   Typography,
   DialogContent,
   Dialog,
-  DialogTitle,
-  InputAdornment, Card, ListItem, List, Menu, MenuItem, ListItemButton, CircularProgress, Container, Grid
+  InputAdornment, ListItem, List, ListItemButton, CircularProgress, Grid
 } from "@mui/material";
 import {useRouter} from "next/router";
 import {Network, networks, sfApi} from "../redux/store";
@@ -14,25 +13,24 @@ import {skipToken} from "@reduxjs/toolkit/query";
 import {ethers} from "ethers";
 import {gql} from "graphql-request";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountAddress, {AccountAddressFormatted} from "./AccountAddress";
-import SuperTokenAddress, {SuperTokenFormatted} from "./SuperTokenAddress";
+import {AccountAddressFormatted} from "./AccountAddress";
+import {SuperTokenFormatted} from "./SuperTokenAddress";
 import {PossibleErrors} from "@superfluid-finance/sdk-redux";
 import QueryError from "./QueryError";
 import Box from "@mui/material/Box";
 import {BoxProps} from "@mui/material/Box/Box";
 import _ from "lodash";
-import AppLink from "./AppLink";
 import NextLink from 'next/link';
 import NetworkFormatted from "./NetworkDisplay";
 
 const searchByAddressDocument = gql`
   query Search($addressId: ID, $addressBytes: Bytes) {
-    tokensByAddress: tokens(where: {id: $addressId}) {
+    tokensByAddress: tokens(where: {id: $addressId, isSuperToken: true}) {
       id
       symbol
       name
     }
-    tokensByUnderlyingAddress: tokens(where: {underlyingAddress: $addressBytes}) {
+    tokensByUnderlyingAddress: tokens(where: {isSuperToken: true, underlyingAddress: $addressBytes}) {
       id
       symbol
       name

@@ -16,7 +16,7 @@ import {
   Divider,
   IconButton,
   List,
-  ListItem, ListItemText,
+  ListItem, ListItemText, Skeleton,
   Slide,
   Toolbar,
   Typography
@@ -28,6 +28,7 @@ import DetailsDialog from "./DetailsDialog";
 import SuperTokenAddress from "./SuperTokenAddress";
 import AccountAddress from "./AccountAddress";
 import IndexSubscriptionDataGrid from "./IndexSubscriptionDataGrid";
+import SkeletonAddress from "./skeletons/SkeletonAddress";
 
 interface Props {
   network: Network;
@@ -72,45 +73,44 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
     <Typography variant="h2">
       Published Index Details
     </Typography>
-    {
-      index && (<>
-        <Card variant="outlined">
-          <List>
-            <ListItem divider>
-              <ListItemText primary="Token" secondary={<SuperTokenAddress network={network} address={index.token}/>}/>
-            </ListItem>
-            <ListItem divider>
-              <ListItemText primary="Publisher"
-                            secondary={<AccountAddress network={network} address={index.publisher}/>}/>
-            </ListItem>
-            <ListItem divider>
-              <ListItemText primary="Total Units" secondary={index.totalUnits}/>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="Total Distributed" secondary={index.totalAmountDistributedUntilUpdatedAt}/>
-            </ListItem>
-          </List>
-        </Card>
-        <Card variant="outlined">
-          <Typography variant="h3">
-            Distributions
-          </Typography>
-          <IndexUpdatedEventDataGrid index={index} queryResult={indexUpdatedEventQuery}
-                                     setPaging={setIndexUpdatedEventPaging}
-                                     ordering={indexUpdatedEventPagingOrdering}
-                                     setOrdering={setIndexUpdatedEventOrdering}/>
-        </Card>
-        <Card variant="outlined">
-          <Typography variant="h3">
-            Subscriptions
-          </Typography>
-          <IndexSubscriptionDataGrid network={network}
-                                     queryResult={indexSubscriptionEventQuery}
-                                     setPaging={setIndexSubscriptionPaging}
-                                     ordering={indexSubscriptionPagingOrdering}
-                                     setOrdering={setIndexSubscriptionOrdering}/>
-        </Card>
-      </>)}
+    <Card variant="outlined">
+      <List>
+        <ListItem divider>
+          <ListItemText primary="Token"
+                        secondary={(network && index) ? <SuperTokenAddress network={network} address={index.token}/> :
+                          <SkeletonAddress/>}/>
+        </ListItem>
+        <ListItem divider>
+          <ListItemText primary="Publisher"
+                        secondary={(network && index) ? <AccountAddress network={network} address={index.publisher}/> : <SkeletonAddress/>}/>
+        </ListItem>
+        <ListItem divider>
+          <ListItemText primary="Total Units" secondary={index ? index.totalUnits : <Skeleton sx={{width: "75px"}} />}/>
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Total Distributed" secondary={index ? index.totalAmountDistributedUntilUpdatedAt : <Skeleton sx={{width: "75px"}} />}/>
+        </ListItem>
+      </List>
+    </Card>
+    <Card variant="outlined">
+      <Typography variant="h3">
+        Distributions
+      </Typography>
+      <IndexUpdatedEventDataGrid index={index} queryResult={indexUpdatedEventQuery}
+                                 setPaging={setIndexUpdatedEventPaging}
+                                 ordering={indexUpdatedEventPagingOrdering}
+                                 setOrdering={setIndexUpdatedEventOrdering}/>
+    </Card>
+    <Card variant="outlined">
+      <Typography variant="h3">
+        Subscriptions
+      </Typography>
+      <IndexSubscriptionDataGrid network={network}
+                                 queryResult={indexSubscriptionEventQuery}
+                                 setPaging={setIndexSubscriptionPaging}
+                                 ordering={indexSubscriptionPagingOrdering}
+                                 setOrdering={setIndexSubscriptionOrdering}/>
+    </Card>
   </Container>)
 };
 

@@ -12,7 +12,7 @@ import {IndexUpdatedEvent} from "@superfluid-finance/sdk-core";
 import {BigNumber} from "ethers";
 
 interface Props {
-  index: Index,
+  index: Index | null | undefined,
   queryResult: {
     isFetching: boolean
     data?: PagedResult<IndexUpdatedEvent>
@@ -46,7 +46,7 @@ const calculateDistributionAmount = (index: Index, event: IndexUpdatedEvent): Bi
 };
 
 const IndexUpdatedEventDataGrid: FC<Props> = ({index, queryResult, setPaging, ordering, setOrdering}) => {
-  const rows: Distribution[] = queryResult.data ? queryResult.data.data.map(indexUpdatedEvent => ({
+  const rows: Distribution[] = (queryResult.data && index)  ? queryResult.data.data.map(indexUpdatedEvent => ({
     id: indexUpdatedEvent.id,
     distributionAmount: calculateDistributionAmount(index, indexUpdatedEvent),
     timestamp: indexUpdatedEvent.timestamp,

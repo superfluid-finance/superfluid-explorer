@@ -20,7 +20,7 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
 
   const incomingStreamColumns: GridColDef[] = [
     {field: 'id', type: "string", hide: true, sortable: false},
-    {field: 'sender', headerName: "Sender", flex: 1, sortable: false},
+    {field: 'sender', headerName: "Sender", sortable: false, flex: 1, renderCell: (params) => (<AccountAddress network={network} address={params.value} />)},
     {field: 'currentFlowRate', headerName: "Flow Rate", flex: 1, sortable: true, renderCell: (params) => (<FlowRate flowRate={params.value} />)},
     {
       field: 'streamedUntilUpdatedAt',

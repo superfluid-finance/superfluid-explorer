@@ -17,7 +17,7 @@ import {
   Dialog,
   Grid,
   IconButton,
-  List, ListItem, ListItemText,
+  List, ListItem, ListItemText, Skeleton,
   Slide,
   TextField,
   Toolbar,
@@ -29,6 +29,7 @@ import {AppDataGrid} from "./AppDataGrid";
 import DetailsDialog from "./DetailsDialog";
 import AccountAddress from "./AccountAddress";
 import SuperTokenAddress from "./SuperTokenAddress";
+import SkeletonAddress from "./skeletons/SkeletonAddress";
 
 interface Props {
   network: Network;
@@ -58,34 +59,32 @@ const StreamDetails: FC<Props> = ({network, streamId}) => {
     <Typography variant="h2">
       Stream Details
     </Typography>
-    {stream && (<>
-      <Card variant="outlined">
-        <List>
-          <ListItem divider>
-            <ListItemText primary="Token" secondary={<SuperTokenAddress network={network} address={stream.token} />}/>
-          </ListItem>
-          <ListItem divider>
-            <ListItemText primary="Sender" secondary={<AccountAddress network={network} address={stream.sender} />}/>
-          </ListItem>
-          <ListItem divider>
-            <ListItemText primary="Receiver" secondary={<AccountAddress network={network} address={stream.receiver} />}/>
-          </ListItem>
-          <ListItem divider>
-            <ListItemText primary="Current Flow Rate" secondary={stream.currentFlowRate}/>
-          </ListItem>
-          <ListItem>
-            <ListItemText primary="Created At" secondary={new Date(stream.createdAtTimestamp * 1000).toDateString()}/>
-          </ListItem>
-        </List>
-      </Card>
-      <Card variant="outlined">
-        <Typography variant="h3">
-          Stream Periods
-        </Typography>
-        <StreamPeriodDataGrid queryResult={streamPeriodListQuery} setPaging={setStreamPeriodPaging}
-                              ordering={streamPeriodOrdering} setOrdering={setStreamPeriodOrdering}/>
-      </Card>
-    </>)}
+    <Card variant="outlined">
+      <List>
+        <ListItem divider>
+          <ListItemText primary="Token" secondary={(network && stream) ? <SuperTokenAddress network={network} address={stream.token}/> : <SkeletonAddress />}/>
+        </ListItem>
+        <ListItem divider>
+          <ListItemText primary="Sender" secondary={(network && stream) ? <AccountAddress network={network} address={stream.sender}/> : <SkeletonAddress />}/>
+        </ListItem>
+        <ListItem divider>
+          <ListItemText primary="Receiver" secondary={(network && stream) ? <AccountAddress network={network} address={stream.receiver}/> : <SkeletonAddress />}/>
+        </ListItem>
+        <ListItem divider>
+          <ListItemText primary="Current Flow Rate" secondary={(stream) ? stream.currentFlowRate : <Skeleton sx={{width: "125px" }} />}/>
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Created At" secondary={(stream) ? new Date(stream.createdAtTimestamp * 1000).toDateString() : <Skeleton sx={{width: "100px" }} />}/>
+        </ListItem>
+      </List>
+    </Card>
+    <Card variant="outlined">
+      <Typography variant="h3">
+        Stream Periods
+      </Typography>
+      <StreamPeriodDataGrid queryResult={streamPeriodListQuery} setPaging={setStreamPeriodPaging}
+                            ordering={streamPeriodOrdering} setOrdering={setStreamPeriodOrdering}/>
+    </Card>
   </Container>)
 };
 

@@ -5,7 +5,6 @@ import {Index, Ordering, PagedResult, SkipPaging, IndexOrderBy} from "@superflui
 import {IndexPublicationDetailsDialog} from "./IndexPublicationDetails";
 import {Network} from "../redux/store";
 import SuperTokenAddress from "./SuperTokenAddress";
-import AccountAddress from "./AccountAddress";
 
 interface Props {
   network: Network,
@@ -36,7 +35,7 @@ const PublishedIndexDataGrid: FC<Props> = ({network, queryResult, setPaging, ord
   const rows: Index[] = queryResult.data ? queryResult.data.data : [];
 
   return (<AppDataGrid columns={columns} rows={rows} queryResult={queryResult} setPaging={setPaging} ordering={ordering}
-                       setOrdering={x => setOrdering(x as any)}/>);
+                       setOrdering={x => setOrdering(x as any)} />);
 }
 
 export default PublishedIndexDataGrid;

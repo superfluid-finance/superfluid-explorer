@@ -22,6 +22,11 @@ import AccountOverview from "../../../components/AccountOverview";
 import AccountStreams from "../../../components/AccountStreams";
 import AccountIndexes from "../../../components/AccountIndexes";
 import SuperTokenIndexes from "../../../components/SuperTokenIndexes";
+import SuperTokenStreams from "../../../components/SuperTokenStreams";
+import SkeletonNetwork from "../../../components/skeletons/SkeletonNetwork";
+import SkeletonTokenSymbol from "../../../components/skeletons/SkeletonTokenSymbol";
+import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
+import SkeletonTokenName from "../../../components/skeletons/SkeletonTokenName";
 // import {getFramework} from "@superfluid-finance/sdk-redux/dist/module/sdkReduxConfig"; // TODO(KK): Think through the import
 
 const SuperTokenPage: NextPage = () => {
@@ -63,52 +68,52 @@ const SuperTokenPage: NextPage = () => {
   const isLoaded = network && superToken;
 
   return (<Container>
-    <Box>
-      <Typography variant="h3" component="h1" sx={{mt: 2, mb: 4}}>
-        Super Token
-      </Typography>
-      <Typography variant="h6" component="h2" sx={{ml: 1, mb: 1}}>
-        Overview
-      </Typography>
-      <Card variant="outlined">
-        <List>
-          <ListItem divider>
-            <ListItemText secondary="Network" primary={network ? <NetworkDisplay network={network}/> : <Skeleton/>}/>
-          </ListItem>
-          <ListItem divider>
-            <ListItemText secondary="Address" primary={superToken ? superToken.id : <Skeleton/>}/>
-          </ListItem>
-          <ListItem divider>
-            <ListItemText primary={superToken ? superToken.name : <Skeleton/>} secondary="Name"/>
-          </ListItem>
-          <ListItem divider>
-            <ListItemText secondary="Symbol" primary={superToken ? superToken.symbol : <Skeleton/>}/>
-          </ListItem>
-          <ListItem>
-            <ListItemText secondary="Underlying Token Address"
-                          primary={superToken ? superToken.underlyingAddress : <Skeleton/>}/>
-          </ListItem>
-        </List>
-      </Card>
+    <Typography variant="h3" component="h1" sx={{mt: 2, mb: 4}}>
+      Super Token
+    </Typography>
+    <Typography variant="h6" component="h2" sx={{ml: 1, mb: 1}}>
+      Overview
+    </Typography>
+    <Card variant="outlined">
+      <List>
+        <ListItem divider>
+          <ListItemText secondary="Network"
+                        primary={network ? <NetworkDisplay network={network}/> : <SkeletonNetwork/>}/>
+        </ListItem>
+        <ListItem divider>
+          <ListItemText secondary="Address" primary={superToken ? superToken.id : <SkeletonAddress/>}/>
+        </ListItem>
+        <ListItem divider>
+          <ListItemText primary={superToken ? superToken.name : <SkeletonTokenName/>} secondary="Name"/>
+        </ListItem>
+        <ListItem divider>
+          <ListItemText secondary="Symbol"
+                        primary={superToken ? superToken.symbol : <SkeletonTokenSymbol/>}/>
+        </ListItem>
+        <ListItem>
+          <ListItemText secondary="Underlying Token Address"
+                        primary={superToken ? superToken.underlyingAddress : <SkeletonAddress/>}/>
+        </ListItem>
+      </List>
+    </Card>
 
-      <Box sx={{mt: 3, mb: 3}}/>
-
-      <Card variant="outlined">
-        <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label="Streams"/>
-            <Tab label="Indexes"/>
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
-          zxvc
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          {(network && address) && <SuperTokenIndexes network={network} tokenAddress={getAddress(address)}/>}
-        </TabPanel>
-      </Card>
+    <Box sx={{ml: 0.75, mt: 3}}>
+      <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+        <Tab label="Streams"/>
+        <Tab label="Indexes"/>
+      </Tabs>
     </Box>
-  </Container>);
+
+    <Box>
+      <TabPanel value={value} index={0}>
+        {(network && address) && <SuperTokenStreams network={network} tokenAddress={getAddress(address)}/>}
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        {(network && address) &&
+          <SuperTokenIndexes network={network} tokenAddress={getAddress(address)}/>}
+      </TabPanel>
+    </Box>
+  </Container>)
 }
 
 SuperTokenPage.getInitialProps = () => {
@@ -142,7 +147,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{p: 3}}>
+        <Box>
           {value === index && children}
         </Box>
       )}
