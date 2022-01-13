@@ -1,7 +1,7 @@
 import {FC, forwardRef, ReactElement, Ref, useState} from "react";
 import {Network, sfApi} from "../redux/store";
 import {
-  createSkipPaging, Index,
+  createSkipPaging, Index, IndexSubscriptionOrderBy,
   IndexUpdatedEventOrderBy,
   Ordering,
   SkipPaging
@@ -27,6 +27,7 @@ import IndexUpdatedEventDataGrid from "./IndexUpdatedEventDataGrid";
 import DetailsDialog from "./DetailsDialog";
 import SuperTokenAddress from "./SuperTokenAddress";
 import AccountAddress from "./AccountAddress";
+import IndexSubscriptionDataGrid from "./IndexSubscriptionDataGrid";
 
 interface Props {
   network: Network;
@@ -52,6 +53,19 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
     order: indexUpdatedEventPagingOrdering
   });
 
+  const [indexSubscriptionPaging, setIndexSubscriptionPaging] = useState<SkipPaging>(createSkipPaging({
+    take: 10
+  }))
+  const [indexSubscriptionPagingOrdering, setIndexSubscriptionOrdering] = useState<Ordering<IndexSubscriptionOrderBy> | undefined>()
+  const indexSubscriptionEventQuery = sfApi.useIndexSubscriptionsQuery({
+    chainId: network.chainId,
+    filter: {
+      index: indexId.toLowerCase()
+    },
+    pagination: indexSubscriptionPaging,
+    order: indexSubscriptionPagingOrdering
+  });
+
   const index: Index | undefined | null = indexQuery.data
 
   return (<Container>
@@ -60,7 +74,7 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
     </Typography>
     {
       index && (<>
-        <Card>
+        <Card variant="outlined">
           <List>
             <ListItem divider>
               <ListItemText primary="Token" secondary={<SuperTokenAddress network={network} address={index.token}/>}/>
@@ -77,7 +91,7 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
             </ListItem>
           </List>
         </Card>
-        <Card>
+        <Card variant="outlined">
           <Typography variant="h3">
             Distributions
           </Typography>
@@ -85,6 +99,16 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
                                      setPaging={setIndexUpdatedEventPaging}
                                      ordering={indexUpdatedEventPagingOrdering}
                                      setOrdering={setIndexUpdatedEventOrdering}/>
+        </Card>
+        <Card variant="outlined">
+          <Typography variant="h3">
+            Subscriptions
+          </Typography>
+          <IndexSubscriptionDataGrid network={network}
+                                     queryResult={indexSubscriptionEventQuery}
+                                     setPaging={setIndexSubscriptionPaging}
+                                     ordering={indexSubscriptionPagingOrdering}
+                                     setOrdering={setIndexSubscriptionOrdering}/>
         </Card>
       </>)}
   </Container>)

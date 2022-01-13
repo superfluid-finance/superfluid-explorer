@@ -93,7 +93,7 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
   // TODO(KK): get rid of anys
 
   return (<Box>
-    <Card>
+    <Card variant="outlined">
       <Typography variant="h5" component="h3">
         Incoming
       </Typography>
@@ -101,7 +101,7 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
                    setPaging={setIncomingStreamPaging} ordering={incomingStreamOrdering}
                    setOrdering={(x: any) => setIncomingStreamOrdering(x)}/>
     </Card>
-    <Card>
+    <Card variant="outlined">
       <Typography variant="h5" component="h3">
         Outgoing
       </Typography>

@@ -45,14 +45,14 @@ const AccountIndexes: FC<Props> = ({network, accountAddress}): ReactElement => {
     <Typography variant="h5" component="h2">
       Indexes
     </Typography>
-    <Card>
+    <Card variant="outlined">
       <Typography variant="h5" component="h3">
         Publications
       </Typography>
       <PublishedIndexDataGrid network={network} queryResult={publishedIndexQuery} setPaging={setPublishedIndexPaging}
                               ordering={publishedIndexOrdering} setOrdering={setPublishedIndexOrdering}/>
     </Card>
-    <Card>
+    <Card variant="outlined">
       <Typography variant="h5" component="h3">
         Subscriptions
       </Typography>

@@ -59,7 +59,7 @@ const StreamDetails: FC<Props> = ({network, streamId}) => {
       Stream Details
     </Typography>
     {stream && (<>
-      <Card>
+      <Card variant="outlined">
         <List>
           <ListItem divider>
             <ListItemText primary="Token" secondary={<SuperTokenAddress network={network} address={stream.token} />}/>
@@ -78,7 +78,7 @@ const StreamDetails: FC<Props> = ({network, streamId}) => {
           </ListItem>
         </List>
       </Card>
-      <Card>
+      <Card variant="outlined">
         <Typography variant="h3">
           Stream Periods
         </Typography>

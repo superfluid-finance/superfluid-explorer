@@ -71,7 +71,7 @@ const IndexSubscriptionDetails: FC<Props> = ({network, indexSubscriptionId}) => 
     </Typography>
     {
       (indexSubscription && index) && (<>
-        <Card>
+        <Card variant="outlined">
           <List>
             <ListItem divider>
               <ListItemText primary="Token"

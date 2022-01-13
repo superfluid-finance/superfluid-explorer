@@ -5,6 +5,7 @@ import {Index, Ordering, PagedResult, SkipPaging, IndexOrderBy} from "@superflui
 import {IndexPublicationDetailsDialog} from "./IndexPublicationDetails";
 import {Network} from "../redux/store";
 import SuperTokenAddress from "./SuperTokenAddress";
+import AccountAddress from "./AccountAddress";
 
 interface Props {
   network: Network,
@@ -15,11 +16,13 @@ interface Props {
   setPaging: (paging: SkipPaging) => void;
   ordering: Ordering<IndexOrderBy> | undefined;
   setOrdering: (ordering?: Ordering<IndexOrderBy>) => void;
+  // columnsToHide: string[];
 }
 
 const PublishedIndexDataGrid: FC<Props> = ({network, queryResult, setPaging, ordering, setOrdering}) => {
   const columns: GridColDef[] = [
     {field: 'id', hide: true, flex: 1},
+    // {field: 'publisher', headerName: "Publisher", flex: 1, renderCell: (params) => (<AccountAddress network={network} address={params.value} />)},
     {field: 'token', headerName: "Token", sortable: true, flex: 1, renderCell: (params) => (<SuperTokenAddress network={network} address={params.value} />)},
     {field: 'totalUnits', headerName: "Total Units", sortable: true, flex: 1},
     {field: 'totalAmountDistributedUntilUpdatedAt', headerName: "Total Distributed", sortable: true, flex: 1},

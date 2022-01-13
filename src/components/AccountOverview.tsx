@@ -30,7 +30,7 @@ const AccountOverview: FC<{
     <Typography variant="h5" component="h2">
       Overview
     </Typography>
-    <Card>
+    <Card variant="outlined">
       <AccountTokenSnapshotDataGrid network={network}
                                     queryResult={accountTokenSnapshotsQuery}
                                     setPaging={setAccountTokenSnapshotPaging}

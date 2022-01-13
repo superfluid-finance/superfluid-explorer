@@ -8,7 +8,6 @@ import AppLink from "../../../components/AppLink";
 import AccountIndexes from "../../../components/AccountIndexes";
 import AccountOverview from "../../../components/AccountOverview";
 import {NextPage} from "next";
-import SuperTokenPage from "../supertokens/[address]";
 
 const getAddress = (address: unknown): string => {
   if (typeof address === "string") {
@@ -60,28 +59,20 @@ const AccountPage: NextPage = () => {
     </Box>
     <TabPanel value={value} index={0}>
       {(network && address) && <AccountOverview network={network} accountAddress={getAddress(address)}/>}
-
     </TabPanel>
     <TabPanel value={value} index={1}>
-
       <Typography variant="h5" component="h2">
         Streams
       </Typography>
       {(network && address) && <AccountStreams network={network} accountAddress={getAddress(address)}/>}
-
     </TabPanel>
     <TabPanel value={value} index={2}>
-
-
       {(network && address) && <AccountIndexes network={network} accountAddress={getAddress(address)}/>}
-
     </TabPanel>
     <TabPanel value={value} index={3}>
-
       <Typography variant="h5" component="h2">
         Events
       </Typography>
-
     </TabPanel>
   </Container>);
 
