@@ -107,26 +107,6 @@ const SuperTokenPage: NextPage = () => {
           {(network && address) && <SuperTokenIndexes network={network} tokenAddress={getAddress(address)}/>}
         </TabPanel>
       </Card>
-
-      {/*<Card>*/}
-      {/*  {(network && superToken) ? <List>*/}
-      {/*    <ListItem divider>*/}
-      {/*      <ListItemText primary={superToken.name} secondary="Name"/>*/}
-      {/*    </ListItem>*/}
-      {/*    <ListItem divider>*/}
-      {/*      <ListItemText secondary="Network" primary={<NetworkDisplay network={network}/>}/>*/}
-      {/*    </ListItem>*/}
-      {/*    <ListItem divider>*/}
-      {/*      <ListItemText secondary="Address" primary={superToken.id}/>*/}
-      {/*    </ListItem>*/}
-      {/*    <ListItem divider>*/}
-      {/*      <ListItemText secondary="Symbol" primary={superToken.symbol}/>*/}
-      {/*    </ListItem>*/}
-      {/*    <ListItem divider>*/}
-      {/*      <ListItemText secondary="Underlying Token Address" primary={superToken.underlyingAddress}/>*/}
-      {/*    </ListItem>*/}
-      {/*  </List> : <CircularProgress/>}*/}
-      {/*</Card>*/}
     </Box>
   </Container>);
 }
@@ -148,13 +128,6 @@ interface TabPanelProps {
   children?: ReactNode;
   index: number;
   value: number;
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `tab-${index}`,
-    'aria-controls': `tabpanel-${index}`,
-  };
 }
 
 function TabPanel(props: TabPanelProps) {

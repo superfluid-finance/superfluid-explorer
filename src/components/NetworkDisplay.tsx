@@ -2,7 +2,7 @@ import {FC} from "react";
 import {Network} from "../redux/store";
 
 const NetworkDisplay: FC<{network: Network}> = ({network}) => {
-  return (<span>{`${network.name}`}</span>);
+  return (<>{`${network.displayName}`}</>);
 }
 
 export default NetworkDisplay;

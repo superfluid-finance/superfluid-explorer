@@ -208,13 +208,13 @@ const SubgraphExplorer: React.FC = () => {
                   label="Explorer"
                 />
                 <GraphiQL.Menu
-                  label={isNetworkLoading ? 'Loading...' : network.name}
+                  label={isNetworkLoading ? 'Loading...' : network.slugName}
                   title="Select Network"
                 >
                   {Object.values(networks).map((network) => (
                     <GraphiQL.MenuItem
                       key={network.chainId}
-                      label={network.name}
+                      label={network.slugName}
                       title={network.subgraphUrl}
                       onSelect={() => setChainId(Number(network.chainId))}
                     />

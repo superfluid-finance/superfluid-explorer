@@ -35,13 +35,13 @@ const AccountPage: NextPage = () => {
   return (<Container>
     {
       network && <Breadcrumbs aria-label="breadcrumb">
-        <AppLink underline="hover" color="inherit" href={`/${network.name}`}>
-          {network.name}
+        <AppLink underline="hover" color="inherit" href={`/${network.slugName}`}>
+          {network.slugName}
         </AppLink>
-        <AppLink underline="hover" color="inherit" href={`/${network.name}/accounts`}>
+        <AppLink underline="hover" color="inherit" href={`/${network.slugName}/accounts`}>
           Accounts
         </AppLink>
-        <AppLink underline="hover" color="inherit" href={`/${network.name}/accounts/${address}`}>
+        <AppLink underline="hover" color="inherit" href={`/${network.slugName}/accounts/${address}`}>
           {address}
         </AppLink>
       </Breadcrumbs>

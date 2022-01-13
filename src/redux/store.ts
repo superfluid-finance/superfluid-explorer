@@ -49,7 +49,8 @@ export const chainIds = [
 ];
 
 export type Network = {
-  name: string,
+  displayName: string,
+  slugName: string,
   chainId: number,
   subgraphUrl: string
 }
@@ -61,43 +62,50 @@ function ensureDefined<T>(value: T | undefined): T {
 
 export const networks: Network[] = [
   {
-    name: "ropsten",
+    displayName: "Ropsten",
+    slugName: "ropsten",
     chainId: 3,
     subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_ROPSTEN),
   },
   {
-    name: "rinkeby",
+    displayName: "Rinkeby",
+    slugName: "rinkeby",
     chainId: 4,
     subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_RINKEBY),
   },
   {
-    name: "goerli",
+    displayName: "Goerli",
+    slugName: "goerli",
     chainId: 5,
     subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_GOERLI),
   },
   {
-    name: "kovan",
+    displayName: "Kovan",
+    slugName: "kovan",
     chainId: 42,
     subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_KOVAN),
   },
   {
-    name: "xDAI",
+    displayName: "xDAI",
+    slugName: "xdai",
     chainId: 100,
     subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_XDAI),
   },
   {
-    name: "matic",
+    displayName: "Polygon",
+    slugName: "matic",
     chainId: 137,
     subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_MATIC),
   },
   {
-    name: "mumbai",
+    displayName: "Mumbai",
+    slugName: "mumbai",
     chainId: 80001,
     subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_MUMBAI),
   },
 ];
 
-export const networksByName = new Map(networks.map(x => [x.name.toLowerCase(), x]))
+export const networksByName = new Map(networks.map(x => [x.slugName.toLowerCase(), x]))
 export const networksByChainId = new Map(networks.map(x => [x.chainId, x]))
 
 export const findNetwork = (x: unknown): Network => {

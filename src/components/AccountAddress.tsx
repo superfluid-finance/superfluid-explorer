@@ -8,11 +8,11 @@ import QueryError from "./QueryError";
 const AccountAddress: FC<{
   network: Network,
   address: string
-}> = ({network, address}) => {
+}> = ({network, address, children}) => {
   return (
     <Tooltip title={<AccountAddressTooltipContent network={network} address={address}/>}><AppLink className="address"
-                                                                                                  href={`/${network.name}/accounts/${address}`}>
-      {ethers.utils.getAddress(address)}
+                                                                                                  href={`/${network.slugName}/accounts/${address}`}>
+      <AccountAddressFormatted address={address} />
     </AppLink></Tooltip>);
 }
 
@@ -37,6 +37,12 @@ const AccountAddressTooltipContent: FC<{
     <ListItem>
       <ListItemText primary={accountQuery.data.isSuperApp ? "SuperApp" : "Account"}/></ListItem>
   </List>) : null);
+}
+
+export const AccountAddressFormatted: FC<{
+  address: string
+}> = ({ address }) => {
+  return <>{ethers.utils.getAddress(address)}</>
 }
 
 export default AccountAddress;

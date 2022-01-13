@@ -6,7 +6,7 @@ import {
   DialogContent,
   Dialog,
   DialogTitle,
-  InputAdornment, Card, ListItem, List
+  InputAdornment, Card, ListItem, List, Menu, MenuItem, ListItemButton, CircularProgress, Container, Grid
 } from "@mui/material";
 import {useRouter} from "next/router";
 import {Network, networks, sfApi} from "../redux/store";
@@ -14,22 +14,28 @@ import {skipToken} from "@reduxjs/toolkit/query";
 import {ethers} from "ethers";
 import {gql} from "graphql-request";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountAddress from "./AccountAddress";
-import SuperTokenAddress from "./SuperTokenAddress";
+import AccountAddress, {AccountAddressFormatted} from "./AccountAddress";
+import SuperTokenAddress, {SuperTokenFormatted} from "./SuperTokenAddress";
 import {PossibleErrors} from "@superfluid-finance/sdk-redux";
 import QueryError from "./QueryError";
 import Box from "@mui/material/Box";
 import {BoxProps} from "@mui/material/Box/Box";
-import NetworkDisplay from "./NetworkDisplay";
 import _ from "lodash";
+import AppLink from "./AppLink";
+import NextLink from 'next/link';
+import NetworkFormatted from "./NetworkDisplay";
 
 const searchByAddressDocument = gql`
   query Search($addressId: ID, $addressBytes: Bytes) {
     tokensByAddress: tokens(where: {id: $addressId}) {
       id
+      symbol
+      name
     }
     tokensByUnderlyingAddress: tokens(where: {underlyingAddress: $addressBytes}) {
       id
+      symbol
+      name
     }
     accounts(where: {id: $addressId}) {
       id
@@ -39,10 +45,14 @@ const searchByAddressDocument = gql`
 
 type SubgraphSearchResult = {
   tokensByAddress: {
-    id: string
+    id: string,
+    symbol: string,
+    name: string
   }[],
   tokensByUnderlyingAddress: {
-    id: string
+    id: string,
+    symbol: string,
+    name: string
   }[],
   accounts: {
     id: string
@@ -51,9 +61,12 @@ type SubgraphSearchResult = {
 
 type NetworkSearchResult = {
   network: Network,
+  isFetching: boolean,
   error?: PossibleErrors,
   tokens: {
     id: string
+    symbol: string,
+    name: string
   }[],
   accounts: {
     id: string
@@ -78,6 +91,7 @@ const useSearchHook = (address: string): NetworkSearchResult[] => {
       const queryResult = queryState.data as SubgraphSearchResult;
       chainResults.push({
         network: network,
+        isFetching: queryState.isFetching,
         error: queryState.error,
         tokens: _.uniq(queryResult.tokensByAddress.concat(queryResult.tokensByUnderlyingAddress)),
         accounts: queryResult.accounts
@@ -130,12 +144,12 @@ const AppSearch: FC<BoxProps> = (boxProps) => {
         fullWidth
         maxWidth="lg"
         onClose={handleClose} open={open}>
-        <DialogTitle>Search</DialogTitle>
         <DialogContent>
           <TextField sx={{
             mt: 1
           }}
-            autoFocus fullWidth id="outlined-search" type="search"
+                     label="Search"
+                     autoFocus fullWidth id="outlined-search" type="search"
                      value={searchTerm}
                      InputProps={{
                        startAdornment: (
@@ -147,18 +161,31 @@ const AppSearch: FC<BoxProps> = (boxProps) => {
                      variant="outlined"
                      onChange={(e) => setSearchTerm(e.currentTarget.value)}/>
           {
-            networkSearchResults.filter(x => x.tokens.length || x.accounts.length).map(x => (<Box key={x.network.chainId}>
-              <NetworkDisplay network={x.network}/>
-              {x.error ? <QueryError error={x.error}/> : <Card sx={{p: 2}}>
-                <List>
-                  {x.accounts.map(account => <ListItem key={`${x.network.chainId}_${account.id}`}><AccountAddress
-                    network={x.network} address={account.id}/></ListItem>)}
-                  {x.tokens.map(token => <ListItem key={`${x.network.chainId}_${token.id}`}><SuperTokenAddress
-                    network={x.network} address={token.id}/></ListItem>)}
-                </List>
-              </Card>
-              }
-            </Box>))
+            networkSearchResults.some(x => x.isFetching) ?
+              <Grid container justifyContent="center" sx={{mt: 3}}>
+                <CircularProgress/>
+              </Grid> : networkSearchResults.filter(x => x.tokens.length || x.accounts.length).map(x => (
+                <Box component="section" key={x.network.chainId}>
+                  <Typography variant="subtitle1" component="h3"><NetworkFormatted network={x.network}/></Typography>
+                  {x.error ? <QueryError error={x.error}/> :
+                    <List>
+                      {x.accounts.map(account => <ListItem disablePadding key={`${x.network.chainId}_${account.id}`}>
+                        <NextLink href={`/${x.network.slugName}/accounts/${account.id}`} passHref>
+                          <ListItemButton component="a">
+                            <AccountAddressFormatted address={account.id}/>
+                          </ListItemButton>
+                        </NextLink>
+                      </ListItem>)}
+                      {x.tokens.map(token => <ListItem disablePadding key={`${x.network.chainId}_${token.id}`}>
+                        <NextLink href={`/${x.network.slugName}/supertokens/${token.id}`} passHref>
+                          <ListItemButton component="a">
+                            <SuperTokenFormatted name={token.name} symbol={token.symbol} address={token.id}/>
+                          </ListItemButton>
+                        </NextLink>
+                      </ListItem>)}
+                    </List>
+                  }
+                </Box>))
           }
         </DialogContent>
       </Dialog>
