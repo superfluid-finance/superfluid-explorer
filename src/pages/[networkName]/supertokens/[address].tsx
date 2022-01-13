@@ -97,7 +97,7 @@ const SuperTokenPage: NextPage = () => {
       </List>
     </Card>
 
-    <Box sx={{ml: 0.75, mt: 3}}>
+    <Box sx={{mt: 3, mb: 2, borderBottom: 1, borderColor: 'divider'}} >
       <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
         <Tab label="Streams"/>
         <Tab label="Indexes"/>

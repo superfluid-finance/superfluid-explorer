@@ -107,7 +107,10 @@ const useSearchHook = (address: string): NetworkSearchResult[] => {
 const AppSearch: FC<BoxProps> = (boxProps) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setSearchTerm("")
+  };
 
   const router = useRouter()
 

@@ -61,9 +61,6 @@ const AccountPage: NextPage = () => {
       {(network && address) && <AccountOverview network={network} accountAddress={getAddress(address)}/>}
     </TabPanel>
     <TabPanel value={value} index={1}>
-      <Typography variant="h5" component="h2">
-        Streams
-      </Typography>
       {(network && address) && <AccountStreams network={network} accountAddress={getAddress(address)}/>}
     </TabPanel>
     <TabPanel value={value} index={2}>
