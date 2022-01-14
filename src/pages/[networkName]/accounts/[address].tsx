@@ -6,7 +6,7 @@ import {
   Link,
   List,
   ListItem,
-  ListItemText,
+  ListItemText, Skeleton,
   Tab,
   Tabs,
   Typography
@@ -16,15 +16,12 @@ import {useRouter} from "next/router";
 import {findNetwork, sfApi} from "../../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import AccountStreams from "../../../components/AccountStreams";
-import AppLink from "../../../components/AppLink";
 import AccountIndexes from "../../../components/AccountIndexes";
-import AccountOverview from "../../../components/AccountOverview";
+import AccountTokens from "../../../components/AccountTokens";
 import {NextPage} from "next";
 import NetworkDisplay from "../../../components/NetworkDisplay";
 import SkeletonNetwork from "../../../components/skeletons/SkeletonNetwork";
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
-import SkeletonTokenName from "../../../components/skeletons/SkeletonTokenName";
-import SkeletonTokenSymbol from "../../../components/skeletons/SkeletonTokenSymbol";
 import {AccountAddressFormatted} from "../../../components/AccountAddress";
 
 const getAddress = (address: unknown): string => {
@@ -74,9 +71,13 @@ const AccountPage: NextPage = () => {
           <ListItemText secondary="Network"
                         primary={network ? <NetworkDisplay network={network}/> : <SkeletonNetwork/>}/>
         </ListItem>
-        <ListItem>
+        <ListItem divider>
           <ListItemText secondary="Address"
                         primary={accountQuery.data ? <AccountAddressFormatted address={accountQuery.data.id} /> : <SkeletonAddress/>}/>
+        </ListItem>
+        <ListItem>
+          <ListItemText secondary="Account Type"
+                        primary={accountQuery.data ? (accountQuery.data.isSuperApp ? "Super App" : "Regular account") : <Skeleton sx={{width: "40px"}}/>}/>
         </ListItem>
       </List>
     </Card>
@@ -91,7 +92,7 @@ const AccountPage: NextPage = () => {
 
     <Box>
       <TabPanel value={value} index={0}>
-        {(network && address) && <AccountOverview network={network} accountAddress={getAddress(address)}/>}
+        {(network && address) && <AccountTokens network={network} accountAddress={getAddress(address)}/>}
       </TabPanel>
       <TabPanel value={value} index={1}>
         {(network && address) && <AccountStreams network={network} accountAddress={getAddress(address)}/>}

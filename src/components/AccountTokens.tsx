@@ -7,16 +7,19 @@ import {
   SkipPaging
 } from "@superfluid-finance/sdk-core";
 import AccountTokenSnapshotDataGrid from "./AccountTokenSnapshotDataGrid";
-import {Card, Typography} from "@mui/material";
+import {Card} from "@mui/material";
 
-const AccountOverview: FC<{
+const AccountTokens: FC<{
   network: Network,
   accountAddress: string
 }> = ({network, accountAddress}): ReactElement => {
   const [accountTokenSnapshotPaging, setAccountTokenSnapshotPaging] = useState<SkipPaging>(createSkipPaging({
     take: 10
   }));
-  const [accountTokenSnapshotOrdering, setAccountTokenSnapshotOrdering] = useState<Ordering<AccountTokenSnapshotOrderBy> | undefined>(undefined);
+  const [accountTokenSnapshotOrdering, setAccountTokenSnapshotOrdering] = useState<Ordering<AccountTokenSnapshotOrderBy> | undefined>({
+    orderBy: "balanceUntilUpdatedAt",
+    orderDirection: "desc"
+  });
   const accountTokenSnapshotsQuery = sfApi.useAccountTokenSnapshotsQuery({
     chainId: network.chainId,
     pagination: accountTokenSnapshotPaging,
@@ -35,4 +38,4 @@ const AccountOverview: FC<{
                                     setOrdering={setAccountTokenSnapshotOrdering}/></Card>)
 }
 
-export default AccountOverview;
+export default AccountTokens;

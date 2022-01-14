@@ -25,6 +25,7 @@ const PublishedIndexDataGrid: FC<Props> = ({network, queryResult, setPaging, ord
     {field: 'token', headerName: "Token", sortable: true, flex: 1, renderCell: (params) => (<SuperTokenAddress network={network} address={params.value} />)},
     {field: 'totalUnits', headerName: "Total Units", sortable: true, flex: 1},
     {field: 'totalAmountDistributedUntilUpdatedAt', headerName: "Total Distributed", sortable: true, flex: 1},
+    {field: 'createdAtTimestamp', headerName: "Created At", sortable: true, flex: 1, renderCell: (params) => (new Date(params.value * 1000).toLocaleString())},
     {
       field: 'details', headerName: "Details", flex: 1, sortable: false, renderCell: (cellParams) => (
         <IndexPublicationDetailsDialog network={network} indexId={cellParams.id.toString()}/>

@@ -53,8 +53,6 @@ const SuperTokenPage: NextPage = () => {
     setValue(newValue);
   };
 
-  const isLoaded = network && superToken;
-
   return (<Container>
     <Typography variant="h3" component="h1" sx={{mt: 2, mb: 4}}>
       Super Token

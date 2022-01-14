@@ -36,7 +36,10 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
   const [indexUpdatedEventPaging, setIndexUpdatedEventPaging] = useState<SkipPaging>(createSkipPaging({
     take: 10
   }))
-  const [indexUpdatedEventPagingOrdering, setIndexUpdatedEventOrdering] = useState<Ordering<IndexUpdatedEventOrderBy> | undefined>()
+  const [indexUpdatedEventPagingOrdering, setIndexUpdatedEventOrdering] = useState<Ordering<IndexUpdatedEventOrderBy> | undefined>({
+    orderBy: "timestamp",
+    orderDirection: "desc"
+  })
   const indexUpdatedEventQuery = sfApi.useIndexUpdatedEventsQuery({
     chainId: network.chainId,
     filter: {

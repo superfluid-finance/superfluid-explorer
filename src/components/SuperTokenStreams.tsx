@@ -1,14 +1,9 @@
 import {Network, sfApi} from "../redux/store";
 import {createSkipPaging, Index, Ordering, SkipPaging, Stream, StreamOrderBy} from "@superfluid-finance/sdk-core";
 import {FC, ReactElement, useState} from "react";
-import {
-  IndexOrderBy
-} from "@superfluid-finance/sdk-core";
-import PublishedIndexDataGrid from "./PublishedIndexDataGrid";
 import {GridColDef} from "@mui/x-data-grid";
 import AccountAddress from "./AccountAddress";
 import FlowRate from "./FlowRate";
-import SuperTokenAddress from "./SuperTokenAddress";
 import {StreamDetailsDialog} from "./StreamDetails";
 import {AppDataGrid} from "./AppDataGrid";
 
@@ -21,7 +16,10 @@ const SuperTokenStreams: FC<Props> = ({network, tokenAddress}): ReactElement => 
   const [streamPaging, setStreamPaging] = useState<SkipPaging>(createSkipPaging({
     take: 10
   }));
-  const [streamOrdering, setStreamOrdering] = useState<Ordering<StreamOrderBy> | undefined>(undefined);
+  const [streamOrdering, setStreamOrdering] = useState<Ordering<StreamOrderBy> | undefined>({
+    orderBy: "createdAtTimestamp",
+    orderDirection: "desc"
+  });
   const streamQuery = sfApi.useStreamsQuery({
     chainId: network.chainId,
     pagination: streamPaging,
@@ -54,6 +52,7 @@ const SuperTokenStreams: FC<Props> = ({network, tokenAddress}): ReactElement => 
       flex: 1,
       renderCell: (params) => (<FlowRate flowRate={params.value}/>)
     },
+    {field: 'createdAtTimestamp', headerName: "Created At", sortable: true, flex: 1, renderCell: (params) => (new Date(params.value * 1000).toLocaleString())},
     {
       field: 'details', headerName: "Details", flex: 1, sortable: false, renderCell: (cellParams) => (
         <StreamDetailsDialog network={network} streamId={cellParams.id.toString()}/>
