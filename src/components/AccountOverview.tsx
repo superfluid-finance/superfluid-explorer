@@ -26,16 +26,13 @@ const AccountOverview: FC<{
     order: accountTokenSnapshotOrdering
   })
 
-  return (<>
-    <Typography variant="h5" component="h2">
-      Overview
-    </Typography>
+  return (
     <Card variant="outlined">
       <AccountTokenSnapshotDataGrid network={network}
                                     queryResult={accountTokenSnapshotsQuery}
                                     setPaging={setAccountTokenSnapshotPaging}
                                     ordering={accountTokenSnapshotOrdering}
-                                    setOrdering={setAccountTokenSnapshotOrdering}/></Card></>)
+                                    setOrdering={setAccountTokenSnapshotOrdering}/></Card>)
 }
 
 export default AccountOverview;

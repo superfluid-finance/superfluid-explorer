@@ -117,22 +117,22 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
   // TODO(KK): get rid of anys
 
   return (<Box>
-    <Card variant="outlined">
-      <Typography variant="h5" component="h3">
+    <Box>
+      <Typography variant="h6" component="h2" sx={{ml: 1, mb: 1}}>
         Incoming
       </Typography>
       <AppDataGrid columns={incomingStreamColumns} rows={incomingStreamRows} queryResult={incomingStreamsQuery}
                    setPaging={setIncomingStreamPaging} ordering={incomingStreamOrdering}
                    setOrdering={(x: any) => setIncomingStreamOrdering(x)}/>
-    </Card>
-    <Card variant="outlined">
-      <Typography variant="h5" component="h3">
+    </Box>
+    <Box>
+      <Typography variant="h6" component="h2" sx={{mt: 3, ml: 1, mb: 1}}>
         Outgoing
       </Typography>
       <AppDataGrid columns={outgoingStreamColumns} rows={outgoingStreamRows} queryResult={outgoingStreamsQuery}
                    setPaging={setOutgoingStreamPaging} ordering={outgoingStreamOrdering}
                    setOrdering={(x: any) => setOutgoingStreamOrdering(x)}/>
-    </Card>
+    </Box>
   </Box>);
 }
 

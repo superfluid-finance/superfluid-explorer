@@ -1,4 +1,16 @@
-import {Box, Breadcrumbs, Container, Link, Tab, Tabs, Typography} from "@mui/material";
+import {
+  Box,
+  Breadcrumbs,
+  Card,
+  Container,
+  Link,
+  List,
+  ListItem,
+  ListItemText,
+  Tab,
+  Tabs,
+  Typography
+} from "@mui/material";
 import {ReactNode, SyntheticEvent, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {findNetwork, sfApi} from "../../../redux/store";
@@ -8,6 +20,12 @@ import AppLink from "../../../components/AppLink";
 import AccountIndexes from "../../../components/AccountIndexes";
 import AccountOverview from "../../../components/AccountOverview";
 import {NextPage} from "next";
+import NetworkDisplay from "../../../components/NetworkDisplay";
+import SkeletonNetwork from "../../../components/skeletons/SkeletonNetwork";
+import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
+import SkeletonTokenName from "../../../components/skeletons/SkeletonTokenName";
+import SkeletonTokenSymbol from "../../../components/skeletons/SkeletonTokenSymbol";
+import {AccountAddressFormatted} from "../../../components/AccountAddress";
 
 const getAddress = (address: unknown): string => {
   if (typeof address === "string") {
@@ -44,44 +62,44 @@ const AccountPage: NextPage = () => {
   };
 
   return (<Container>
-    {
-      network && <Breadcrumbs aria-label="breadcrumb">
-        <AppLink underline="hover" color="inherit" href={`/${network.slugName}`}>
-          {network.slugName}
-        </AppLink>
-        <AppLink underline="hover" color="inherit" href={`/${network.slugName}/accounts`}>
-          Accounts
-        </AppLink>
-        <AppLink underline="hover" color="inherit" href={`/${network.slugName}/accounts/${address}`}>
-          {address}
-        </AppLink>
-      </Breadcrumbs>
-    }
-    <Typography variant="h2" component="h1">
-      {address}
+    <Typography variant="h3" component="h1" sx={{mt: 2, mb: 4}}>
+      Account
     </Typography>
-    <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+    <Typography variant="h6" component="h2" sx={{ml: 1, mb: 1}}>
+      Overview
+    </Typography>
+    <Card variant="outlined">
+      <List>
+        <ListItem divider>
+          <ListItemText secondary="Network"
+                        primary={network ? <NetworkDisplay network={network}/> : <SkeletonNetwork/>}/>
+        </ListItem>
+        <ListItem>
+          <ListItemText secondary="Address"
+                        primary={accountQuery.data ? <AccountAddressFormatted address={accountQuery.data.id} /> : <SkeletonAddress/>}/>
+        </ListItem>
+      </List>
+    </Card>
+
+    <Box sx={{mt: 3, mb: 2, borderBottom: 1, borderColor: 'divider'}}>
       <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-        <Tab label="Overview" {...a11yProps(0)} />
+        <Tab label="Super tokens" {...a11yProps(0)} />
         <Tab label="Streams" {...a11yProps(1)} />
         <Tab label="Indexes" {...a11yProps(2)} />
-        <Tab label="Events" {...a11yProps(3)} />
       </Tabs>
     </Box>
-    <TabPanel value={value} index={0}>
-      {(network && address) && <AccountOverview network={network} accountAddress={getAddress(address)}/>}
-    </TabPanel>
-    <TabPanel value={value} index={1}>
-      {(network && address) && <AccountStreams network={network} accountAddress={getAddress(address)}/>}
-    </TabPanel>
-    <TabPanel value={value} index={2}>
-      {(network && address) && <AccountIndexes network={network} accountAddress={getAddress(address)}/>}
-    </TabPanel>
-    <TabPanel value={value} index={3}>
-      <Typography variant="h5" component="h2">
-        Events
-      </Typography>
-    </TabPanel>
+
+    <Box>
+      <TabPanel value={value} index={0}>
+        {(network && address) && <AccountOverview network={network} accountAddress={getAddress(address)}/>}
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        {(network && address) && <AccountStreams network={network} accountAddress={getAddress(address)}/>}
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        {(network && address) && <AccountIndexes network={network} accountAddress={getAddress(address)}/>}
+      </TabPanel>
+    </Box>
   </Container>);
 
 }
@@ -115,7 +133,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{p: 3}}>
+        <Box>
           {value === index && children}
         </Box>
       )}

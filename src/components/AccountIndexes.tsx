@@ -7,7 +7,7 @@ import {
   IndexOrderBy
 } from "@superfluid-finance/sdk-core";
 import PublishedIndexDataGrid from "./PublishedIndexDataGrid";
-import {Card, Typography} from "@mui/material";
+import {Box, Card, Typography} from "@mui/material";
 
 interface Props {
   network: Network,
@@ -42,24 +42,21 @@ const AccountIndexes: FC<Props> = ({network, accountAddress}): ReactElement => {
   })
 
   return <>
-    <Typography variant="h5" component="h2">
-      Indexes
-    </Typography>
-    <Card variant="outlined">
-      <Typography variant="h5" component="h3">
+    <Box>
+      <Typography variant="h6" component="h2" sx={{ml: 1, mb: 1}}>
         Publications
       </Typography>
       <PublishedIndexDataGrid network={network} queryResult={publishedIndexQuery} setPaging={setPublishedIndexPaging}
                               ordering={publishedIndexOrdering} setOrdering={setPublishedIndexOrdering}/>
-    </Card>
-    <Card variant="outlined">
-      <Typography variant="h5" component="h3">
+    </Box>
+    <Box>
+      <Typography variant="h6" component="h2" sx={{mt: 3, ml: 1, mb: 1}}>
         Subscriptions
       </Typography>
       <IndexSubscriptionDataGrid network={network} queryResult={indexSubscriptionQuery}
                                  setPaging={setIndexSubscriptionPaging} ordering={indexSubscriptionOrdering}
                                  setOrdering={setIndexSubscriptionOrdering}/>
-    </Card>
+    </Box>
   </>
 }
 
