@@ -176,17 +176,17 @@ const AppSearch: FC<BoxProps> = (boxProps) => {
               </Grid> : networkSearchResults.filter(x => x.tokens.length || x.accounts.length).map(x => (
                 <Card sx={{mt: 3}} variant="outlined" component="section" key={x.network.chainId}>
                   <Typography sx={{p: 1}} variant="subtitle1" component="h3"><NetworkFormatted network={x.network}/></Typography>
-                  <Divider sx={{mb: 1.5}} />
+                  <Divider />
                   {x.error ? <QueryError error={x.error}/> :
                     <List disablePadding>
-                      {x.accounts.map(account => <ListItem disablePadding key={`${x.network.chainId}_${account.id}`}>
+                      {x.accounts.map(account => <ListItem disablePadding sx={{pt: 1, pb: 1}} key={`${x.network.chainId}_${account.id}`}>
                         <NextLink href={`/${x.network.slugName}/accounts/${account.id}`} passHref>
                           <ListItemButton component="a">
                             <AccountAddressFormatted address={account.id}/>
                           </ListItemButton>
                         </NextLink>
                       </ListItem>)}
-                      {x.tokens.map(token => <ListItem disablePadding key={`${x.network.chainId}_${token.id}`}>
+                      {x.tokens.map(token => <ListItem disablePadding sx={{mt: 1, mb: 1}} key={`${x.network.chainId}_${token.id}`}>
                         <NextLink href={`/${x.network.slugName}/supertokens/${token.id}`} passHref>
                           <ListItemButton component="a">
                             <SuperTokenFormatted name={token.name} symbol={token.symbol} address={token.id}/>
