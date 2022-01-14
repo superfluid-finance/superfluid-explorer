@@ -20,6 +20,7 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
 
   const incomingStreamColumns: GridColDef[] = [
     {field: 'id', type: "string", hide: true, sortable: false},
+    {field: 'token', headerName: "Token", flex: 1, sortable: false, renderCell: (params) => (<SuperTokenAddress network={network} address={params.value} />)},
     {field: 'sender', headerName: "Sender", sortable: false, flex: 1, renderCell: (params) => (<AccountAddress network={network} address={params.value} />)},
     {field: 'currentFlowRate', headerName: "Flow Rate", flex: 1, sortable: true, renderCell: (params) => (<FlowRate flowRate={params.value} />)},
     {
@@ -38,7 +39,7 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
         />)
       }
     },
-    {field: 'token', headerName: "Token", flex: 1, sortable: false, renderCell: (params) => (<SuperTokenAddress network={network} address={params.value} />)},
+    {field: 'createdAtTimestamp', headerName: "Created At", sortable: true, flex: 1, renderCell: (params) => (new Date(params.value * 1000).toLocaleString())},
     {
       field: 'details', headerName: "Details", flex: 1, sortable: false, renderCell: (cellParams) => (
         <StreamDetailsDialog network={network} streamId={cellParams.id.toString()}/>
@@ -46,7 +47,10 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
     }
   ];
 
-  const [incomingStreamOrdering, setIncomingStreamOrdering] = useState<Ordering<StreamOrderBy> | undefined>(undefined);
+  const [incomingStreamOrdering, setIncomingStreamOrdering] = useState<Ordering<StreamOrderBy> | undefined>({
+    orderBy: "createdAtTimestamp",
+    orderDirection: "desc"
+  });
   const [incomingStreamPaging, setIncomingStreamPaging] = useState<SkipPaging>(createSkipPaging({
     take: 10
   }));
@@ -62,16 +66,36 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
 
   const incomingStreamRows: Stream[] = incomingStreamsQuery.data ? incomingStreamsQuery.data.data : [];
 
-  const [outgoingStreamOrdering, setOutgoingStreamOrdering] = useState<Ordering<StreamOrderBy> | undefined>(undefined);
+  const [outgoingStreamOrdering, setOutgoingStreamOrdering] = useState<Ordering<StreamOrderBy> | undefined>({
+    orderBy: "createdAtTimestamp",
+    orderDirection: "desc"
+  });
   const [outgoingStreamPaging, setOutgoingStreamPaging] = useState<SkipPaging>(createSkipPaging({
     take: 10
   }));
 
   const outgoingStreamColumns: GridColDef[] = [
     {field: 'id', hide: true, flex: 1},
+    {field: 'token', headerName: "Token", sortable: false, flex: 1, renderCell: (params) => (<SuperTokenAddress network={network} address={params.value} />)},
     {field: 'receiver', headerName: "Receiver", sortable: false, flex: 1, renderCell: (params) => (<AccountAddress network={network} address={params.value} />)},
     {field: 'currentFlowRate', headerName: "Flow Rate", sortable: true, flex: 1, renderCell: (params) => (<FlowRate flowRate={params.value} />)},
-    {field: 'token', headerName: "Token", sortable: false, flex: 1, renderCell: (params) => (<SuperTokenAddress network={network} address={params.value} />)},
+    {
+      field: 'streamedUntilUpdatedAt',
+      headerName: "Total Streamed",
+      flex: 1,
+      sortable: false,
+      renderCell: (params) => {
+        const stream = params.row as Stream;
+        return (<FlowingBalance
+          {...{
+            balance: stream.streamedUntilUpdatedAt,
+            balanceTimestamp: stream.updatedAtTimestamp,
+            flowRate: stream.currentFlowRate
+          }}
+        />)
+      }
+    },
+    {field: 'createdAtTimestamp', headerName: "Created At", sortable: true, flex: 1, renderCell: (params) => (new Date(params.value * 1000).toLocaleString())},
     {
       field: 'details', headerName: "Details", flex: 1, sortable: false, renderCell: (cellParams) => (
         <StreamDetailsDialog network={network} streamId={cellParams.id.toString()}/>

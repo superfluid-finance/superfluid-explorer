@@ -68,19 +68,19 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
     <Card variant="outlined">
       <List>
         <ListItem divider>
-          <ListItemText primary="Token"
-                        secondary={(network && index) ? <SuperTokenAddress network={network} address={index.token}/> :
+          <ListItemText secondary="Token"
+                        primary={(network && index) ? <SuperTokenAddress network={network} address={index.token}/> :
                           <SkeletonAddress/>}/>
         </ListItem>
         <ListItem divider>
-          <ListItemText primary="Publisher"
-                        secondary={(network && index) ? <AccountAddress network={network} address={index.publisher}/> : <SkeletonAddress/>}/>
+          <ListItemText secondary="Publisher"
+                        primary={(network && index) ? <AccountAddress network={network} address={index.publisher}/> : <SkeletonAddress/>}/>
         </ListItem>
         <ListItem divider>
-          <ListItemText primary="Total Units" secondary={index ? index.totalUnits : <Skeleton sx={{width: "75px"}} />}/>
+          <ListItemText secondary="Total Units" primary={index ? index.totalUnits : <Skeleton sx={{width: "75px"}} />}/>
         </ListItem>
         <ListItem>
-          <ListItemText primary="Total Distributed" secondary={index ? index.totalAmountDistributedUntilUpdatedAt : <Skeleton sx={{width: "75px"}} />}/>
+          <ListItemText secondary="Total Distributed" primary={index ? index.totalAmountDistributedUntilUpdatedAt : <Skeleton sx={{width: "75px"}} />}/>
         </ListItem>
       </List>
     </Card>

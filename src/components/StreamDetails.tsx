@@ -1,35 +1,25 @@
-import {FC, forwardRef, ReactElement, Ref, useState} from "react";
+import {FC, useState} from "react";
 import {Network, sfApi} from "../redux/store";
 import {
   createSkipPaging,
-  IndexSubscription,
   Ordering,
   SkipPaging, Stream,
-  StreamPeriodOrderBy, SuperToken
+  StreamPeriodOrderBy
 } from "@superfluid-finance/sdk-core";
 import Container from "@mui/material/Container";
 import StreamPeriodDataGrid from "./StreamPeriodDataGrid";
 import {
-  AppBar,
   Box,
   Button,
   Card,
-  Dialog,
-  Grid,
-  IconButton,
   List, ListItem, ListItemText, Skeleton,
-  Slide,
-  TextField,
-  Toolbar,
   Typography
 } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
-import {TransitionProps} from "@mui/material/transitions";
-import {AppDataGrid} from "./AppDataGrid";
 import DetailsDialog from "./DetailsDialog";
 import AccountAddress from "./AccountAddress";
 import SuperTokenAddress from "./SuperTokenAddress";
 import SkeletonAddress from "./skeletons/SkeletonAddress";
+import FlowingBalance from "./FlowingBalance";
 
 interface Props {
   network: Network;
@@ -45,7 +35,10 @@ const StreamDetails: FC<Props> = ({network, streamId}) => {
   const stream: Stream | undefined | null = streamQuery.data
 
   const [streamPeriodPaging, setStreamPeriodPaging] = useState<SkipPaging>(createSkipPaging())
-  const [streamPeriodOrdering, setStreamPeriodOrdering] = useState<Ordering<StreamPeriodOrderBy> | undefined>()
+  const [streamPeriodOrdering, setStreamPeriodOrdering] = useState<Ordering<StreamPeriodOrderBy> | undefined>({
+    orderBy: "startedAtTimestamp",
+    orderDirection: "desc"
+  })
   const streamPeriodListQuery = sfApi.useStreamPeriodsQuery({
     chainId: network.chainId,
     filter: {
@@ -62,19 +55,28 @@ const StreamDetails: FC<Props> = ({network, streamId}) => {
     <Card variant="outlined">
       <List>
         <ListItem divider>
-          <ListItemText primary="Token" secondary={(network && stream) ? <SuperTokenAddress network={network} address={stream.token}/> : <SkeletonAddress />}/>
+          <ListItemText secondary="Token" primary={(network && stream) ? <SuperTokenAddress network={network} address={stream.token}/> : <SkeletonAddress />}/>
         </ListItem>
         <ListItem divider>
-          <ListItemText primary="Sender" secondary={(network && stream) ? <AccountAddress network={network} address={stream.sender}/> : <SkeletonAddress />}/>
+          <ListItemText secondary="Sender" primary={(network && stream) ? <AccountAddress network={network} address={stream.sender}/> : <SkeletonAddress />}/>
         </ListItem>
         <ListItem divider>
-          <ListItemText primary="Receiver" secondary={(network && stream) ? <AccountAddress network={network} address={stream.receiver}/> : <SkeletonAddress />}/>
+          <ListItemText secondary="Receiver" primary={(network && stream) ? <AccountAddress network={network} address={stream.receiver}/> : <SkeletonAddress />}/>
         </ListItem>
         <ListItem divider>
-          <ListItemText primary="Current Flow Rate" secondary={(stream) ? stream.currentFlowRate : <Skeleton sx={{width: "125px" }} />}/>
+          <ListItemText secondary="Current Flow Rate" primary={(stream) ? stream.currentFlowRate : <Skeleton sx={{width: "125px" }} />}/>
+        </ListItem>
+        <ListItem divider>
+          <ListItemText secondary="Total Amount Streamed" primary={(stream) ? <FlowingBalance
+            {...{
+              balance: stream.streamedUntilUpdatedAt,
+              balanceTimestamp: stream.updatedAtTimestamp,
+              flowRate: stream.currentFlowRate
+            }}
+          /> : <Skeleton sx={{width: "125px" }} />}/>
         </ListItem>
         <ListItem>
-          <ListItemText primary="Created At" secondary={(stream) ? new Date(stream.createdAtTimestamp * 1000).toDateString() : <Skeleton sx={{width: "100px" }} />}/>
+          <ListItemText secondary="Created At" primary={(stream) ? new Date(stream.createdAtTimestamp * 1000).toDateString() : <Skeleton sx={{width: "100px" }} />}/>
         </ListItem>
       </List>
     </Card>

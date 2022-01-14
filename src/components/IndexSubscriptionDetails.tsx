@@ -73,25 +73,25 @@ const IndexSubscriptionDetails: FC<Props> = ({network, indexSubscriptionId}) => 
     <Card variant="outlined">
       <List>
         <ListItem divider>
-          <ListItemText primary="Token"
-                        secondary={(network && indexSubscription) ?
+          <ListItemText secondary="Token"
+                        primary={(network && indexSubscription) ?
                           <SuperTokenAddress network={network} address={indexSubscription.token}/> :
                           <SkeletonAddress/>}/>
         </ListItem>
         <ListItem divider>
-          <ListItemText primary="Publisher"
-                        secondary={(network && indexSubscription) ?
+          <ListItemText secondary="Publisher"
+                        primary={(network && indexSubscription) ?
                           <AccountAddress network={network} address={indexSubscription.publisher}/> :
                           <SkeletonAddress/>}/>
         </ListItem>
         <ListItem>
-          <ListItemText primary="Subscriber"
-                        secondary={(network && indexSubscription) ?
+          <ListItemText secondary="Subscriber"
+                        primary={(network && indexSubscription) ?
                           <AccountAddress network={network} address={indexSubscription.subscriber}/> :
                           <SkeletonAddress/>}/>
         </ListItem>
         <ListItem>
-          <ListItemText primary="Total Units Received" secondary={(indexSubscription && index) ? calculateUnitsReceived(
+          <ListItemText secondary="Total Units Received" primary={(indexSubscription && index) ? calculateUnitsReceived(
             BigNumber.from(index.indexValue),
             BigNumber.from(indexSubscription.totalAmountReceivedUntilUpdatedAt),
             BigNumber.from(indexSubscription.indexValueUntilUpdatedAt),
