@@ -16,7 +16,7 @@ import {
   Divider,
   IconButton,
   List,
-  ListItem, ListItemText,
+  ListItem, ListItemText, Skeleton,
   Slide,
   Toolbar,
   Typography
@@ -31,6 +31,7 @@ import DetailsDialog from "./DetailsDialog";
 import IndexPublicationDetails from "./IndexPublicationDetails";
 import SuperTokenAddress from "./SuperTokenAddress";
 import AccountAddress from "./AccountAddress";
+import SkeletonAddress from "./skeletons/SkeletonAddress";
 
 interface Props {
   network: Network;
@@ -69,43 +70,46 @@ const IndexSubscriptionDetails: FC<Props> = ({network, indexSubscriptionId}) => 
     <Typography variant="h2">
       Index Subscription Details
     </Typography>
-    {
-      (indexSubscription && index) && (<>
-        <Card variant="outlined">
-          <List>
-            <ListItem divider>
-              <ListItemText primary="Token"
-                            secondary={<SuperTokenAddress network={network} address={indexSubscription.token}/>}/>
-            </ListItem>
-            <ListItem divider>
-              <ListItemText primary="Publisher"
-                            secondary={<AccountAddress network={network} address={indexSubscription.publisher}/>}/>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="Subscriber"
-                            secondary={<AccountAddress network={network} address={indexSubscription.subscriber}/>}/>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="Total Units Received" secondary={calculateUnitsReceived(
-                BigNumber.from(index.indexValue),
-                BigNumber.from(indexSubscription.totalAmountReceivedUntilUpdatedAt),
-                BigNumber.from(indexSubscription.indexValueUntilUpdatedAt),
-                Number(indexSubscription.units)
-              ).toString()}/>
-            </ListItem>
-          </List>
-        </Card>
-        <Card>
-          <Typography variant="h3">
-            Distributions
-          </Typography>
-          <SubscriptionUnitsUpdatedEventDataGrid indexSubscription={indexSubscription}
-                                                 queryResult={subscriptionUnitsUpdatedEventQuery}
-                                                 setPaging={setSubscriptionUnitsUpdatedEventPaging}
-                                                 ordering={subscriptionUnitsUpdatedEventPagingOrdering}
-                                                 setOrdering={setSubscriptionUnitsUpdatedEventOrdering}/>
-        </Card>
-      </>)}
+    <Card variant="outlined">
+      <List>
+        <ListItem divider>
+          <ListItemText primary="Token"
+                        secondary={(network && indexSubscription) ?
+                          <SuperTokenAddress network={network} address={indexSubscription.token}/> :
+                          <SkeletonAddress/>}/>
+        </ListItem>
+        <ListItem divider>
+          <ListItemText primary="Publisher"
+                        secondary={(network && indexSubscription) ?
+                          <AccountAddress network={network} address={indexSubscription.publisher}/> :
+                          <SkeletonAddress/>}/>
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Subscriber"
+                        secondary={(network && indexSubscription) ?
+                          <AccountAddress network={network} address={indexSubscription.subscriber}/> :
+                          <SkeletonAddress/>}/>
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Total Units Received" secondary={(indexSubscription && index) ? calculateUnitsReceived(
+            BigNumber.from(index.indexValue),
+            BigNumber.from(indexSubscription.totalAmountReceivedUntilUpdatedAt),
+            BigNumber.from(indexSubscription.indexValueUntilUpdatedAt),
+            Number(indexSubscription.units)
+          ).toString() : <Skeleton sx={{width: "100px"}}/>}/>
+        </ListItem>
+      </List>
+    </Card>
+    <Card>
+      <Typography variant="h3">
+        Distributions
+      </Typography>
+      <SubscriptionUnitsUpdatedEventDataGrid
+        queryResult={subscriptionUnitsUpdatedEventQuery}
+        setPaging={setSubscriptionUnitsUpdatedEventPaging}
+        ordering={subscriptionUnitsUpdatedEventPagingOrdering}
+        setOrdering={setSubscriptionUnitsUpdatedEventOrdering}/>
+    </Card>
   </Container>)
 };
 

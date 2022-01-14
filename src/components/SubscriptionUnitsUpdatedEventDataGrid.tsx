@@ -11,7 +11,6 @@ import {
 } from "@superfluid-finance/sdk-core";
 
 interface Props {
-  indexSubscription: IndexSubscription,
   queryResult: {
     isFetching: boolean
     data?: PagedResult<SubscriptionUnitsUpdatedEvent>
@@ -27,7 +26,7 @@ const columns: GridColDef[] = [
   {field: 'units', headerName: "Units", sortable: true, flex: 1},
 ];
 
-const SubscriptionUnitsUpdatedEventDataGrid: FC<Props> = ({indexSubscription, queryResult, setPaging, ordering, setOrdering}) => {
+const SubscriptionUnitsUpdatedEventDataGrid: FC<Props> = ({queryResult, setPaging, ordering, setOrdering}) => {
   const rows: SubscriptionUnitsUpdatedEvent[] = queryResult.data ? queryResult.data.data : [];
 
   return (<AppDataGrid columns={columns} rows={rows} queryResult={queryResult} setPaging={setPaging} ordering={ordering}
