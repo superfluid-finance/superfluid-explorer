@@ -1,16 +1,13 @@
-import {FC, ReactNode, SyntheticEvent, useEffect, useState} from "react";
+import {ReactNode, SyntheticEvent, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {findNetwork, sfApi} from "../../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {
   Card,
-  CircularProgress,
   Container,
-  Divider,
   List,
   ListItem,
-  ListItemText, Skeleton,
-  Tab,
+  ListItemText, Tab,
   Tabs,
   Typography
 } from "@mui/material";
@@ -18,46 +15,37 @@ import {Box} from "@mui/system";
 import NetworkDisplay from "../../../components/NetworkDisplay";
 import {Token} from "@superfluid-finance/sdk-core";
 import {NextPage} from "next";
-import AccountOverview from "../../../components/AccountOverview";
-import AccountStreams from "../../../components/AccountStreams";
-import AccountIndexes from "../../../components/AccountIndexes";
 import SuperTokenIndexes from "../../../components/SuperTokenIndexes";
 import SuperTokenStreams from "../../../components/SuperTokenStreams";
 import SkeletonNetwork from "../../../components/skeletons/SkeletonNetwork";
 import SkeletonTokenSymbol from "../../../components/skeletons/SkeletonTokenSymbol";
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
 import SkeletonTokenName from "../../../components/skeletons/SkeletonTokenName";
-// import {getFramework} from "@superfluid-finance/sdk-redux/dist/module/sdkReduxConfig"; // TODO(KK): Think through the import
 
 const SuperTokenPage: NextPage = () => {
   const router = useRouter()
   const {networkName, address} = router.query;
 
   const network = typeof networkName === "string" ? findNetwork(networkName) : undefined;
-  const queryState = sfApi.useTokenQuery(network ? {
+  const tokenQuery = sfApi.useTokenQuery(network ? {
     chainId: network.chainId,
     id: getAddress(address)
   } : skipToken);
 
-  const superToken: Token | null | undefined = queryState.data;
+  const [triggerMonitoring, monitorResult] = sfApi.useMonitorForEventsToInvalidateCacheMutation();
+  useEffect(() => {
+    if (network && tokenQuery.data && monitorResult.isUninitialized) {
+      triggerMonitoring({
+        chainId: network.chainId,
+        address: tokenQuery.data.id
+      });
+      return monitorResult.reset;
+    }
+  }, [])
+
+  const superToken: Token | null | undefined = tokenQuery.data;
 
   const [totalSupply, setTotalSupply] = useState<string | undefined>();
-
-  // useEffect(() => {
-  //   if (network) {
-  //     getFramework(network.chainId).then(x => x.loadSuperToken(getAddress(address))).then(async (x) => {
-  //       setTotalSupply(x.totalSupply(await getFramework(network.chainId).))
-  //     })
-  //   }
-  // }, [network])
-  //
-  // const web3Token = network ? getFramework(network.chainId). : ;
-
-
-  // const queryState = sfApi.useListEventsQuery(network ? {
-  //   chainId: network.chainId,
-  //
-  // } : skipToken);
 
   const [value, setValue] = useState(0);
 
