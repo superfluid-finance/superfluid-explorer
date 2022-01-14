@@ -1,34 +1,23 @@
-import {FC, forwardRef, ReactElement, Ref, useState} from "react";
+import {FC, useState} from "react";
 import {Network, sfApi} from "../redux/store";
 import {
   createSkipPaging, Index, IndexSubscription,
-  IndexUpdatedEventOrderBy,
   Ordering,
   SkipPaging, SubscriptionUnitsUpdatedEventOrderBy
 } from "@superfluid-finance/sdk-core";
 import Container from "@mui/material/Container";
 import {
-  AppBar,
   Box,
   Button,
   Card,
-  Dialog,
-  Divider,
-  IconButton,
   List,
   ListItem, ListItemText, Skeleton,
-  Slide,
-  Toolbar,
   Typography
 } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
-import {TransitionProps} from "@mui/material/transitions";
-import IndexUpdatedEventDataGrid from "./IndexUpdatedEventDataGrid";
 import SubscriptionUnitsUpdatedEventDataGrid from "./SubscriptionUnitsUpdatedEventDataGrid";
 import {BigNumber} from "ethers";
 import {skipToken} from "@reduxjs/toolkit/query";
 import DetailsDialog from "./DetailsDialog";
-import IndexPublicationDetails from "./IndexPublicationDetails";
 import SuperTokenAddress from "./SuperTokenAddress";
 import AccountAddress from "./AccountAddress";
 import SkeletonAddress from "./skeletons/SkeletonAddress";
@@ -84,7 +73,7 @@ const IndexSubscriptionDetails: FC<Props> = ({network, indexSubscriptionId}) => 
                           <AccountAddress network={network} address={indexSubscription.publisher}/> :
                           <SkeletonAddress/>}/>
         </ListItem>
-        <ListItem>
+        <ListItem divider>
           <ListItemText secondary="Subscriber"
                         primary={(network && indexSubscription) ?
                           <AccountAddress network={network} address={indexSubscription.subscriber}/> :

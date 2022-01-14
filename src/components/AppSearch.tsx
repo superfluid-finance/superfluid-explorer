@@ -94,6 +94,14 @@ const useSearchHook = (address: string): NetworkSearchResult[] => {
         tokens: _.uniq(queryResult.tokensByAddress.concat(queryResult.tokensByUnderlyingAddress)),
         accounts: queryResult.accounts
       });
+    } else {
+      chainResults.push({
+        network: network,
+        isFetching: queryState.isFetching,
+        error: queryState.error,
+        tokens: [],
+        accounts: []
+      });
     }
   });
 
