@@ -5,7 +5,7 @@ import {
   Typography,
   DialogContent,
   Dialog,
-  InputAdornment, ListItem, List, ListItemButton, CircularProgress, Grid
+  InputAdornment, ListItem, List, ListItemButton, CircularProgress, Grid, Card, Divider
 } from "@mui/material";
 import {useRouter} from "next/router";
 import {Network, networks, sfApi} from "../redux/store";
@@ -174,10 +174,11 @@ const AppSearch: FC<BoxProps> = (boxProps) => {
               <Grid container justifyContent="center" sx={{mt: 3}}>
                 <CircularProgress/>
               </Grid> : networkSearchResults.filter(x => x.tokens.length || x.accounts.length).map(x => (
-                <Box component="section" key={x.network.chainId}>
-                  <Typography variant="subtitle1" component="h3"><NetworkFormatted network={x.network}/></Typography>
+                <Card sx={{mt: 3}} variant="outlined" component="section" key={x.network.chainId}>
+                  <Typography sx={{p: 1}} variant="subtitle1" component="h3"><NetworkFormatted network={x.network}/></Typography>
+                  <Divider sx={{mb: 1.5}} />
                   {x.error ? <QueryError error={x.error}/> :
-                    <List>
+                    <List disablePadding>
                       {x.accounts.map(account => <ListItem disablePadding key={`${x.network.chainId}_${account.id}`}>
                         <NextLink href={`/${x.network.slugName}/accounts/${account.id}`} passHref>
                           <ListItemButton component="a">
@@ -194,7 +195,7 @@ const AppSearch: FC<BoxProps> = (boxProps) => {
                       </ListItem>)}
                     </List>
                   }
-                </Box>))
+                </Card>))
           }
         </DialogContent>
       </Dialog>

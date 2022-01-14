@@ -5,15 +5,17 @@ import {Network, sfApi} from "../redux/store";
 import {CircularProgress, List, ListItem, ListItemText, Tooltip} from "@mui/material";
 import QueryError from "./QueryError";
 
+// <Tooltip title={<AccountAddressTooltipContent network={network} address={address}/>}>
+// </Tooltip>
 const AccountAddress: FC<{
   network: Network,
   address: string
 }> = ({network, address, children}) => {
   return (
-    <Tooltip title={<AccountAddressTooltipContent network={network} address={address}/>}><AppLink className="address"
-                                                                                                  href={`/${network.slugName}/accounts/${address}`}>
-      <AccountAddressFormatted address={address} />
-    </AppLink></Tooltip>);
+    <AppLink className="address"
+             href={`/${network.slugName}/accounts/${address}`}>
+      <AccountAddressFormatted address={address}/>
+    </AppLink>);
 }
 
 const AccountAddressTooltipContent: FC<{
@@ -41,7 +43,7 @@ const AccountAddressTooltipContent: FC<{
 
 export const AccountAddressFormatted: FC<{
   address: string
-}> = ({ address }) => {
+}> = ({address}) => {
   return <>{ethers.utils.getAddress(address)}</>
 }
 

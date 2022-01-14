@@ -5,16 +5,32 @@ import {Network, sfApi} from "../redux/store";
 import {CircularProgress, Grid, List, ListItem, ListItemText, Tooltip, Typography} from "@mui/material";
 import QueryError from "./QueryError";
 
+// <Tooltip title={<SuperTokenTooltipContent network={network} address={address}/>}>
+//*</Tooltip>*/}
 const SuperTokenAddress: FC<{
   network: Network,
   address: string
 }> = ({network, address}) => {
-  return (<Tooltip title={<SuperTokenTooltipContent network={network} address={address}/>}><AppLink
-    className="address" href={`/${network.slugName}/supertokens/${address}`}>
-    {ethers.utils.getAddress(address)}
-  </AppLink></Tooltip>);
+  const tokenQuery = sfApi.useTokenQuery({
+    chainId: network.chainId,
+    id: address
+  })
+
+  const appLink = (<AppLink className="address" href={`/${network.slugName}/supertokens/${address}`}>
+    {tokenQuery.data ? <>{tokenQuery.data.name} ({tokenQuery.data.symbol})</> : ethers.utils.getAddress(address)}
+  </AppLink>);
+
+  return (<>
+    {tokenQuery.data ?
+      <Tooltip title={tokenQuery.data.id} placement="right" arrow>
+        {appLink}
+      </Tooltip> : appLink
+    }</>);
 }
 
+
+// <Tooltip title={tokenQuery.data.id}>
+// </Tooltip>
 const SuperTokenTooltipContent: FC<{
   network: Network,
   address: string
@@ -48,9 +64,9 @@ export const SuperTokenFormatted: FC<{
   name: string,
   symbol: string,
 }> = ({address, name, symbol}) => {
-  return <span><Grid><Grid item xs={12}>{name} ({symbol})</Grid><Grid item
-                                                                      xs={12}><Typography variant="caption" component="span">{ethers.utils.getAddress(address)}</Typography></Grid></Grid>
-    </span>
+  return <Grid><Grid item xs={12}>{name} ({symbol})</Grid><Grid item
+                                                                xs={12}><Typography variant="caption"
+                                                                                    component="span">{ethers.utils.getAddress(address)}</Typography></Grid></Grid>
 }
 
 export default SuperTokenAddress;
