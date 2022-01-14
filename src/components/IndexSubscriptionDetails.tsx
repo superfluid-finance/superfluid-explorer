@@ -100,7 +100,7 @@ const IndexSubscriptionDetails: FC<Props> = ({network, indexSubscriptionId}) => 
         </ListItem>
       </List>
     </Card>
-    <Card>
+    <Card variant="outlined">
       <Typography variant="h3">
         Distributions
       </Typography>

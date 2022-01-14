@@ -1,9 +1,7 @@
 import {
   Box,
-  Breadcrumbs,
   Card,
   Container,
-  Link,
   List,
   ListItem,
   ListItemText, Skeleton,
@@ -58,7 +56,7 @@ const AccountPage: NextPage = () => {
     setValue(newValue);
   };
 
-  return (<Container>
+  return (<Container className="page">
     <Typography variant="h3" component="h1" sx={{mt: 2, mb: 4}}>
       Account
     </Typography>
@@ -73,11 +71,13 @@ const AccountPage: NextPage = () => {
         </ListItem>
         <ListItem divider>
           <ListItemText secondary="Address"
-                        primary={accountQuery.data ? <AccountAddressFormatted address={accountQuery.data.id} /> : <SkeletonAddress/>}/>
+                        primary={accountQuery.data ? <AccountAddressFormatted address={accountQuery.data.id}/> :
+                          <SkeletonAddress/>}/>
         </ListItem>
         <ListItem>
           <ListItemText secondary="Account Type"
-                        primary={accountQuery.data ? (accountQuery.data.isSuperApp ? "Super App" : "Regular account") : <Skeleton sx={{width: "40px"}}/>}/>
+                        primary={accountQuery.data ? (accountQuery.data.isSuperApp ? "Super App" : "Regular account") :
+                          <Skeleton sx={{width: "40px"}}/>}/>
         </ListItem>
       </List>
     </Card>

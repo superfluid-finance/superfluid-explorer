@@ -50,7 +50,7 @@ const Layout: FC = ({children}) => {
       height: "100vh"
     }}>
       <SfAppBar/>
-      <Box component="main" sx={{height: "100vh"}}>{children}</Box>
+      <Box className="wave-container" component="main" sx={{height: "100vh"}}>{children}</Box>
     </Box>
   )
 }

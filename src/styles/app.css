@@ -3,3 +3,17 @@
   overflow: hidden;
   white-space: nowrap;
 }
+
+main {
+  overflow: auto
+}
+
+.wave-container {
+  background-image: url("wave.svg");
+  background-repeat:no-repeat;
+  background-position:bottom left, bottom right;
+}
+
+.page {
+  background-color: #ffffff;
+}

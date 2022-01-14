@@ -53,7 +53,7 @@ const SuperTokenPage: NextPage = () => {
     setValue(newValue);
   };
 
-  return (<Container>
+  return (<Container className="page">
     <Typography variant="h3" component="h1" sx={{mt: 2, mb: 4}}>
       Super Token
     </Typography>
