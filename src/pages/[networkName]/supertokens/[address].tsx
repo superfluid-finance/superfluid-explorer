@@ -21,6 +21,7 @@ import SkeletonNetwork from "../../../components/skeletons/SkeletonNetwork";
 import SkeletonTokenSymbol from "../../../components/skeletons/SkeletonTokenSymbol";
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
 import SkeletonTokenName from "../../../components/skeletons/SkeletonTokenName";
+import EventList from "../../../components/EventList";
 
 const SuperTokenPage: NextPage = () => {
   const router = useRouter()
@@ -85,6 +86,7 @@ const SuperTokenPage: NextPage = () => {
 
     <Box sx={{mt: 3, mb: 2, borderBottom: 1, borderColor: 'divider'}} >
       <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+        <Tab label="Events"/>
         <Tab label="Streams"/>
         <Tab label="Indexes"/>
       </Tabs>
@@ -92,9 +94,12 @@ const SuperTokenPage: NextPage = () => {
 
     <Box>
       <TabPanel value={value} index={0}>
-        {(network && address) && <SuperTokenStreams network={network} tokenAddress={getAddress(address)}/>}
+        {(network && address) && <EventList network={network} address={getAddress(address)}/>}
       </TabPanel>
       <TabPanel value={value} index={1}>
+        {(network && address) && <SuperTokenStreams network={network} tokenAddress={getAddress(address)}/>}
+      </TabPanel>
+      <TabPanel value={value} index={2}>
         {(network && address) &&
           <SuperTokenIndexes network={network} tokenAddress={getAddress(address)}/>}
       </TabPanel>

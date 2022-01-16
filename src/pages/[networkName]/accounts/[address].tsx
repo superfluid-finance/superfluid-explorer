@@ -21,6 +21,7 @@ import NetworkDisplay from "../../../components/NetworkDisplay";
 import SkeletonNetwork from "../../../components/skeletons/SkeletonNetwork";
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
 import {AccountAddressFormatted} from "../../../components/AccountAddress";
+import EventList from "../../../components/EventList";
 
 const getAddress = (address: unknown): string => {
   if (typeof address === "string") {
@@ -84,20 +85,24 @@ const AccountPage: NextPage = () => {
 
     <Box sx={{mt: 3, mb: 2, borderBottom: 1, borderColor: 'divider'}}>
       <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-        <Tab label="Super tokens" {...a11yProps(0)} />
-        <Tab label="Streams" {...a11yProps(1)} />
-        <Tab label="Indexes" {...a11yProps(2)} />
+        <Tab label="Events" />
+        <Tab label="Super tokens" />
+        <Tab label="Streams" />
+        <Tab label="Indexes" />
       </Tabs>
     </Box>
 
     <Box>
       <TabPanel value={value} index={0}>
-        {(network && address) && <AccountTokens network={network} accountAddress={getAddress(address)}/>}
+        {(network && address) && <EventList network={network} address={getAddress(address)}/>}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {(network && address) && <AccountStreams network={network} accountAddress={getAddress(address)}/>}
+        {(network && address) && <AccountTokens network={network} accountAddress={getAddress(address)}/>}
       </TabPanel>
       <TabPanel value={value} index={2}>
+        {(network && address) && <AccountStreams network={network} accountAddress={getAddress(address)}/>}
+      </TabPanel>
+      <TabPanel value={value} index={3}>
         {(network && address) && <AccountIndexes network={network} accountAddress={getAddress(address)}/>}
       </TabPanel>
     </Box>
@@ -113,13 +118,6 @@ interface TabPanelProps {
   children?: ReactNode;
   index: number;
   value: number;
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `tab-${index}`,
-    'aria-controls': `tabpanel-${index}`,
-  };
 }
 
 function TabPanel(props: TabPanelProps) {

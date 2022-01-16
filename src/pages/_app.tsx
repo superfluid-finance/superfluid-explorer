@@ -26,7 +26,7 @@ export function MyApp(props: MyAppProps) {
   return (
     <CacheProvider value={emotionCache}>
       <Head>
-        <title>Change title in _app.tsx</title>
+        <title>Superfluid Console</title>
         <meta name="viewport" content="initial-scale=1, width=device-width"/>
       </Head>
       <ThemeProvider theme={theme}>
