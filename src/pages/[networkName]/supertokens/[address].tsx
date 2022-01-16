@@ -35,7 +35,7 @@ const SuperTokenPage: NextPage = () => {
 
   const [triggerMonitoring, monitorResult] = sfApi.useMonitorForEventsToInvalidateCacheMutation();
   useEffect(() => {
-    if (network && tokenQuery.data && monitorResult.isUninitialized) {
+    if (network && tokenQuery.data) {
       triggerMonitoring({
         chainId: network.chainId,
         address: tokenQuery.data.id

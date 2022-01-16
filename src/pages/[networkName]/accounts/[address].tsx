@@ -44,7 +44,7 @@ const AccountPage: NextPage = () => {
 
   const [triggerMonitoring, monitorResult] = sfApi.useMonitorForEventsToInvalidateCacheMutation();
   useEffect(() => {
-    if (network && accountQuery.data && monitorResult.isUninitialized) {
+    if (network && accountQuery.data) {
       triggerMonitoring({
         chainId: network.chainId,
         address: accountQuery.data.id
