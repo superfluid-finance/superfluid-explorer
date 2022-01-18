@@ -30,12 +30,11 @@ const AccountTokens: FC<{
   })
 
   return (
-    <Card variant="outlined">
       <AccountTokenSnapshotDataGrid network={network}
                                     queryResult={accountTokenSnapshotsQuery}
                                     setPaging={setAccountTokenSnapshotPaging}
                                     ordering={accountTokenSnapshotOrdering}
-                                    setOrdering={setAccountTokenSnapshotOrdering}/></Card>)
+                                    setOrdering={setAccountTokenSnapshotOrdering}/>)
 }
 
 export default AccountTokens;

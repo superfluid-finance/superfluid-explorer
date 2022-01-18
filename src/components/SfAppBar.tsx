@@ -2,8 +2,14 @@ import * as React from "react";
 import {AppBar, Button, Toolbar} from "@mui/material";
 import AppLink from "./AppLink";
 import AppSearch from "./AppSearch";
+import dynamic from "next/dynamic";
+
+const SelectThemeButtonWithoutSSR = dynamic(() => import('./SelectThemeButton'), {
+  ssr: false,
+})
 
 const SfAppBar = () => {
+
   return (
     <AppBar position="sticky">
       <Toolbar>
@@ -12,6 +18,7 @@ const SfAppBar = () => {
                                            id="search-button"
                                            size="medium"
                                            variant="contained">Subgraph</Button></AppLink>
+        <SelectThemeButtonWithoutSSR />
       </Toolbar>
     </AppBar>
   );

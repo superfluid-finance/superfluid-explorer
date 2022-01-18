@@ -27,6 +27,7 @@
     "lodash": "latest",
     "next": "latest",
     "next-redux-wrapper": "latest",
+    "next-themes": "^0.0.15",
     "react": "latest",
     "react-dom": "latest",
     "react-redux": "latest",

@@ -4,7 +4,7 @@ import {
   Container,
   List,
   ListItem,
-  ListItemText, Skeleton,
+  ListItemText, Paper, Skeleton,
   Tab,
   Tabs,
   Typography
@@ -57,14 +57,14 @@ const AccountPage: NextPage = () => {
     setValue(newValue);
   };
 
-  return (<Container className="page">
+  return (<Container className="page" component={Paper} elevation={1}>
     <Typography variant="h3" component="h1" sx={{mt: 2, mb: 4}}>
       Account
     </Typography>
     <Typography variant="h6" component="h2" sx={{ml: 1, mb: 1}}>
       Overview
     </Typography>
-    <Card variant="outlined">
+    <Paper elevation={2}>
       <List>
         <ListItem divider>
           <ListItemText secondary="Network"
@@ -81,14 +81,14 @@ const AccountPage: NextPage = () => {
                           <Skeleton sx={{width: "40px"}}/>}/>
         </ListItem>
       </List>
-    </Card>
+    </Paper>
 
     <Box sx={{mt: 3, mb: 2, borderBottom: 1, borderColor: 'divider'}}>
       <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-        <Tab label="Events" />
-        <Tab label="Super tokens" />
-        <Tab label="Streams" />
-        <Tab label="Indexes" />
+        <Tab label="Events"/>
+        <Tab label="Super tokens"/>
+        <Tab label="Streams"/>
+        <Tab label="Indexes"/>
       </Tabs>
     </Box>
 

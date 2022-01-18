@@ -1,18 +1,18 @@
 import * as React from 'react';
 import Head from 'next/head';
 import {AppProps} from 'next/app';
-import {ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {CacheProvider, EmotionCache} from '@emotion/react';
-import theme from '../styles/theme';
 import createEmotionCache from '../utils/createEmotionCache';
 import {Provider} from "react-redux";
 import {store, wrapper} from "../redux/store";
 import SfAppBar from "../components/SfAppBar";
-import {FC} from "react";
+import {FC, useState} from "react";
 import Box from "@mui/material/Box";
 import "../styles/graphiql.min.css"
 import "../styles/app.css"
+import {Button} from "@mui/material";
+import {SfThemeProvider} from "../styles/SfThemeProvider";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -29,7 +29,7 @@ export function MyApp(props: MyAppProps) {
         <title>Superfluid Console</title>
         <meta name="viewport" content="initial-scale=1, width=device-width"/>
       </Head>
-      <ThemeProvider theme={theme}>
+      <SfThemeProvider>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline/>
         <Provider store={store}>
@@ -37,10 +37,11 @@ export function MyApp(props: MyAppProps) {
             <Component {...pageProps} />
           </Layout>
         </Provider>
-      </ThemeProvider>
+      </SfThemeProvider>
     </CacheProvider>
   );
 }
+
 
 const Layout: FC = ({children}) => {
   return (
