@@ -24,8 +24,6 @@ export const MyApp: FC<MyAppProps> = (props) => {
   const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;
   const theme = useSfTheme();
 
-  console.log({theme})
-
   return (
     <CacheProvider value={emotionCache}>
       <Head>

@@ -9,7 +9,7 @@ const useSfTheme = (): Theme => {
 
   const {themePreference} = useAppSelector((state) => state.appPreferences);
 
-  const [ muiTheme, setMuiTheme ] = useState<Theme>(themePreference === 'dark' ? createSfTheme('dark') : createSfTheme('light'));
+  const [ muiTheme, setMuiTheme ] = useState<Theme>(themePreference === 'system' ? createSfTheme('light') : createSfTheme(themePreference));
 
   // System theme we'll handle client-side because server has no knowledge of system preferences.
   // NOTE: UseEffect runs only on client-side.
@@ -17,6 +17,10 @@ const useSfTheme = (): Theme => {
     if (themePreference === 'system') {
       if (isSystemDarkTheme && muiTheme.palette.mode !== 'dark') {
         setMuiTheme(createSfTheme('dark'));
+      }
+    } else {
+      if (muiTheme.palette.mode !== themePreference) {
+        setMuiTheme(createSfTheme(themePreference));
       }
     }
   }, [themePreference]);
