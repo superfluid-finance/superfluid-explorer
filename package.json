@@ -27,12 +27,11 @@
     "lodash": "latest",
     "next": "latest",
     "next-redux-wrapper": "latest",
-    "next-themes": "^0.0.15",
+    "next-redux-cookie-wrapper": "latest",
     "react": "latest",
     "react-dom": "latest",
     "react-redux": "latest",
-    "redux": "latest",
-    "redux-persist": "latest"
+    "redux": "latest"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.178",

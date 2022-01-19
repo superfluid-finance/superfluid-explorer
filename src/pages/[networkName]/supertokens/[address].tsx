@@ -1,6 +1,6 @@
 import {ReactNode, SyntheticEvent, useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {findNetwork, sfApi} from "../../../redux/store";
+import {findNetwork, sfApi, wrapper} from "../../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {
   Card,
@@ -107,9 +107,11 @@ const SuperTokenPage: NextPage = () => {
   </Container>)
 }
 
-SuperTokenPage.getInitialProps = () => {
-  return {};
-}
+export const getServerSideProps = wrapper.getServerSideProps(store => async () => {
+  return {
+    props: {},
+  };
+})
 
 const getAddress = (address: unknown): string => {
   if (typeof address === "string") {

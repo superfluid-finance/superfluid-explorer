@@ -1,5 +1,5 @@
 import {useRouter} from "next/router";
-import {findNetwork, sfApi} from "../../redux/store";
+import {findNetwork, sfApi, wrapper} from "../../redux/store";
 import {GridColDef, GridRenderCellParams,} from "@mui/x-data-grid";
 import {Box} from "@mui/material";
 import QueryError from "../../components/QueryError";
@@ -54,9 +54,11 @@ const AccountsPage: NextPage = () => {
   );
 }
 
-AccountsPage.getInitialProps = () => {
-  return {};
-}
+export const getServerSideProps = wrapper.getServerSideProps(store => async () => {
+  return {
+    props: {},
+  };
+})
 
 export default AccountsPage;
 

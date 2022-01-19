@@ -1,14 +1,15 @@
-import {configureStore, Dispatch} from "@reduxjs/toolkit";
+import {configureStore} from "@reduxjs/toolkit";
 import {
   initializeSfApiSlice,
   initializeSfTransactionSlice,
   createApiWithReactHooks,
   setFrameworkForSdkRedux
 } from "@superfluid-finance/sdk-redux";
-import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {Framework} from "@superfluid-finance/sdk-core";
 import {ethers} from "ethers";
 import {createWrapper, HYDRATE} from "next-redux-wrapper";
+import {nextReduxCookieMiddleware, wrapMakeStore} from "next-redux-cookie-wrapper";
+import {themePreferenceSlice} from "./slices/appPreferences.slice";
 
 export const {sfApi} = initializeSfApiSlice((options) =>
   createApiWithReactHooks({
@@ -22,19 +23,6 @@ export const {sfApi} = initializeSfApiSlice((options) =>
 );
 
 export const {sfTransactions} = initializeSfTransactionSlice();
-
-export const store = configureStore({
-  reducer: {
-    "sfApi": sfApi.reducer,
-    "sfTransactions": sfTransactions.reducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(sfApi.middleware),
-});
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useAppDispatch = () => useDispatch<Dispatch>();
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 // Ugly code below
 
@@ -138,29 +126,30 @@ const infuraProviders = chainIds.map((chainId) => ({
     }),
 }));
 
-export const makeStore = () => {
-  const chainId = 5;
 
+export const makeStore = wrapMakeStore(() => {
   infuraProviders.map((x) =>
     setFrameworkForSdkRedux(x.chainId, x.frameworkGetter)
   );
 
   return configureStore({
     reducer: {
-      sfApi: sfApi.reducer,
-      sfTransactions: sfTransactions.reducer,
+      "sfApi": sfApi.reducer,
+      "sfTransactions": sfTransactions.reducer,
+      [themePreferenceSlice.name]: themePreferenceSlice.reducer
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(sfApi.middleware),
+      getDefaultMiddleware().prepend(nextReduxCookieMiddleware({
+        compress: true,
+        subtrees: ["appPreferences"]
+      })).concat(sfApi.middleware),
   });
-};
+});
 
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore["getState"]>;
 export type AppDispatch = AppStore["dispatch"];
 
 export const wrapper = createWrapper<AppStore>(makeStore, {
-  debug: true,
-  serializeState: (state) => JSON.stringify(state),
-  deserializeState: (state) => JSON.parse(state),
+  debug: true
 });

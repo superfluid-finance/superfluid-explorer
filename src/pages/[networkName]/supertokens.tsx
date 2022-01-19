@@ -1,6 +1,6 @@
-import {DataGrid, GridColDef, GridRowsProp} from "@mui/x-data-grid";
+import {DataGrid, GridColDef} from "@mui/x-data-grid";
 import {useRouter} from "next/router";
-import {findNetwork, networksByName, sfApi} from "../../redux/store";
+import {findNetwork, sfApi, wrapper} from "../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {NextPage} from "next";
 
@@ -30,5 +30,11 @@ const SuperTokensPage: NextPage = () => {
       }}/>
     </div>);
 }
+
+export const getServerSideProps = wrapper.getServerSideProps(store => async () => {
+  return {
+    props: {},
+  };
+})
 
 export default SuperTokensPage;

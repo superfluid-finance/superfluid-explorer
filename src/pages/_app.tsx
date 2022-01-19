@@ -4,15 +4,14 @@ import {AppProps} from 'next/app';
 import CssBaseline from '@mui/material/CssBaseline';
 import {CacheProvider, EmotionCache} from '@emotion/react';
 import createEmotionCache from '../utils/createEmotionCache';
-import {Provider} from "react-redux";
-import {store, wrapper} from "../redux/store";
+import {wrapper} from "../redux/store";
 import SfAppBar from "../components/SfAppBar";
-import {FC, useState} from "react";
+import {FC} from "react";
 import Box from "@mui/material/Box";
 import "../styles/graphiql.min.css"
 import "../styles/app.css"
-import {Button} from "@mui/material";
-import {SfThemeProvider} from "../styles/SfThemeProvider";
+import {ThemeProvider} from "@mui/material/styles";
+import useSfTheme from "../styles/useSfTheme";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -21,27 +20,28 @@ interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
 
-export function MyApp(props: MyAppProps) {
+export const MyApp: FC<MyAppProps> = (props) => {
   const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;
+  const theme = useSfTheme();
+
+  console.log({theme})
+
   return (
     <CacheProvider value={emotionCache}>
       <Head>
         <title>Superfluid Console</title>
         <meta name="viewport" content="initial-scale=1, width=device-width"/>
       </Head>
-      <SfThemeProvider>
+      <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline/>
-        <Provider store={store}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </Provider>
-      </SfThemeProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ThemeProvider>
     </CacheProvider>
   );
 }
-
 
 const Layout: FC = ({children}) => {
   return (
@@ -56,6 +56,7 @@ const Layout: FC = ({children}) => {
   )
 }
 
+// NOTE: This wraps the React code with Redux provider component.
 export default wrapper.withRedux(MyApp);
 
 

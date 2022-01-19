@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import {ReactNode, SyntheticEvent, useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {findNetwork, sfApi} from "../../../redux/store";
+import {findNetwork, sfApi, wrapper} from "../../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import AccountStreams from "../../../components/AccountStreams";
 import AccountIndexes from "../../../components/AccountIndexes";
@@ -107,12 +107,13 @@ const AccountPage: NextPage = () => {
       </TabPanel>
     </Box>
   </Container>);
-
 }
 
-AccountPage.getInitialProps = () => {
-  return {};
-}
+export const getServerSideProps = wrapper.getServerSideProps(store => async () => {
+  return {
+    props: {},
+  };
+})
 
 interface TabPanelProps {
   children?: ReactNode;
