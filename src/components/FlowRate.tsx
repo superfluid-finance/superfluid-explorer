@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {ethers} from "ethers";
 import AppLink from "./AppLink";
-import {Network} from "../redux/store";
+import {Network} from "../redux/networks";
 
 const FlowRate: FC<{
   flowRate: string

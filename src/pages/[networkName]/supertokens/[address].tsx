@@ -1,6 +1,6 @@
 import {ReactNode, SyntheticEvent, useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {findNetwork, sfApi, wrapper} from "../../../redux/store";
+import {sfApi, wrapper} from "../../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {
   Card,
@@ -22,6 +22,7 @@ import SkeletonTokenSymbol from "../../../components/skeletons/SkeletonTokenSymb
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
 import SkeletonTokenName from "../../../components/skeletons/SkeletonTokenName";
 import EventList from "../../../components/EventList";
+import {findNetwork} from "../../../redux/networks";
 
 const SuperTokenPage: NextPage = () => {
   const router = useRouter()

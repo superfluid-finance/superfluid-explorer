@@ -1,9 +1,12 @@
 import {FC} from "react";
 import {ethers} from "ethers";
 import AppLink from "./AppLink";
-import {Network, sfApi} from "../redux/store";
+import {sfApi} from "../redux/store";
 import {CircularProgress, List, ListItem, ListItemText, Tooltip} from "@mui/material";
 import QueryError from "./QueryError";
+import {Network} from "../redux/networks";
+import {useAppSelector} from "../redux/hooks";
+import {addressBookSelectors, createEntryId} from "../redux/slices/addressBook.slice";
 
 // <Tooltip title={<AccountAddressTooltipContent network={network} address={address}/>}>
 // </Tooltip>
@@ -14,7 +17,7 @@ const AccountAddress: FC<{
   return (
     <AppLink className="address"
              href={`/${network.slugName}/accounts/${address}`}>
-      <AccountAddressFormatted address={address}/>
+      <AccountAddressFormatted network={network} address={address}/>
     </AppLink>);
 }
 
@@ -42,9 +45,12 @@ const AccountAddressTooltipContent: FC<{
 }
 
 export const AccountAddressFormatted: FC<{
+  network: Network
   address: string
-}> = ({address}) => {
-  return <>{ethers.utils.getAddress(address)}</>
+}> = ({network, address}) => {
+  const addressBookEntry = useAppSelector(state => addressBookSelectors.selectById(state, createEntryId(network, address)));
+
+  return <>{addressBookEntry?.nameTag ? `${addressBookEntry.nameTag} (${ethers.utils.getAddress(address)})` : ethers.utils.getAddress(address)}</>
 }
 
 export default AccountAddress;

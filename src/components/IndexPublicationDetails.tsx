@@ -1,5 +1,5 @@
 import {FC, useState} from "react";
-import {Network, sfApi} from "../redux/store";
+import {sfApi} from "../redux/store";
 import {
   createSkipPaging, Index, IndexSubscriptionOrderBy,
   IndexUpdatedEventOrderBy,
@@ -21,6 +21,7 @@ import SuperTokenAddress from "./SuperTokenAddress";
 import AccountAddress from "./AccountAddress";
 import IndexSubscriptionDataGrid from "./IndexSubscriptionDataGrid";
 import SkeletonAddress from "./skeletons/SkeletonAddress";
+import {Network} from "../redux/networks";
 
 interface Props {
   network: Network;

@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import {ReactNode, SyntheticEvent, useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {findNetwork, sfApi, wrapper} from "../../../redux/store";
+import {sfApi, wrapper} from "../../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import AccountStreams from "../../../components/AccountStreams";
 import AccountIndexes from "../../../components/AccountIndexes";
@@ -22,6 +22,8 @@ import SkeletonNetwork from "../../../components/skeletons/SkeletonNetwork";
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
 import {AccountAddressFormatted} from "../../../components/AccountAddress";
 import EventList from "../../../components/EventList";
+import {findNetwork} from "../../../redux/networks";
+import {FavouriteButton} from "../../../components/AddressBook";
 
 const getAddress = (address: unknown): string => {
   if (typeof address === "string") {
@@ -64,6 +66,7 @@ const AccountPage: NextPage = () => {
     <Typography variant="h6" component="h2" sx={{ml: 1, mb: 1}}>
       Overview
     </Typography>
+    { (network && accountQuery.data) ? <FavouriteButton network={network} address={accountQuery.data.id} /> : null }
     <Paper elevation={2}>
       <List>
         <ListItem divider>
@@ -72,7 +75,7 @@ const AccountPage: NextPage = () => {
         </ListItem>
         <ListItem divider>
           <ListItemText secondary="Address"
-                        primary={accountQuery.data ? <AccountAddressFormatted address={accountQuery.data.id}/> :
+                        primary={(network && accountQuery.data) ? <AccountAddressFormatted network={network} address={accountQuery.data.id}/> :
                           <SkeletonAddress/>}/>
         </ListItem>
         <ListItem>

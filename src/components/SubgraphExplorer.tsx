@@ -12,12 +12,12 @@ import type {
 import {request} from 'graphql-request';
 import type {GraphQLSchema} from 'graphql';
 import 'graphiql/graphiql.min.css';
-import {networks, networksByChainId} from "../redux/store";
 // @ts-ignore
 import GraphiQLExplorer from 'graphiql-explorer';
 import {Box, Card, Container} from "@mui/material";
 import SfLoader from "./SfLoader"
 import _ from "lodash";
+import {networks, networksByChainId} from "../redux/networks";
 
 
 // const GridBody = styled(LayoutBody)`

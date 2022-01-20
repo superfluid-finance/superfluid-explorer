@@ -1,8 +1,9 @@
 import {DataGrid, GridColDef} from "@mui/x-data-grid";
 import {useRouter} from "next/router";
-import {findNetwork, sfApi, wrapper} from "../../redux/store";
+import {sfApi, wrapper} from "../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {NextPage} from "next";
+import {findNetwork} from "../../redux/networks";
 
 const columns: GridColDef[] = [
   {field: 'id', headerName: 'Address', width: 150},

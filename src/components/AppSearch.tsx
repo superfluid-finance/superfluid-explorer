@@ -8,7 +8,7 @@ import {
   InputAdornment, ListItem, List, ListItemButton, CircularProgress, Grid, Card, Divider
 } from "@mui/material";
 import {useRouter} from "next/router";
-import {Network, networks, sfApi} from "../redux/store";
+import {sfApi} from "../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {ethers} from "ethers";
 import {gql} from "graphql-request";
@@ -22,6 +22,7 @@ import {BoxProps} from "@mui/material/Box/Box";
 import _ from "lodash";
 import NextLink from 'next/link';
 import NetworkFormatted from "./NetworkDisplay";
+import {Network, networks} from "../redux/networks";
 
 const searchByAddressDocument = gql`
   query Search($addressId: ID, $addressBytes: Bytes) {
@@ -182,7 +183,7 @@ const AppSearch: FC<BoxProps> = (boxProps) => {
                       {x.accounts.map(account => <ListItem disablePadding sx={{pt: 1, pb: 1}} key={`${x.network.chainId}_${account.id}`}>
                         <NextLink href={`/${x.network.slugName}/accounts/${account.id}`} passHref>
                           <ListItemButton component="a">
-                            <AccountAddressFormatted address={account.id}/>
+                            <AccountAddressFormatted network={x.network} address={account.id}/>
                           </ListItemButton>
                         </NextLink>
                       </ListItem>)}
