@@ -19,7 +19,7 @@ export const getDuration = (timeAgoInSeconds: number) => {
   }
   return {
     interval: 0,
-    epoch: "seconds"
+    epoch: "second"
   };
 };
 
