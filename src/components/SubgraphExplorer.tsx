@@ -14,7 +14,8 @@ import type {GraphQLSchema} from 'graphql';
 import 'graphiql/graphiql.min.css';
 // @ts-ignore
 import GraphiQLExplorer from 'graphiql-explorer';
-import {Box, Card, CircularProgress, Container} from "@mui/material";
+import {Box, Card, Container} from "@mui/material";
+import FullPageLoader from "./FullPageLoader"
 import _ from "lodash";
 import {networks, networksByChainId} from "../redux/networks";
 
@@ -96,7 +97,7 @@ const SubgraphExplorer: React.FC = () => {
 
   const [schema, setSchema] = useState<GraphQLSchema | null>(null);
   const [isExplorerOpen, setIsExplorerOpen] = useState(true);
-  const [isInitializing, setIsInitializing] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
   const [isNetworkLoading, setIsNetworkLoading] = useState(false);
   const [fetchedFromUrl, setFetchedFromUrl] = useState<string | null>(null);
   const [query, setQuery] = useState(
@@ -112,6 +113,8 @@ const SubgraphExplorer: React.FC = () => {
   useEffect(() => {
     if (!schema) {
       setIsInitializing(true);
+    } else {
+      setIsInitializing(false);
     }
     setIsNetworkLoading(true);
     getGraphQLIntrospectionClientSchemaMemoized(subgraphUrl).then(
@@ -137,7 +140,7 @@ const SubgraphExplorer: React.FC = () => {
   return (
     <>
       {isInitializing ? (
-        <CircularProgress/>
+        <FullPageLoader />
       ) : (
         <Box component="div" className="graphiql-container" sx={{height: "100%"}}>
           <GraphiQLExplorer

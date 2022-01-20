@@ -10,6 +10,7 @@ import SuperTokenAddress from "./SuperTokenAddress";
 import FlowRate from "./FlowRate";
 import AccountAddress from "./AccountAddress";
 import {Network} from "../redux/networks";
+import {timeAgo} from "../utils/dateTime";
 
 interface Props {
   network: Network,
@@ -40,7 +41,7 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
         />)
       }
     },
-    {field: 'createdAtTimestamp', headerName: "Created At", sortable: true, flex: 1, renderCell: (params) => (new Date(params.value * 1000).toLocaleString())},
+    {field: 'createdAtTimestamp', headerName: "Created At", sortable: true, flex: 1, renderCell: (params) => (timeAgo(params.value * 1000))},
     {
       field: 'details', headerName: "Details", flex: 1, sortable: false, renderCell: (cellParams) => (
         <StreamDetailsDialog network={network} streamId={cellParams.id.toString()}/>
@@ -96,7 +97,7 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
         />)
       }
     },
-    {field: 'createdAtTimestamp', headerName: "Created At", sortable: true, flex: 1, renderCell: (params) => (new Date(params.value * 1000).toLocaleString())},
+    {field: 'createdAtTimestamp', headerName: "Created At", sortable: true, flex: 1, renderCell: (params) => (timeAgo(params.value * 1000))},
     {
       field: 'details', headerName: "Details", flex: 1, sortable: false, renderCell: (cellParams) => (
         <StreamDetailsDialog network={network} streamId={cellParams.id.toString()}/>
