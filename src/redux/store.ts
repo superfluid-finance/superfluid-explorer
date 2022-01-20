@@ -10,6 +10,7 @@ import {ethers} from "ethers";
 import {createWrapper, HYDRATE} from "next-redux-wrapper";
 import {nextReduxCookieMiddleware, wrapMakeStore} from "next-redux-cookie-wrapper";
 import {themePreferenceSlice} from "./slices/appPreferences.slice";
+import {addressBookSlice} from "./slices/addressBook.slice";
 import {chainIds} from "./networks";
 
 export const {sfApi} = initializeSfApiSlice((options) =>
@@ -49,7 +50,8 @@ export const makeStore = wrapMakeStore(() => {
     reducer: {
       "sfApi": sfApi.reducer,
       "sfTransactions": sfTransactions.reducer,
-      [themePreferenceSlice.name]: themePreferenceSlice.reducer
+      [themePreferenceSlice.name]: themePreferenceSlice.reducer,
+      [addressBookSlice.name]: addressBookSlice.reducer
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().prepend(nextReduxCookieMiddleware({

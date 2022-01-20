@@ -183,7 +183,7 @@ const AppSearch: FC<BoxProps> = (boxProps) => {
                       {x.accounts.map(account => <ListItem disablePadding sx={{pt: 1, pb: 1}} key={`${x.network.chainId}_${account.id}`}>
                         <NextLink href={`/${x.network.slugName}/accounts/${account.id}`} passHref>
                           <ListItemButton component="a">
-                            <AccountAddressFormatted address={account.id}/>
+                            <AccountAddressFormatted network={x.network} address={account.id}/>
                           </ListItemButton>
                         </NextLink>
                       </ListItem>)}

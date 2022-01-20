@@ -23,6 +23,7 @@ import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
 import {AccountAddressFormatted} from "../../../components/AccountAddress";
 import EventList from "../../../components/EventList";
 import {findNetwork} from "../../../redux/networks";
+import {FavouriteButton} from "../../../components/AddressBook";
 
 const getAddress = (address: unknown): string => {
   if (typeof address === "string") {
@@ -65,6 +66,7 @@ const AccountPage: NextPage = () => {
     <Typography variant="h6" component="h2" sx={{ml: 1, mb: 1}}>
       Overview
     </Typography>
+    { (network && accountQuery.data) ? <FavouriteButton network={network} address={accountQuery.data.id} /> : null }
     <Paper elevation={2}>
       <List>
         <ListItem divider>
@@ -73,7 +75,7 @@ const AccountPage: NextPage = () => {
         </ListItem>
         <ListItem divider>
           <ListItemText secondary="Address"
-                        primary={accountQuery.data ? <AccountAddressFormatted address={accountQuery.data.id}/> :
+                        primary={(network && accountQuery.data) ? <AccountAddressFormatted network={network} address={accountQuery.data.id}/> :
                           <SkeletonAddress/>}/>
         </ListItem>
         <ListItem>
