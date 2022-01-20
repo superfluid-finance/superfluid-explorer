@@ -1,7 +1,6 @@
-import {FC, SyntheticEvent} from "react";
+import {FC} from "react";
 import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef} from "@mui/x-data-grid";
-import {useRouter} from "next/router";
 import {
   AllEvents,
   Ordering,
@@ -11,8 +10,10 @@ import {
 import {Event_OrderBy} from "@superfluid-finance/sdk-core/dist/module/subgraph/schema.generated";
 import {Network} from "../redux/networks";
 import {timeAgo} from "../utils/dateTime";
+import AppLink from "./AppLink";
 
 export type EventOrderBy = Event_OrderBy;
+
 // TODO(KK): bad import
 
 interface Props {
@@ -27,8 +28,6 @@ interface Props {
 }
 
 const EventDataGrid: FC<Props> = ({network, queryResult, setPaging, ordering, setOrdering}) => {
-  const router = useRouter()
-
   const columns: GridColDef[] = [
     {field: 'id', hide: true, sortable: false, flex: 1},
     {field: 'name', headerName: "Name", sortable: false, flex: 1},
@@ -42,13 +41,8 @@ const EventDataGrid: FC<Props> = ({network, queryResult, setPaging, ordering, se
     {field: 'blockNumber', headerName: "Block Number", sortable: false, flex: 1},
     {
       field: 'transactionHash', headerName: "Transaction Hash", sortable: false, flex: 1, renderCell: (params) => {
-        const onTransactionHashClick = (e: SyntheticEvent): void => {
-          e.stopPropagation()
-          router.push(network.getLinkForTransaction(params.value))
-        }
-
         return (
-          <span style={{cursor: 'pointer'}} onClick={onTransactionHashClick}>{params.value}</span>)
+          <AppLink href={network.getLinkForTransaction(params.value)} target="_blank">{params.value}</AppLink>)
       }
     }
   ];
