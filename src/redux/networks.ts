@@ -27,14 +27,14 @@ export const networks: Network[] = [
     slugName: "ropsten",
     chainId: 3,
     subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_ROPSTEN),
-    getLinkForTransaction: (txHash: string): string => `https://goerli.etherscan.io/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://ropsten.etherscan.io/tx/${txHash}`
   },
   {
     displayName: "Rinkeby",
     slugName: "rinkeby",
     chainId: 4,
     subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_RINKEBY),
-    getLinkForTransaction: (txHash: string): string => `https://goerli.etherscan.io/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://rinkeby.etherscan.io/tx/${txHash}`
   },
   {
     displayName: "Goerli",
@@ -48,14 +48,14 @@ export const networks: Network[] = [
     slugName: "kovan",
     chainId: 42,
     subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_KOVAN),
-    getLinkForTransaction: (txHash: string): string => `https://goerli.etherscan.io/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://kovan.etherscan.io/tx/${txHash}`
   },
   {
-    displayName: "xDAI",
+    displayName: "Gnosis Chain",
     slugName: "xdai",
     chainId: 100,
     subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_XDAI),
-    getLinkForTransaction: (txHash: string): string => `https://goerli.etherscan.io/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://blockscout.com/xdai/mainnet/tx/${txHash}`
   },
   {
     displayName: "Polygon",
@@ -69,7 +69,7 @@ export const networks: Network[] = [
     slugName: "mumbai",
     chainId: 80001,
     subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_SUBGRAPH_MUMBAI),
-    getLinkForTransaction: (txHash: string): string => `https://goerli.etherscan.io/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://mumbai.polygonscan.com/tx/${txHash}`
   },
 ];
 
