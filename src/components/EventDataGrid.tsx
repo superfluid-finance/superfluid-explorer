@@ -1,16 +1,11 @@
 import {FC} from "react";
 import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef} from "@mui/x-data-grid";
-import {
-  AllEvents,
-  Ordering,
-  PagedResult,
-  SkipPaging
-} from "@superfluid-finance/sdk-core";
+import {AllEvents, Ordering, PagedResult, SkipPaging} from "@superfluid-finance/sdk-core";
 import {Event_OrderBy} from "@superfluid-finance/sdk-core/dist/module/subgraph/schema.generated";
 import {Network} from "../redux/networks";
 import {timeAgo} from "../utils/dateTime";
-import AppLink from "./AppLink";
+import {TransactionHash} from "./TransactionHash";
 
 export type EventOrderBy = Event_OrderBy;
 
@@ -40,10 +35,12 @@ const EventDataGrid: FC<Props> = ({network, queryResult, setPaging, ordering, se
     },
     {field: 'blockNumber', headerName: "Block Number", sortable: false, flex: 1},
     {
-      field: 'transactionHash', headerName: "Transaction Hash", sortable: false, flex: 1, renderCell: (params) => {
-        return (
-          <AppLink href={network.getLinkForTransaction(params.value)} target="_blank">{params.value}</AppLink>)
-      }
+      field: 'transactionHash',
+      headerName: "Transaction Hash",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => (
+        <TransactionHash network={network} transactionHash={params.value}/>)
     }
   ];
   const rows: AllEvents[] = queryResult.data ? queryResult.data.data : [];
