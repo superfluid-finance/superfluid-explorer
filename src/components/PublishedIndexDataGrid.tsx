@@ -3,8 +3,8 @@ import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef} from "@mui/x-data-grid";
 import {Index, Ordering, PagedResult, SkipPaging, IndexOrderBy} from "@superfluid-finance/sdk-core";
 import {IndexPublicationDetailsDialog} from "./IndexPublicationDetails";
-import {Network} from "../redux/store";
 import SuperTokenAddress from "./SuperTokenAddress";
+import {Network} from "../redux/networks";
 
 interface Props {
   network: Network,

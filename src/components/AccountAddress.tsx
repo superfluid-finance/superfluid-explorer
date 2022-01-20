@@ -1,9 +1,10 @@
 import {FC} from "react";
 import {ethers} from "ethers";
 import AppLink from "./AppLink";
-import {Network, sfApi} from "../redux/store";
+import {sfApi} from "../redux/store";
 import {CircularProgress, List, ListItem, ListItemText, Tooltip} from "@mui/material";
 import QueryError from "./QueryError";
+import {Network} from "../redux/networks";
 
 // <Tooltip title={<AccountAddressTooltipContent network={network} address={address}/>}>
 // </Tooltip>

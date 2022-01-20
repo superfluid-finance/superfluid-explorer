@@ -1,9 +1,10 @@
 import {FC} from "react";
 import {ethers} from "ethers";
 import AppLink from "./AppLink";
-import {Network, sfApi} from "../redux/store";
+import {sfApi} from "../redux/store";
 import {CircularProgress, Grid, List, ListItem, ListItemText, Tooltip, Typography} from "@mui/material";
 import QueryError from "./QueryError";
+import {Network} from "../redux/networks";
 
 // <Tooltip title={<SuperTokenTooltipContent network={network} address={address}/>}>
 //*</Tooltip>*/}

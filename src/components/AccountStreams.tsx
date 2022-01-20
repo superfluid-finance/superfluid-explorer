@@ -1,4 +1,4 @@
-import {Network, sfApi} from "../redux/store";
+import {sfApi} from "../redux/store";
 import {FC, ReactElement, useState} from "react";
 import {createSkipPaging, Ordering, SkipPaging, Stream, StreamOrderBy} from "@superfluid-finance/sdk-core";
 import {AppDataGrid} from "./AppDataGrid";
@@ -9,6 +9,7 @@ import FlowingBalance from "./FlowingBalance";
 import SuperTokenAddress from "./SuperTokenAddress";
 import FlowRate from "./FlowRate";
 import AccountAddress from "./AccountAddress";
+import {Network} from "../redux/networks";
 
 interface Props {
   network: Network,

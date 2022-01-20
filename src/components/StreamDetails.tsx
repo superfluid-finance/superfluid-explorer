@@ -1,5 +1,5 @@
 import {FC, useState} from "react";
-import {Network, sfApi} from "../redux/store";
+import {sfApi} from "../redux/store";
 import {
   createSkipPaging,
   Ordering,
@@ -20,6 +20,7 @@ import AccountAddress from "./AccountAddress";
 import SuperTokenAddress from "./SuperTokenAddress";
 import SkeletonAddress from "./skeletons/SkeletonAddress";
 import FlowingBalance from "./FlowingBalance";
+import {Network} from "../redux/networks";
 
 interface Props {
   network: Network;

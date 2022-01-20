@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import {ReactNode, SyntheticEvent, useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {findNetwork, sfApi, wrapper} from "../../../redux/store";
+import {sfApi, wrapper} from "../../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import AccountStreams from "../../../components/AccountStreams";
 import AccountIndexes from "../../../components/AccountIndexes";
@@ -22,6 +22,7 @@ import SkeletonNetwork from "../../../components/skeletons/SkeletonNetwork";
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
 import {AccountAddressFormatted} from "../../../components/AccountAddress";
 import EventList from "../../../components/EventList";
+import {findNetwork} from "../../../redux/networks";
 
 const getAddress = (address: unknown): string => {
   if (typeof address === "string") {

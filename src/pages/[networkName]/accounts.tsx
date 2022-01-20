@@ -1,5 +1,5 @@
 import {useRouter} from "next/router";
-import {findNetwork, sfApi, wrapper} from "../../redux/store";
+import {sfApi, wrapper} from "../../redux/store";
 import {GridColDef, GridRenderCellParams,} from "@mui/x-data-grid";
 import {Box} from "@mui/material";
 import QueryError from "../../components/QueryError";
@@ -9,6 +9,7 @@ import {createSkipPaging, SkipPaging} from "@superfluid-finance/sdk-core"
 import AppLink from "../../components/AppLink";
 import {AppDataGrid} from "../../components/AppDataGrid";
 import {NextPage} from "next";
+import {findNetwork} from "../../redux/networks";
 
 const AccountsPage: NextPage = () => {
   const router = useRouter()

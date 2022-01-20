@@ -1,7 +1,8 @@
-import {Network, sfApi} from "../redux/store";
+import {sfApi} from "../redux/store";
 import {createSkipPaging, Ordering, SkipPaging} from "@superfluid-finance/sdk-core";
 import {FC, ReactElement, useState} from "react";
 import EventDataGrid, {EventOrderBy} from "./EventDataGrid";
+import {Network} from "../redux/networks";
 
 interface Props {
   network: Network,

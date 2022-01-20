@@ -8,10 +8,10 @@ import {
   PagedResult,
   SkipPaging
 } from "@superfluid-finance/sdk-core";
-import {Network} from "../redux/store";
 import {IndexSubscriptionDetailsDialog} from "./IndexSubscriptionDetails";
 import AccountAddress from "./AccountAddress";
 import SuperTokenAddress from "./SuperTokenAddress";
+import {Network} from "../redux/networks";
 
 interface Props {
   network: Network,

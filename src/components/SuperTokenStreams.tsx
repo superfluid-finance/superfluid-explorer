@@ -1,4 +1,4 @@
-import {Network, sfApi} from "../redux/store";
+import {sfApi} from "../redux/store";
 import {createSkipPaging, Index, Ordering, SkipPaging, Stream, StreamOrderBy} from "@superfluid-finance/sdk-core";
 import {FC, ReactElement, useState} from "react";
 import {GridColDef} from "@mui/x-data-grid";
@@ -6,6 +6,7 @@ import AccountAddress from "./AccountAddress";
 import FlowRate from "./FlowRate";
 import {StreamDetailsDialog} from "./StreamDetails";
 import {AppDataGrid} from "./AppDataGrid";
+import {Network} from "../redux/networks";
 
 interface Props {
   network: Network,

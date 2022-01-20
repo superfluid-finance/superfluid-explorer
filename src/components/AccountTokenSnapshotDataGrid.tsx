@@ -11,7 +11,7 @@ import {
 } from "@superfluid-finance/sdk-core";
 import FlowingBalance from "./FlowingBalance";
 import SuperTokenAddress from "./SuperTokenAddress";
-import {Network} from "../redux/store";
+import {Network} from "../redux/networks";
 
 interface Props {
   network: Network,
