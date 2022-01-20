@@ -15,7 +15,8 @@ import 'graphiql/graphiql.min.css';
 import {networks, networksByChainId} from "../redux/store";
 // @ts-ignore
 import GraphiQLExplorer from 'graphiql-explorer';
-import {Box, Card, CircularProgress, Container} from "@mui/material";
+import {Box, Card, Container} from "@mui/material";
+import SfLoader from "./SfLoader"
 import _ from "lodash";
 
 
@@ -159,7 +160,7 @@ const SubgraphExplorer: React.FC = () => {
   return (
     <>
       {isInitializing ? (
-        <CircularProgress/>
+        <SfLoader />
       ) : (
         <Box component="div" className="graphiql-container" sx={{height: "100%"}}>
           <GraphiQLExplorer
