@@ -97,7 +97,7 @@ const SubgraphExplorer: React.FC = () => {
 
   const [schema, setSchema] = useState<GraphQLSchema | null>(null);
   const [isExplorerOpen, setIsExplorerOpen] = useState(true);
-  const [isInitializing, setIsInitializing] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
   const [isNetworkLoading, setIsNetworkLoading] = useState(false);
   const [fetchedFromUrl, setFetchedFromUrl] = useState<string | null>(null);
   const [query, setQuery] = useState(
@@ -113,6 +113,8 @@ const SubgraphExplorer: React.FC = () => {
   useEffect(() => {
     if (!schema) {
       setIsInitializing(true);
+    } else {
+      setIsInitializing(false);
     }
     setIsNetworkLoading(true);
     getGraphQLIntrospectionClientSchemaMemoized(subgraphUrl).then(
