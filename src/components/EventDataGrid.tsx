@@ -10,6 +10,7 @@ import {
 } from "@superfluid-finance/sdk-core";
 import {Event_OrderBy} from "@superfluid-finance/sdk-core/dist/module/subgraph/schema.generated";
 import {Network} from "../redux/networks";
+import {timeAgo} from "../utils/dateTime";
 
 
 export type EventOrderBy = Event_OrderBy;
@@ -25,35 +26,6 @@ interface Props {
   ordering: Ordering<EventOrderBy> | undefined;
   setOrdering: (ordering?: Ordering<EventOrderBy>) => void;
 }
-const epochs: [string, number][] = [
-  ['year', 31536000],
-  ['month', 2592000],
-  ['day', 86400],
-  ['hour', 3600],
-  ['minute', 60],
-  ['second', 1]
-];
-
-const getDuration = (timeAgoInSeconds: number) => {
-  for (let [name, seconds] of epochs) {
-    const interval = Math.floor(timeAgoInSeconds / seconds);
-    if (interval >= 1) {
-      return {
-        interval: interval,
-        epoch: name
-      };
-    }
-  }
-};
-
-const timeAgo = (date: number) => {
-  const timeAgoInSeconds = Math.floor((new Date().valueOf() - new Date(date).valueOf()) / 1000);
-  // @ts-ignore
-  const {interval, epoch} = getDuration(timeAgoInSeconds);
-  const suffix = interval === 1 ? '' : 's';
-  return `${interval} ${epoch}${suffix} ago`;
-};
-
 
 const EventDataGrid: FC<Props> = ({network, queryResult, setPaging, ordering, setOrdering}) => {
   const router = useRouter()
