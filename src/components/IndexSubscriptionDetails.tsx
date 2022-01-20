@@ -1,5 +1,5 @@
 import {FC, useState} from "react";
-import {sfApi} from "../redux/store";
+import {sfSubgraph} from "../redux/store";
 import {
   createSkipPaging, Index, IndexSubscription,
   Ordering,
@@ -29,14 +29,14 @@ interface Props {
 }
 
 const IndexSubscriptionDetails: FC<Props> = ({network, indexSubscriptionId}) => {
-  const indexSubscriptionQuery = sfApi.useIndexSubscriptionQuery({
+  const indexSubscriptionQuery = sfSubgraph.useIndexSubscriptionQuery({
     chainId: network.chainId,
     id: indexSubscriptionId
   });
 
   const indexSubscription: IndexSubscription | undefined | null = indexSubscriptionQuery.data
 
-  const indexQuery = sfApi.useIndexQuery(indexSubscription ? {
+  const indexQuery = sfSubgraph.useIndexQuery(indexSubscription ? {
     chainId: network.chainId,
     id: indexSubscription.index
   } : skipToken);
@@ -47,7 +47,7 @@ const IndexSubscriptionDetails: FC<Props> = ({network, indexSubscriptionId}) => 
     take: 10
   }))
   const [subscriptionUnitsUpdatedEventPagingOrdering, setSubscriptionUnitsUpdatedEventOrdering] = useState<Ordering<SubscriptionUnitsUpdatedEventOrderBy> | undefined>()
-  const subscriptionUnitsUpdatedEventQuery = sfApi.useSubscriptionUnitsUpdatedEventsQuery({
+  const subscriptionUnitsUpdatedEventQuery = sfSubgraph.useSubscriptionUnitsUpdatedEventsQuery({
     chainId: network.chainId,
     filter: {
       subscription: indexSubscriptionId.toLowerCase()

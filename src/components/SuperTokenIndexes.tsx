@@ -1,4 +1,4 @@
-import {sfApi} from "../redux/store";
+import {sfSubgraph} from "../redux/store";
 import {createSkipPaging, Ordering, SkipPaging} from "@superfluid-finance/sdk-core";
 import {FC, ReactElement, useState} from "react";
 import {
@@ -20,7 +20,7 @@ const SuperTokenIndexes: FC<Props> = ({network, tokenAddress}): ReactElement => 
     orderBy: "createdAtTimestamp",
     orderDirection: "desc"
   });
-  const publishedIndexQuery = sfApi.useIndexesQuery({
+  const publishedIndexQuery = sfSubgraph.useIndexesQuery({
     chainId: network.chainId,
     pagination: publishedIndexPaging,
     filter: {

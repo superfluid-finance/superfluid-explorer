@@ -1,5 +1,5 @@
 import {useRouter} from "next/router";
-import {sfApi, wrapper} from "../../redux/store";
+import {sfSubgraph, wrapper} from "../../redux/store";
 import {GridColDef, GridRenderCellParams,} from "@mui/x-data-grid";
 import {Box} from "@mui/material";
 import QueryError from "../../components/QueryError";
@@ -20,7 +20,7 @@ const AccountsPage: NextPage = () => {
 
   const {networkName} = router.query;
 
-  const queryResult = sfApi.useAccountsQuery(typeof networkName === "string" ? {
+  const queryResult = sfSubgraph.useAccountsQuery(typeof networkName === "string" ? {
     chainId: findNetwork(networkName).chainId,
     pagination: paging
   } : skipToken);

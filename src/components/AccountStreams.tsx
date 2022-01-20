@@ -1,9 +1,9 @@
-import {sfApi} from "../redux/store";
+import {sfSubgraph} from "../redux/store";
 import {FC, ReactElement, useState} from "react";
 import {createSkipPaging, Ordering, SkipPaging, Stream, StreamOrderBy} from "@superfluid-finance/sdk-core";
 import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef} from "@mui/x-data-grid";
-import {Box, Card, Typography} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 import {StreamDetailsDialog} from "./StreamDetails";
 import FlowingBalance from "./FlowingBalance";
 import SuperTokenAddress from "./SuperTokenAddress";
@@ -56,7 +56,7 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
     take: 10
   }));
 
-  const incomingStreamsQuery = sfApi.useStreamsQuery({
+  const incomingStreamsQuery = sfSubgraph.useStreamsQuery({
     chainId: network.chainId,
     filter: {
       receiver: accountAddress
@@ -104,7 +104,7 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
     }
   ];
 
-  const outgoingStreamsQuery = sfApi.useStreamsQuery({
+  const outgoingStreamsQuery = sfSubgraph.useStreamsQuery({
     chainId: network.chainId,
     filter: {
       sender: accountAddress

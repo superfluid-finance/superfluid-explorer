@@ -1,6 +1,6 @@
 import {DataGrid, GridColDef} from "@mui/x-data-grid";
 import {useRouter} from "next/router";
-import {sfApi, wrapper} from "../../redux/store";
+import {sfSubgraph, wrapper} from "../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {NextPage} from "next";
 import {findNetwork} from "../../redux/networks";
@@ -15,7 +15,7 @@ const SuperTokensPage: NextPage = () => {
 
   const {networkName} = router.query;
 
-  const {data: pagedResult} = sfApi.useTokensQuery(typeof networkName === "string" ? {
+  const {data: pagedResult} = sfSubgraph.useTokensQuery(typeof networkName === "string" ? {
     chainId: findNetwork(networkName).chainId, // TODO(KK): Ugly...
   } : skipToken);
 

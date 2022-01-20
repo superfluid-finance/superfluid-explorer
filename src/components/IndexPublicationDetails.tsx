@@ -1,5 +1,5 @@
 import {FC, useState} from "react";
-import {sfApi} from "../redux/store";
+import {sfSubgraph} from "../redux/store";
 import {
   createSkipPaging, Index, IndexSubscriptionOrderBy,
   IndexUpdatedEventOrderBy,
@@ -29,7 +29,7 @@ interface Props {
 }
 
 const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
-  const indexQuery = sfApi.useIndexQuery({
+  const indexQuery = sfSubgraph.useIndexQuery({
     chainId: network.chainId,
     id: indexId
   });
@@ -41,7 +41,7 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
     orderBy: "timestamp",
     orderDirection: "desc"
   })
-  const indexUpdatedEventQuery = sfApi.useIndexUpdatedEventsQuery({
+  const indexUpdatedEventQuery = sfSubgraph.useIndexUpdatedEventsQuery({
     chainId: network.chainId,
     filter: {
       index: indexId.toLowerCase()
@@ -54,7 +54,7 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
     take: 10
   }))
   const [indexSubscriptionPagingOrdering, setIndexSubscriptionOrdering] = useState<Ordering<IndexSubscriptionOrderBy> | undefined>()
-  const indexSubscriptionEventQuery = sfApi.useIndexSubscriptionsQuery({
+  const indexSubscriptionEventQuery = sfSubgraph.useIndexSubscriptionsQuery({
     chainId: network.chainId,
     filter: {
       index: indexId.toLowerCase()

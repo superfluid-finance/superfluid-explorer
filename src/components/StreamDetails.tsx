@@ -1,5 +1,5 @@
 import {FC, useState} from "react";
-import {sfApi} from "../redux/store";
+import {sfSubgraph} from "../redux/store";
 import {
   createSkipPaging,
   Ordering,
@@ -28,7 +28,7 @@ interface Props {
 }
 
 const StreamDetails: FC<Props> = ({network, streamId}) => {
-  const streamQuery = sfApi.useStreamQuery({
+  const streamQuery = sfSubgraph.useStreamQuery({
     chainId: network.chainId,
     id: streamId
   });
@@ -40,7 +40,7 @@ const StreamDetails: FC<Props> = ({network, streamId}) => {
     orderBy: "startedAtTimestamp",
     orderDirection: "desc"
   })
-  const streamPeriodListQuery = sfApi.useStreamPeriodsQuery({
+  const streamPeriodListQuery = sfSubgraph.useStreamPeriodsQuery({
     chainId: network.chainId,
     filter: {
       stream: streamId.toLowerCase()

@@ -1,5 +1,5 @@
 import {FC, ReactElement, useState} from "react";
-import {sfApi} from "../redux/store";
+import {sfSubgraph} from "../redux/store";
 import {
   AccountTokenSnapshotOrderBy,
   createSkipPaging,
@@ -21,7 +21,7 @@ const AccountTokens: FC<{
     orderBy: "balanceUntilUpdatedAt",
     orderDirection: "desc"
   });
-  const accountTokenSnapshotsQuery = sfApi.useAccountTokenSnapshotsQuery({
+  const accountTokenSnapshotsQuery = sfSubgraph.useAccountTokenSnapshotsQuery({
     chainId: network.chainId,
     pagination: accountTokenSnapshotPaging,
     filter: {

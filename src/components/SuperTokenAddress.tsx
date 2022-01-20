@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {ethers} from "ethers";
 import AppLink from "./AppLink";
-import {sfApi} from "../redux/store";
+import {sfSubgraph} from "../redux/store";
 import {CircularProgress, Grid, List, ListItem, ListItemText, Tooltip, Typography} from "@mui/material";
 import QueryError from "./QueryError";
 import {Network} from "../redux/networks";
@@ -12,7 +12,7 @@ const SuperTokenAddress: FC<{
   network: Network,
   address: string
 }> = ({network, address}) => {
-  const tokenQuery = sfApi.useTokenQuery({
+  const tokenQuery = sfSubgraph.useTokenQuery({
     chainId: network.chainId,
     id: address
   })
@@ -36,7 +36,7 @@ const SuperTokenTooltipContent: FC<{
   network: Network,
   address: string
 }> = ({network, address}) => {
-  const tokenQuery = sfApi.useTokenQuery({
+  const tokenQuery = sfSubgraph.useTokenQuery({
     chainId: network.chainId,
     id: address
   });

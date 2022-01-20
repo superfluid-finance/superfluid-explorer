@@ -5,9 +5,7 @@ import {
   AccountTokenSnapshot, AccountTokenSnapshotOrderBy,
   Ordering,
   PagedResult,
-  SkipPaging,
-  StreamPeriod,
-  StreamPeriodOrderBy
+  SkipPaging
 } from "@superfluid-finance/sdk-core";
 import FlowingBalance from "./FlowingBalance";
 import SuperTokenAddress from "./SuperTokenAddress";

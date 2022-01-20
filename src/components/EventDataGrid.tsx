@@ -10,7 +10,6 @@ import {
 import {Event_OrderBy} from "@superfluid-finance/sdk-core/dist/module/subgraph/schema.generated";
 import {Network} from "../redux/networks";
 
-
 export type EventOrderBy = Event_OrderBy;
 // TODO(KK): bad import
 
