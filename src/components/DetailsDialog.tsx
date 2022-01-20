@@ -1,17 +1,8 @@
 import {FC, forwardRef, ReactElement, Ref, useEffect} from "react";
 import {TransitionProps} from "@mui/material/transitions";
-import {AppBar, Dialog, Drawer, IconButton, Slide, Toolbar} from "@mui/material";
+import {AppBar, Drawer, IconButton, Slide, Toolbar} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {useRouter} from "next/router";
-
-const Transition = forwardRef(function Transition(
-  props: TransitionProps & {
-    children: ReactElement;
-  },
-  ref: Ref<unknown>,
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const DetailsDialog: FC<{
   open: boolean,

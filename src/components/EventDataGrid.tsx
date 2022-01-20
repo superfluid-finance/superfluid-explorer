@@ -12,7 +12,6 @@ import {Event_OrderBy} from "@superfluid-finance/sdk-core/dist/module/subgraph/s
 import {Network} from "../redux/networks";
 import {timeAgo} from "../utils/dateTime";
 
-
 export type EventOrderBy = Event_OrderBy;
 // TODO(KK): bad import
 

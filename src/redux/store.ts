@@ -2,6 +2,7 @@ import {configureStore} from "@reduxjs/toolkit";
 import {
   createApiWithReactHooks,
   initializeSfApiSlice,
+  initializeSubgraphSlice,
   initializeSfTransactionSlice,
   setFrameworkForSdkRedux
 } from "@superfluid-finance/sdk-redux";
@@ -14,6 +15,17 @@ import {addressBookSlice} from "./slices/addressBook.slice";
 import {chainIds} from "./networks";
 
 export const {sfApi} = initializeSfApiSlice((options) =>
+  createApiWithReactHooks({
+    ...options,
+    extractRehydrationInfo(action, {reducerPath}) {
+      if (action.type === HYDRATE) {
+        return action.payload[reducerPath];
+      }
+    },
+  })
+);
+
+export const {sfSubgraph} = initializeSubgraphSlice((options) =>
   createApiWithReactHooks({
     ...options,
     extractRehydrationInfo(action, {reducerPath}) {
@@ -49,6 +61,7 @@ export const makeStore = wrapMakeStore(() => {
     reducer: {
       "sfApi": sfApi.reducer,
       "sfTransactions": sfTransactions.reducer,
+      "sfSubgraph": sfSubgraph.reducer,
       [themePreferenceSlice.name]: themePreferenceSlice.reducer,
       [addressBookSlice.name]: addressBookSlice.reducer
     },

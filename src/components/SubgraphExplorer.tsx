@@ -19,28 +19,6 @@ import SfLoader from "./SfLoader"
 import _ from "lodash";
 import {networks, networksByChainId} from "../redux/networks";
 
-
-// const GridBody = styled(LayoutBody)`
-//   display: flex;
-//   flex-direction: column;
-// `;
-//
-// const Grid = styled(Layout)`
-//   margin: 0px;
-//   grid-template:
-//     'sidebar body' 6rem
-//     'sidebar body' 1fr
-//     'sidebar body' 5rem
-//     / 6rem 1fr;
-// `;
-//
-// const LoaderContainer = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   height: 100%;
-// `;
-
 const DocumentationLinks = [
   {
     name: 'Subgraph',

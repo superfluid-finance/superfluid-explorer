@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {ethers} from "ethers";
 import AppLink from "./AppLink";
-import {sfApi} from "../redux/store";
+import {sfSubgraph} from "../redux/store";
 import {CircularProgress, List, ListItem, ListItemText, Tooltip} from "@mui/material";
 import QueryError from "./QueryError";
 import {Network} from "../redux/networks";
@@ -25,7 +25,7 @@ const AccountAddressTooltipContent: FC<{
   network: Network,
   address: string
 }> = ({network, address}) => {
-  const accountQuery = sfApi.useAccountQuery({
+  const accountQuery = sfSubgraph.useAccountQuery({
     chainId: network.chainId,
     id: address
   });

@@ -1,6 +1,6 @@
 import {ReactNode, SyntheticEvent, useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {sfApi, wrapper} from "../../../redux/store";
+import {sfSubgraph, sfApi, wrapper} from "../../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {
   Card,
@@ -29,7 +29,8 @@ const SuperTokenPage: NextPage = () => {
   const {networkName, address} = router.query;
 
   const network = typeof networkName === "string" ? findNetwork(networkName) : undefined;
-  const tokenQuery = sfApi.useTokenQuery(network ? {
+
+  const tokenQuery = sfSubgraph.useTokenQuery(network ? {
     chainId: network.chainId,
     id: getAddress(address)
   } : skipToken);

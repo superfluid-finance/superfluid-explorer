@@ -1,4 +1,4 @@
-import {sfApi} from "../redux/store";
+import {sfSubgraph} from "../redux/store";
 import {Account, createSkipPaging, Ordering, SkipPaging} from "@superfluid-finance/sdk-core";
 import {FC, ReactElement, useState} from "react";
 import IndexSubscriptionDataGrid from "./IndexSubscriptionDataGrid";
@@ -20,7 +20,7 @@ const AccountIndexes: FC<Props> = ({network, accountAddress}): ReactElement => {
     take: 10
   }));
   const [indexSubscriptionOrdering, setIndexSubscriptionOrdering] = useState<Ordering<IndexSubscriptionOrderBy> | undefined>(undefined);
-  const indexSubscriptionQuery = sfApi.useIndexSubscriptionsQuery({
+  const indexSubscriptionQuery = sfSubgraph.useIndexSubscriptionsQuery({
     chainId: network.chainId,
     pagination: indexSubscriptionPaging,
     filter: {
@@ -33,7 +33,7 @@ const AccountIndexes: FC<Props> = ({network, accountAddress}): ReactElement => {
     take: 10
   }));
   const [publishedIndexOrdering, setPublishedIndexOrdering] = useState<Ordering<IndexOrderBy> | undefined>(undefined);
-  const publishedIndexQuery = sfApi.useIndexesQuery({
+  const publishedIndexQuery = sfSubgraph.useIndexesQuery({
     chainId: network.chainId,
     pagination: publishedIndexPaging,
     filter: {

@@ -1,6 +1,5 @@
 import {
   Box,
-  Card,
   Container,
   List,
   ListItem,
@@ -11,7 +10,7 @@ import {
 } from "@mui/material";
 import {ReactNode, SyntheticEvent, useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {sfApi, wrapper} from "../../../redux/store";
+import {sfApi, sfSubgraph, wrapper} from "../../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import AccountStreams from "../../../components/AccountStreams";
 import AccountIndexes from "../../../components/AccountIndexes";
@@ -39,7 +38,7 @@ const AccountPage: NextPage = () => {
   const [value, setValue] = useState(0);
 
   const network = typeof networkName === "string" ? findNetwork(networkName) : undefined;
-  const accountQuery = sfApi.useAccountQuery(network ? {
+  const accountQuery = sfSubgraph.useAccountQuery(network ? {
     chainId: network.chainId,
     id: getAddress(address)
   } : skipToken);

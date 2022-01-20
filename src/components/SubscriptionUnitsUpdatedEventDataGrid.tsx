@@ -2,7 +2,6 @@ import {FC} from "react";
 import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef} from "@mui/x-data-grid";
 import {
-  IndexSubscription,
   Ordering,
   PagedResult,
   SkipPaging,
