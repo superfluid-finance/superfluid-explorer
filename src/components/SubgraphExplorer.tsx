@@ -15,7 +15,7 @@ import 'graphiql/graphiql.min.css';
 // @ts-ignore
 import GraphiQLExplorer from 'graphiql-explorer';
 import {Box, Card, Container} from "@mui/material";
-import SfLoader from "./SfLoader"
+import FullPageLoader from "./FullPageLoader"
 import _ from "lodash";
 import {networks, networksByChainId} from "../redux/networks";
 
@@ -138,7 +138,7 @@ const SubgraphExplorer: React.FC = () => {
   return (
     <>
       {isInitializing ? (
-        <SfLoader />
+        <FullPageLoader />
       ) : (
         <Box component="div" className="graphiql-container" sx={{height: "100%"}}>
           <GraphiQLExplorer
