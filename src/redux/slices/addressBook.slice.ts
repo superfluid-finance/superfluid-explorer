@@ -4,6 +4,7 @@ import {
 } from '@reduxjs/toolkit'
 import { Network } from '../networks';
 import {RootState} from "../store";
+import {REHYDRATE} from "redux-persist";
 
 export interface AddressBookEntry {
   chainId: number,
@@ -29,6 +30,12 @@ export const addressBookSlice = createSlice({
   reducers: {
     entryUpserted: addressBookAdapter.upsertOne,
     entryRemoved: addressBookAdapter.removeOne
+  },
+  extraReducers: {
+    [REHYDRATE]: (state, {payload}) => ({
+      ...state,
+      ...payload[sliceName],
+    }),
   },
 })
 

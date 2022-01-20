@@ -36,21 +36,27 @@ export const FavouriteDialog: FC<{ network: Network, address: string, open: bool
                                                                                                                      open,
                                                                                                                      handleClose
                                                                                                                    }) => {
+  const getInitialNameTag = () => existingEntry?.nameTag ?? "";
 
   const existingEntry = useAppSelector(state => addressBookSelectors.selectById(state, createEntryId(network, address)));
-  const [nameTag, setNameTag] = useState<string>(existingEntry?.nameTag ?? "");
+  const [nameTag, setNameTag] = useState<string>(getInitialNameTag());
 
   const dispatch = useAppDispatch();
 
-  const handleRemove = () => {
+  const handleCloseWrapped = () => {
     handleClose();
+    setNameTag(getInitialNameTag());
+  }
+
+  const handleRemove = () => {
+    handleCloseWrapped();
     if (existingEntry) {
       dispatch(addressBookSlice.actions.entryRemoved(getEntryId(existingEntry)));
     }
   }
 
   const handleSave = () => {
-    handleClose();
+    handleCloseWrapped();
     dispatch(addressBookSlice.actions.entryUpserted({
       chainId: network.chainId,
       address: ethers.utils.getAddress(address),
@@ -58,7 +64,7 @@ export const FavouriteDialog: FC<{ network: Network, address: string, open: bool
     }));
   }
 
-  return (<Dialog open={open} onClose={handleClose}>
+  return (<Dialog open={open} onClose={handleCloseWrapped}>
     <DialogTitle>{ existingEntry ? "Add favourite" : "Edit favourite" }</DialogTitle>
     <DialogContent>
       <DialogContentText>
@@ -78,7 +84,7 @@ Lorem ipsum text
     </DialogContent>
     <DialogActions>
       {existingEntry ? <Button onClick={handleRemove} variant="outlined">Remove favourite</Button> :
-        <Button onClick={handleClose}>Cancel</Button>}
+        <Button onClick={handleCloseWrapped}>Cancel</Button>}
       <Button onClick={handleSave} variant="contained">Save</Button>
     </DialogActions>
   </Dialog>);

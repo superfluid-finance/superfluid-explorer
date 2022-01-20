@@ -31,7 +31,8 @@
     "react": "latest",
     "react-dom": "latest",
     "react-redux": "latest",
-    "redux": "latest"
+    "redux": "latest",
+    "redux-persist": "latest"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.178",
