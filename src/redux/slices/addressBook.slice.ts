@@ -34,7 +34,7 @@ export const addressBookSlice = createSlice({
   extraReducers: {
     [REHYDRATE]: (state, {payload}) => ({
       ...state,
-      ...payload[sliceName],
+      ...(payload ? payload[sliceName] : {}),
     }),
   },
 })

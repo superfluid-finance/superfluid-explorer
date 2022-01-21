@@ -13,9 +13,11 @@ import {nextReduxCookieMiddleware, SERVE_COOKIES, wrapMakeStore} from "next-redu
 import {themePreferenceSlice} from "./slices/appPreferences.slice";
 import {addressBookSlice} from "./slices/addressBook.slice";
 import {chainIds} from "./networks";
-import storage from "redux-persist/lib/storage";
+import storageLocal from "redux-persist/lib/storage";
+import storageSession from "redux-persist/lib/storage/session";
 import {FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE} from "redux-persist";
 import isServer from "../utils/isServer";
+import {searchHistorySlice} from "./slices/searchHistory.slice";
 
 export const {sfApi} = initializeSfApiSlice(createApiWithReactHooks);
 export const {sfSubgraph} = initializeSubgraphSlice(createApiWithReactHooks);
@@ -39,8 +41,13 @@ export const makeStore = wrapMakeStore(() => {
   );
 
   const addressBookReducer = persistReducer(
-    {key: 'address-book', version: 1, storage},
+    {key: 'address-book', version: 1, storage: storageLocal},
     addressBookSlice.reducer,
+  );
+
+  const searchHistoryReducer = persistReducer(
+    {key: 'search-history', version: 1, storage: storageSession},
+    searchHistorySlice.reducer,
   );
 
   const store = configureStore({
@@ -49,7 +56,8 @@ export const makeStore = wrapMakeStore(() => {
       "sfSubgraph": sfSubgraph.reducer,
       "sfTransactions": sfTransactions.reducer,
       [themePreferenceSlice.name]: themePreferenceSlice.reducer,
-      [addressBookSlice.name]: addressBookReducer
+      [addressBookSlice.name]: addressBookReducer,
+      [searchHistorySlice.name]: searchHistoryReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

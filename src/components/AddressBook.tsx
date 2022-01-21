@@ -50,14 +50,15 @@ export const FavouriteDialog: FC<{ network: Network, address: string, open: bool
   }
 
   const handleRemove = () => {
-    handleCloseWrapped();
+    handleClose();
+    setNameTag("");
     if (existingEntry) {
       dispatch(addressBookSlice.actions.entryRemoved(getEntryId(existingEntry)));
     }
   }
 
   const handleSave = () => {
-    handleCloseWrapped();
+    handleClose();
     dispatch(addressBookSlice.actions.entryUpserted({
       chainId: network.chainId,
       address: ethers.utils.getAddress(address),
@@ -70,6 +71,7 @@ export const FavouriteDialog: FC<{ network: Network, address: string, open: bool
       <Box sx={{ display: "flex", justifyContent: 'center' }}>
       <DialogTitle>{existingEntry ? "Add favourite" : "Edit favourite"}</DialogTitle>
       </Box>
+      <Divider />
       <DialogContent>
         <DialogContentText>
         </DialogContentText>
