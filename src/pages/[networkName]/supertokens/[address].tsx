@@ -4,7 +4,7 @@ import {sfSubgraph, sfApi, wrapper} from "../../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {
   Card,
-  Container,
+  Container, Divider,
   List,
   ListItem,
   ListItemText, Tab,
@@ -60,10 +60,12 @@ const SuperTokenPage: NextPage = () => {
     <Typography variant="h3" component="h1" sx={{mt: 2, mb: 4}}>
       Super Token
     </Typography>
-    <Typography variant="h6" component="h2" sx={{ml: 1, mb: 1}}>
-      Overview
-    </Typography>
-    <Card variant="outlined">
+
+    <Card>
+      <Typography variant="h6" component="h2" sx={{ml: 1, mb: 2, mt: 2}}>
+        Overview
+      </Typography>
+      <Divider />
       <List>
         <ListItem divider>
           <ListItemText secondary="Network"

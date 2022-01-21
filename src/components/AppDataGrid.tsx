@@ -1,6 +1,6 @@
 import {DataGrid, GridColumns, GridRowsProp, GridSortModel} from "@mui/x-data-grid";
 import {ILightEntity, PagedResult, SkipPaging, Ordering} from "@superfluid-finance/sdk-core";
-import {Box, Pagination} from "@mui/material";
+import {Box, Divider, Pagination, Typography} from "@mui/material";
 import {FC, ReactElement, useState} from "react";
 
 interface Props {
@@ -13,6 +13,7 @@ interface Props {
   setPaging: (paging: SkipPaging) => void;
   ordering?: Ordering<string>;
   setOrdering: (ordering?: Ordering<string>) => void;
+  headerTitle?: string
 }
 
 export const AppDataGrid: FC<Props> = ({
@@ -21,7 +22,8 @@ export const AppDataGrid: FC<Props> = ({
                                          queryResult,
                                          setPaging,
                                          ordering,
-                                         setOrdering
+                                         setOrdering,
+                                         headerTitle
                                        }): ReactElement => {
 
   return (
@@ -33,8 +35,7 @@ export const AppDataGrid: FC<Props> = ({
       columns={columns}
       paginationMode="server"
       components={{
-        // Header: () => (<Box sx={{float: "right"}}><AppDataGridPagination paging={paging} hasNextPage={hasNextPage}
-        //                                                                  setPaging={setPaging}/></Box>),
+        Header: () => (headerTitle ? <><Typography variant="h6" sx={{m: 1}}>{headerTitle}</Typography><Divider/></> : null),
         Pagination: () =>
           AppDataGridPagination({
             paging: queryResult.data?.paging as SkipPaging,

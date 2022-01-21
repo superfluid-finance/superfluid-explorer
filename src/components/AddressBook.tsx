@@ -1,10 +1,11 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
+  DialogTitle, Divider,
   IconButton,
   TextField
 } from "@mui/material";
@@ -12,7 +13,7 @@ import {FC, useState} from "react";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import {useAppDispatch, useAppSelector} from "../redux/hooks";
-import { addressBookSelectors, addressBookSlice, createEntryId, getEntryId} from "../redux/slices/addressBook.slice";
+import {addressBookSelectors, addressBookSlice, createEntryId, getEntryId} from "../redux/slices/addressBook.slice";
 import {Network} from "../redux/networks";
 import {ethers} from "ethers";
 
@@ -64,28 +65,31 @@ export const FavouriteDialog: FC<{ network: Network, address: string, open: bool
     }));
   }
 
-  return (<Dialog open={open} onClose={handleCloseWrapped}>
-    <DialogTitle>{ existingEntry ? "Add favourite" : "Edit favourite" }</DialogTitle>
-    <DialogContent>
-      <DialogContentText>
-Lorem ipsum text
-      </DialogContentText>
-      <TextField
-        autoFocus
-        margin="dense"
-        id="name"
-        label="Name"
-        type="text"
-        fullWidth
-        variant="standard"
-        value={nameTag}
-        onChange={(event => setNameTag(event.target.value.trim()))}
-      />
-    </DialogContent>
-    <DialogActions>
-      {existingEntry ? <Button onClick={handleRemove} variant="outlined">Remove favourite</Button> :
-        <Button onClick={handleCloseWrapped}>Cancel</Button>}
-      <Button onClick={handleSave} variant="contained">Save</Button>
-    </DialogActions>
+  return (<Dialog fullWidth maxWidth="xs" open={open} onClose={handleCloseWrapped}>
+    <Box sx={{pb: 1}}>
+      <Box sx={{ display: "flex", justifyContent: 'center' }}>
+      <DialogTitle>{existingEntry ? "Add favourite" : "Edit favourite"}</DialogTitle>
+      </Box>
+      <DialogContent>
+        <DialogContentText>
+        </DialogContentText>
+        <TextField
+          autoFocus
+          margin="dense"
+          id="name"
+          label="Name Tag"
+          type="text"
+          fullWidth
+          variant="standard"
+          value={nameTag}
+          onChange={(event => setNameTag(event.target.value.trim()))}
+        />
+      </DialogContent>
+      <DialogActions>
+        {existingEntry ? <Button onClick={handleRemove} variant="outlined">Remove favourite</Button> :
+          <Button onClick={handleCloseWrapped}>Cancel</Button>}
+        <Button onClick={handleSave} variant="contained">Save</Button>
+      </DialogActions>
+    </Box>
   </Dialog>);
 }
