@@ -11,6 +11,7 @@ import type {
 } from 'graphql';
 import {request} from 'graphql-request';
 import type {GraphQLSchema} from 'graphql';
+import useSfTheme from "../styles/useSfTheme";
 import 'graphiql/graphiql.min.css';
 // @ts-ignore
 import GraphiQLExplorer from 'graphiql-explorer';
@@ -91,6 +92,8 @@ const getGraphQLIntrospectionClientSchemaMemoized = _.memoize(
 
 const SubgraphExplorer: React.FC = () => {
   const [chainId, setChainId] = useState(100);
+  const theme = useSfTheme();
+  const isDarkTheme = theme.palette.mode === 'dark';
 
   const network = networksByChainId.get(chainId)!;
   const subgraphUrl = network.subgraphUrl;
@@ -142,7 +145,7 @@ const SubgraphExplorer: React.FC = () => {
       {isInitializing ? (
         <FullPageLoader />
       ) : (
-        <Box component="div" className="graphiql-container" sx={{height: "100%"}}>
+        <Box component="div" className="graphiql-container" sx={{height: "100%", filter: `invert(${isDarkTheme? 1 : 0})`}}>
           <GraphiQLExplorer
             schema={schema}
             query={query}
