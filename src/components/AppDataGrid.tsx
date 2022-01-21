@@ -1,7 +1,13 @@
-import {DataGrid, GridColumns, GridRowsProp, GridSortModel} from "@mui/x-data-grid";
+import {
+  DataGrid,
+  DataGridProps,
+  GridColumns,
+  GridRowsProp
+} from "@mui/x-data-grid";
 import {ILightEntity, PagedResult, SkipPaging, Ordering} from "@superfluid-finance/sdk-core";
-import {Box, Divider, Pagination, Typography} from "@mui/material";
-import {FC, ReactElement, useState} from "react";
+import {Pagination} from "@mui/material";
+import {FC, ReactElement} from "react";
+import _ from "lodash";
 
 interface Props {
   columns: GridColumns,
@@ -13,7 +19,7 @@ interface Props {
   setPaging: (paging: SkipPaging) => void;
   ordering?: Ordering<string>;
   setOrdering: (ordering?: Ordering<string>) => void;
-  headerTitle?: string
+  dataGridProps?: Partial<DataGridProps>
 }
 
 export const AppDataGrid: FC<Props> = ({
@@ -23,38 +29,40 @@ export const AppDataGrid: FC<Props> = ({
                                          setPaging,
                                          ordering,
                                          setOrdering,
-                                         headerTitle
+                                         dataGridProps
                                        }): ReactElement => {
 
-  return (
-    <DataGrid
-      autoHeight={true}
-      disableColumnFilter={true}
-      pagination={true}
-      rows={rows}
-      columns={columns}
-      paginationMode="server"
-      components={{
-        Header: () => (headerTitle ? <><Typography variant="h6" sx={{m: 1}}>{headerTitle}</Typography><Divider/></> : null),
-        Pagination: () =>
-          AppDataGridPagination({
-            paging: queryResult.data?.paging as SkipPaging,
-            hasNextPage: !!queryResult.data?.nextPaging,
-            setPaging
-          }),
-      }}
-      loading={queryResult.isFetching}
-      disableSelectionOnClick={true}
-      sortingMode={"server"}
-      sortModel={ordering ? [{
-        field: ordering.orderBy,
-        sort: ordering.orderDirection,
-      }] : []}
-      onSortModelChange={(sortModel) => setOrdering(sortModel[0] ? {
-        orderBy: sortModel[0].field,
-        orderDirection: sortModel[0].sort! // TODO(KK): Forbidden
-      } : undefined)}
-    />)
+  const defaultDataGridProps: DataGridProps = {
+    autoHeight: true,
+    disableColumnFilter: true,
+    pagination: true,
+    rows: rows,
+    columns: columns,
+    paginationMode: "server",
+    components: {
+      Pagination: () =>
+        AppDataGridPagination({
+          paging: queryResult.data?.paging as SkipPaging,
+          hasNextPage: !!queryResult.data?.nextPaging,
+          setPaging
+        }),
+    },
+    loading: queryResult.isFetching,
+    disableSelectionOnClick: true,
+    sortingMode: "server",
+    sortModel: ordering ? [{
+      field: ordering.orderBy,
+      sort: ordering.orderDirection,
+    }] : [],
+    onSortModelChange: (sortModel) => setOrdering(sortModel[0] ? {
+      orderBy: sortModel[0].field,
+      orderDirection: sortModel[0].sort! // TODO(KK): Forbidden
+    } : undefined)
+  }
+
+  const finalDataGridProps = _.merge(defaultDataGridProps, dataGridProps)
+
+  return <DataGrid {...finalDataGridProps}/>
 }
 
 interface PaginationProps {

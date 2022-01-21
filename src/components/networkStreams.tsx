@@ -1,7 +1,7 @@
 import * as React from "react";
 import {FC, useMemo, useState} from "react";
 import {Network} from "../redux/networks";
-import {GridColDef} from "@mui/x-data-grid";
+import {DataGridProps, GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
 import SuperTokenAddress from "./SuperTokenAddress";
 import FlowRate from "./FlowRate";
 import AccountAddress from "./AccountAddress";
@@ -11,65 +11,43 @@ import {timeAgo} from "../utils/dateTime";
 import {StreamDetailsDialog} from "./StreamDetails";
 import {sfSubgraph} from "../redux/store";
 import {AppDataGrid} from "./AppDataGrid";
+import {Divider, Grid, Typography} from "@mui/material";
+import {ethers} from "ethers";
+import AppLink from "./AppLink";
 
 export const NetworkStreams: FC<{ network: Network }> = ({network}) => {
   const columns: GridColDef[] = useMemo(() => [
     {field: 'id', type: "string", hide: true, sortable: false},
     {
-      field: 'token',
-      headerName: "Token",
-      flex: 1,
-      sortable: false,
-      renderCell: (params) => (<SuperTokenAddress network={network} address={params.value}/>)
-    },
-    {
-      field: 'currentFlowRate',
-      headerName: "Flow Rate",
-      flex: 1,
-      sortable: true,
-      renderCell: (params) => (<FlowRate flowRate={params.value}/>)
-    },
-    {
-      field: 'sender',
-      headerName: "Sender",
-      sortable: false,
-      flex: 1,
-      renderCell: (params) => (<AccountAddress network={network} address={params.value}/>)
-    },
-    {
-      field: 'receiver',
-      headerName: "Receiver",
-      sortable: false,
-      flex: 1,
-      renderCell: (params) => (<AccountAddress network={network} address={params.value}/>)
-    },
-    {
-      field: 'streamedUntilUpdatedAt',
-      headerName: "Total Streamed",
-      flex: 1,
-      sortable: false,
-      renderCell: (params) => {
-        const stream = params.row as Stream;
-        return (<FlowingBalance
-          {...{
-            balance: stream.streamedUntilUpdatedAt,
-            balanceTimestamp: stream.updatedAtTimestamp,
-            flowRate: stream.currentFlowRate
-          }}
-        />)
-      }
-    },
-    {
       field: 'createdAtTimestamp',
       headerName: "Created At",
       sortable: true,
-      flex: 0.5,
+      flex: 2,
       renderCell: (params) => (timeAgo(params.value * 1000))
     },
     {
-      field: 'details', headerName: "Details", flex: 0.5, sortable: false, renderCell: (cellParams) => (
-        <StreamDetailsDialog network={network} streamId={cellParams.id.toString()}/>
-      )
+      field: 'from-to',
+      headerName: "From & To",
+      sortable: false,
+      flex: 5,
+      renderCell: (params: GridRenderCellParams<any, Stream>) => (
+        <SenderReceiver network={network} fromAddress={params.row.sender} toAddress={params.row.receiver}/>)
+    },
+    {
+      field: 'token',
+      headerName: "Token",
+      flex: 5,
+      sortable: false,
+      renderCell: ({
+                     row: {
+                       token,
+                       streamedUntilUpdatedAt,
+                       updatedAtTimestamp,
+                       currentFlowRate
+                     }
+                   }: GridRenderCellParams<any, Stream>) => (
+        <TotalStreamed network={network} tokenAddress={token} balance={streamedUntilUpdatedAt}
+                       balanceTimestamp={updatedAtTimestamp} flowRate={currentFlowRate}/>)
     }
   ], [network.chainId]);
 
@@ -87,10 +65,70 @@ export const NetworkStreams: FC<{ network: Network }> = ({network}) => {
     pagination: paging
   });
 
-  const rows = query.data ? query.data.data : [];
+  const rows: Stream[] = query.data ? query.data.data : [];
 
-  return (<AppDataGrid columns={columns} rows={rows} queryResult={query}
-                       setPaging={setPaging} ordering={ordering}
-                       setOrdering={(x: any) => setOrdering(x)}
-                       headerTitle="Latest Streams"/>);
+  return (<AppDataGrid
+    dataGridProps={{
+      headerHeight: 0,
+      components: {
+        Header: () => (
+          <Typography variant="subtitle2" sx={{m: 1}}>Latest Streams</Typography>),
+      }
+    }}
+    columns={columns} rows={rows} queryResult={query}
+    setPaging={setPaging} ordering={ordering}
+    setOrdering={(x: any) => setOrdering(x)}/>);
+}
+
+const SenderReceiver: FC<{ network: Network, fromAddress: string, toAddress: string }> = ({
+                                                                                            network,
+                                                                                            fromAddress,
+                                                                                            toAddress
+                                                                                          }) => {
+  return (
+    <Grid container spacing={0} sx={{lineHeight: "1.5"}}>
+      <Grid container xs={2}>
+        <Grid item xs={12}>From:
+        </Grid>
+        <Grid item xs={12}>To:
+        </Grid>
+      </Grid>
+      <Grid container xs={10}>
+        <Grid item xs={12}><AccountAddress network={network} address={fromAddress}/>
+        </Grid>
+        <Grid item xs={12}><AccountAddress network={network} address={toAddress}/>
+        </Grid>
+      </Grid>
+    </Grid>
+  )
+}
+
+const TotalStreamed: FC<{
+  network: Network,
+  tokenAddress: string,
+  balance: string,
+  balanceTimestamp: number,
+  flowRate: string
+}> = (props) => {
+  const {network, tokenAddress} = props;
+
+  const tokenQuery = sfSubgraph.useTokenQuery({
+    chainId: network.chainId,
+    id: tokenAddress
+  })
+
+  return (
+    <Grid container spacing={0} sx={{lineHeight: "1.5"}}>
+      <Grid item xs={12}>
+        Total streamed:
+      </Grid>
+      <Grid item xs={12} >
+        <FlowingBalance {...props} format={(value) => ethers.utils.formatEther(value).padEnd(20, "0")} />{" "}
+        {tokenQuery.data ?
+          <AppLink className="address" href={`/${network.slugName}/supertokens/${tokenAddress}`}>
+            {tokenQuery.data.symbol}
+          </AppLink> : null}
+      </Grid>
+    </Grid>
+  );
 }

@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import {wrapper} from '../redux/store';
-import {Card, Divider, Tab} from "@mui/material";
+import {Card, Divider, Grid, Tab} from "@mui/material";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import {networks} from "../redux/networks";
 import {NetworkStreams} from "../components/networkStreams";
@@ -44,7 +44,9 @@ const Home: NextPage = () => {
             </TabList>
           </Box>
           {
-            networks.map((network) => <TabPanel key={`TabPanel_${network.slugName}`} value={network.slugName}><NetworkStreams network={network} /></TabPanel>)
+            networks.map((network) => <TabPanel key={`TabPanel_${network.slugName}`} value={network.slugName}>
+              <NetworkStreams network={network} />
+            </TabPanel>)
           }
         </TabContext>
       </Card>
@@ -59,4 +61,6 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async () =
 })
 
 export default Home;
+
+
 

@@ -4,10 +4,10 @@ import {sfSubgraph, sfApi, wrapper} from "../../../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {
   Card,
-  Container, Divider,
+  Container, Divider, Grid,
   List,
   ListItem,
-  ListItemText, Tab,
+  ListItemText, Paper, Tab,
   Tabs,
   Typography
 } from "@mui/material";
@@ -22,7 +22,10 @@ import SkeletonTokenSymbol from "../../../components/skeletons/SkeletonTokenSymb
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
 import SkeletonTokenName from "../../../components/skeletons/SkeletonTokenName";
 import EventList from "../../../components/EventList";
-import {findNetwork} from "../../../redux/networks";
+import {findNetwork, networks} from "../../../redux/networks";
+import {TabContext, TabList, TabPanel} from "@mui/lab";
+import {NetworkStreams} from "../../../components/networkStreams";
+import * as React from "react";
 
 const SuperTokenPage: NextPage = () => {
   const router = useRouter()
@@ -50,65 +53,81 @@ const SuperTokenPage: NextPage = () => {
 
   const [totalSupply, setTotalSupply] = useState<string | undefined>();
 
-  const [value, setValue] = useState(0);
+  const [tabValue, setTabValue] = useState<string>("streams");
 
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+  return (
+    <Container component={Paper} elevation={1} sx={{my: 2, py: 2}}>
 
-  return (<Container className="page">
-    <Typography variant="h3" component="h1" sx={{mt: 2, mb: 4}}>
-      Super Token
-    </Typography>
+      <Grid container spacing={3}>
 
-    <Card>
-      <Typography variant="h6" component="h2" sx={{ml: 1, mb: 2, mt: 2}}>
-        Overview
-      </Typography>
-      <Divider />
-      <List>
-        <ListItem divider>
-          <ListItemText secondary="Network"
-                        primary={network ? <NetworkDisplay network={network}/> : <SkeletonNetwork/>}/>
-        </ListItem>
-        <ListItem divider>
-          <ListItemText secondary="Address" primary={superToken ? superToken.id : <SkeletonAddress/>}/>
-        </ListItem>
-        <ListItem divider>
-          <ListItemText primary={superToken ? superToken.name : <SkeletonTokenName/>} secondary="Name"/>
-        </ListItem>
-        <ListItem divider>
-          <ListItemText secondary="Symbol"
-                        primary={superToken ? superToken.symbol : <SkeletonTokenSymbol/>}/>
-        </ListItem>
-        <ListItem>
-          <ListItemText secondary="Underlying Token Address"
-                        primary={superToken ? superToken.underlyingAddress : <SkeletonAddress/>}/>
-        </ListItem>
-      </List>
-    </Card>
+        <Grid item>
+          <Typography variant="h3" component="h1">
+            Super Token
+          </Typography>
+        </Grid>
 
-    <Box sx={{mt: 3, mb: 2, borderBottom: 1, borderColor: 'divider'}} >
-      <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-        <Tab label="Events"/>
-        <Tab label="Streams"/>
-        <Tab label="Indexes"/>
-      </Tabs>
-    </Box>
+        <Grid item xs={12}>
+          <Card elevation={2}>
+            <Typography variant="h6" component="h2" sx={{ml: 1, mb: 2, mt: 2}}>
+              Overview
+            </Typography>
+            <Divider/>
+            <List>
+              <ListItem divider>
+                <ListItemText secondary="Network"
+                              primary={network ? <NetworkDisplay network={network}/> : <SkeletonNetwork/>}/>
+              </ListItem>
+              <ListItem divider>
+                <ListItemText secondary="Address" primary={superToken ? superToken.id : <SkeletonAddress/>}/>
+              </ListItem>
+              <ListItem divider>
+                <ListItemText primary={superToken ? superToken.name : <SkeletonTokenName/>} secondary="Name"/>
+              </ListItem>
+              <ListItem divider>
+                <ListItemText secondary="Symbol"
+                              primary={superToken ? superToken.symbol : <SkeletonTokenSymbol/>}/>
+              </ListItem>
+              <ListItem>
+                <ListItemText secondary="Underlying Token Address"
+                              primary={superToken ? superToken.underlyingAddress : <SkeletonAddress/>}/>
+              </ListItem>
+            </List>
+          </Card>
+        </Grid>
 
-    <Box>
-      <TabPanel value={value} index={0}>
-        {(network && address) && <EventList network={network} address={getAddress(address)}/>}
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        {(network && address) && <SuperTokenStreams network={network} tokenAddress={getAddress(address)}/>}
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        {(network && address) &&
-          <SuperTokenIndexes network={network} tokenAddress={getAddress(address)}/>}
-      </TabPanel>
-    </Box>
-  </Container>)
+        <Grid item xs={12}>
+          <Card elevation={2}>
+            <TabContext value={tabValue}>
+              <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+                <TabList variant="scrollable"
+                         scrollButtons="auto"
+                         onChange={(_event, newValue: string) => setTabValue(newValue)}
+                         aria-label="tabs">
+                  <Tab label="Events" value="events"/>
+                  <Tab label="Streams" value="streams"/>
+                  <Tab label="Indexes" value="indexes"/>
+                </TabList>
+              </Box>
+              <Box>
+                <TabPanel value="events">
+                  {(network && address) && <EventList network={network} address={getAddress(address)}/>}
+                </TabPanel>
+                <TabPanel value="streams">
+                  {(network && address) && <SuperTokenStreams network={network} tokenAddress={getAddress(address)}/>}
+                </TabPanel>
+                <TabPanel value="indexes">
+                  {(network && address) &&
+                    <SuperTokenIndexes network={network} tokenAddress={getAddress(address)}/>}
+                </TabPanel>
+              </Box>
+            </TabContext>
+          </Card>
+        </Grid>
+
+      </Grid>
+
+    </Container>
+  )
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async () => {
@@ -125,30 +144,3 @@ const getAddress = (address: unknown): string => {
 }
 
 export default SuperTokenPage;
-
-interface TabPanelProps {
-  children?: ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const {children, value, index, ...other} = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box>
-          {value === index && children}
-        </Box>
-      )}
-    </div>
-  );
-}
-
