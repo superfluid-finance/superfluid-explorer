@@ -39,12 +39,12 @@ const Home: NextPage = () => {
                      onChange={(_event, newValue: string) => setValue(newValue)}
                      aria-label="lab API tabs example">
               {
-                networks.map((network) => <Tab label={network.displayName} value={network.slugName}/>)
+                networks.map((network) => <Tab key={`Tab_${network.slugName}`} label={network.displayName} value={network.slugName}/>)
               }
             </TabList>
           </Box>
           {
-            networks.map((network) => <TabPanel value={network.slugName}><NetworkStreams network={network} /></TabPanel>)
+            networks.map((network) => <TabPanel key={`TabPanel_${network.slugName}`} value={network.slugName}><NetworkStreams network={network} /></TabPanel>)
           }
         </TabContext>
       </Card>
