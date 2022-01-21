@@ -8,8 +8,8 @@ import {
 } from "@superfluid-finance/sdk-redux";
 import {Framework} from "@superfluid-finance/sdk-core";
 import {ethers} from "ethers";
-import {createWrapper, HYDRATE} from "next-redux-wrapper";
-import {nextReduxCookieMiddleware, wrapMakeStore} from "next-redux-cookie-wrapper";
+import {createWrapper } from "next-redux-wrapper";
+import {nextReduxCookieMiddleware, SERVE_COOKIES, wrapMakeStore} from "next-redux-cookie-wrapper";
 import {themePreferenceSlice} from "./slices/appPreferences.slice";
 import {addressBookSlice} from "./slices/addressBook.slice";
 import {chainIds} from "./networks";
@@ -17,37 +17,9 @@ import storage from "redux-persist/lib/storage";
 import {FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE} from "redux-persist";
 import isServer from "../utils/isServer";
 
-export const {sfApi} = initializeSfApiSlice((options) =>
-  createApiWithReactHooks({
-    ...options,
-    extractRehydrationInfo(action, {reducerPath}) {
-      if (action.type === HYDRATE) {
-        return action.payload[reducerPath]
-      }
-      if (action.type === REHYDRATE) {
-        return action.payload[reducerPath]
-      }
-    }
-  })
-);
-
-export const {sfSubgraph} = initializeSubgraphSlice((options) =>
-  createApiWithReactHooks({
-    ...options,
-    extractRehydrationInfo(action, {reducerPath}) {
-      if (action.type === HYDRATE) {
-        return action.payload[reducerPath]
-      }
-      if (action.type === REHYDRATE) {
-        return action.payload[reducerPath]
-      }
-    }
-  })
-);
-
+export const {sfApi} = initializeSfApiSlice(createApiWithReactHooks);
+export const {sfSubgraph} = initializeSubgraphSlice(createApiWithReactHooks);
 export const {sfTransactions} = initializeSfTransactionSlice();
-
-// Ugly code below
 
 const infuraProviders = chainIds.map((chainId) => ({
   chainId,
@@ -61,32 +33,20 @@ const infuraProviders = chainIds.map((chainId) => ({
     }),
 }));
 
-const sdkReduxPersistConfig = { key: 'sdk-redux', version: 1, storage };
-
 export const makeStore = wrapMakeStore(() => {
   infuraProviders.map((x) =>
     setFrameworkForSdkRedux(x.chainId, x.frameworkGetter)
   );
 
   const addressBookReducer = persistReducer(
-    { key: 'address-book', version: 1, storage },
+    {key: 'address-book', version: 1, storage},
     addressBookSlice.reducer,
-  );
-
-  const sfApiReducer = persistReducer(
-    sdkReduxPersistConfig,
-    sfApi.reducer,
-  );
-
-  const sfSubgraphReducer = persistReducer(
-    sdkReduxPersistConfig,
-    sfSubgraph.reducer
   );
 
   const store = configureStore({
     reducer: {
-      "sfApi": sfApiReducer,
-      "sfSubgraph": sfSubgraphReducer,
+      "sfApi": sfApi.reducer,
+      "sfSubgraph": sfSubgraph.reducer,
       "sfTransactions": sfTransactions.reducer,
       [themePreferenceSlice.name]: themePreferenceSlice.reducer,
       [addressBookSlice.name]: addressBookReducer
@@ -94,12 +54,12 @@ export const makeStore = wrapMakeStore(() => {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER], // Ignore redux-persist actions: https://stackoverflow.com/a/62610422
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, SERVE_COOKIES], // Ignore redux-persist actions: https://stackoverflow.com/a/62610422
         },
       }).prepend(nextReduxCookieMiddleware({
         compress: true,
         subtrees: ["appPreferences"]
-      })).concat(sfApi.middleware),
+      })).concat(sfApi.middleware).concat(sfSubgraph.middleware),
   });
 
   if (!isServer()) {
@@ -114,5 +74,7 @@ export type RootState = ReturnType<AppStore["getState"]>;
 export type AppDispatch = AppStore["dispatch"];
 
 export const wrapper = createWrapper<AppStore>(makeStore, {
-  debug: true
+  debug: true,
+  serializeState: (state) => JSON.stringify(state),
+  deserializeState: (state) => JSON.parse(state)
 });
