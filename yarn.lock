@@ -1194,10 +1194,10 @@
     graphql-request "^3.7.0"
     tsify "^5.0.4"
 
-"@superfluid-finance/sdk-redux@^0.1.1-PR571.20e03c5.0":
-  version "0.1.1-PR571.20e03c5.0"
-  resolved "https://npm.pkg.github.com/download/@superfluid-finance/sdk-redux/0.1.1-PR571.20e03c5.0/7577bf6c8579cb4c265248baf770b5b2b7be72b16c53adce1982bfeeaa554d4f#76a7b1605d5f1c3004fcbeff6cfac1efce7127d5"
-  integrity sha512-2FV1UfRYKW52jiTSEEiJzl+9OT6hwV1Ndvy3H3MObQYYrdpzppfveUuDXVxg1WqxHDjwhpAnyn/eqWmMTB5adA==
+"@superfluid-finance/sdk-redux@^0.1.1-PR571.af1f894.0":
+  version "0.1.1-PR571.af1f894.0"
+  resolved "https://npm.pkg.github.com/download/@superfluid-finance/sdk-redux/0.1.1-PR571.af1f894.0/a73762b6112da7f95f0e26839ecbc9666077c95cfd3ad0557f4138f46f37fa35#4458bda2a8a479387e397a6d0b9cee9c7d82b395"
+  integrity sha512-sgYThi1EBDJYEok/hFSCHCkkfXvp3P3usECnjg14JSfAJs5vqHvhyyBqIsefDqpem17+Q/HRoz5y5CnpuPvMIA==
   dependencies:
     ethers "^5.5.1"
     graphql-request "^3.7.0"

@@ -8,7 +8,7 @@ import {
   InputAdornment, ListItem, List, ListItemButton, CircularProgress, Grid, Card, Divider, ListItemText
 } from "@mui/material";
 import {useRouter} from "next/router";
-import {sfApi} from "../redux/store";
+import {sfApi, sfSubgraph} from "../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {ethers} from "ethers";
 import {gql} from "graphql-request";
@@ -88,7 +88,7 @@ const useSearchHook = (address: string): NetworkSearchResult[] => {
   const lastSearchAddress = useAppSelector((state) => state.searchHistory.ids[0]);
 
   networks.forEach(network => {
-    const queryState = sfApi.useAdHocSubgraphQuery(isSearchTermAddress ? {
+    const queryState = sfSubgraph.useCustomQuery(isSearchTermAddress ? {
       chainId: network.chainId,
       document: searchByAddressDocument,
       variables: {
