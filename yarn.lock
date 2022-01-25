@@ -1182,10 +1182,10 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.0.tgz#7f698254aadf921e48dda8c0a6b304026b8a9323"
   integrity sha512-JLo+Y592QzIE+q7Dl2pMUtt4q8SKYI5jDrZxrozEQxnGVOyYE+GWK9eLkwTaeN9DDctlaRAQ3TBmzZ1qdLE30A==
 
-"@superfluid-finance/sdk-core@^0.2.1-PR571.20e03c5.0":
-  version "0.2.1-PR571.20e03c5.0"
-  resolved "https://npm.pkg.github.com/download/@superfluid-finance/sdk-core/0.2.1-PR571.20e03c5.0/f2d7764e3904304dda3e51d61c2af1ab9153f28e3b94c65bda3c87ac40394565#91133c330c505061a19f2b70b0cc78b3b0eb5260"
-  integrity sha512-4WL9R+ivEbPXRmBE5aOwU3Z8mLlKf4Jj+GVvrerO/SWzLdIWI2z+woI76vKV3RuyJZE2Hb8wCmDxzxzSOm0sSQ==
+"@superfluid-finance/sdk-core@^0.2.1-PR571.451b71b.0":
+  version "0.2.1-PR571.451b71b.0"
+  resolved "https://npm.pkg.github.com/download/@superfluid-finance/sdk-core/0.2.1-PR571.451b71b.0/251f597db01e36da9a1e9913d49cd72d8e2f91e8eefe4f165b37f50edf507ba1#65466b6a8475ccb141b832cfc9213f7157a8e114"
+  integrity sha512-3VGm6JuXw9mdzfBp6nfrn3nW+wMhbRsLvABvoVcEDrJ5cffP88iGjZaxpwsshuDCv6pyUwVk91g6sKA2uUfayg==
   dependencies:
     "@ethersproject/providers" "^5.5.1"
     ajv "^8.8.2"
@@ -1194,10 +1194,10 @@
     graphql-request "^3.7.0"
     tsify "^5.0.4"
 
-"@superfluid-finance/sdk-redux@^0.1.1-PR571.af1f894.0":
-  version "0.1.1-PR571.af1f894.0"
-  resolved "https://npm.pkg.github.com/download/@superfluid-finance/sdk-redux/0.1.1-PR571.af1f894.0/a73762b6112da7f95f0e26839ecbc9666077c95cfd3ad0557f4138f46f37fa35#4458bda2a8a479387e397a6d0b9cee9c7d82b395"
-  integrity sha512-sgYThi1EBDJYEok/hFSCHCkkfXvp3P3usECnjg14JSfAJs5vqHvhyyBqIsefDqpem17+Q/HRoz5y5CnpuPvMIA==
+"@superfluid-finance/sdk-redux@^0.1.1-PR571.451b71b.0":
+  version "0.1.1-PR571.451b71b.0"
+  resolved "https://npm.pkg.github.com/download/@superfluid-finance/sdk-redux/0.1.1-PR571.451b71b.0/ea3765bce300df737ec581a5e9162e4b09dc0918c11a466c8dd6f2dea1f465ea#349f43fba4f935ed40d075e5f6038969bc2762a1"
+  integrity sha512-fhMo23iGybqOCsicuzimjm4/e2FROVmMNCJZ5c7QtuhSODT/oW3uIVnAbcle05S2cqcihcLydvQUzIXde+w/zg==
   dependencies:
     ethers "^5.5.1"
     graphql-request "^3.7.0"
