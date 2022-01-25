@@ -1,3 +1,2 @@
-const isServer = () => typeof window === 'undefined';
-
-export default isServer;
+export const isServer = () => typeof window === 'undefined';
+export const isClient = () => !isServer();

@@ -130,12 +130,6 @@ const SuperTokenPage: NextPage = () => {
   )
 }
 
-export const getServerSideProps = wrapper.getServerSideProps(store => async () => {
-  return {
-    props: {},
-  };
-})
-
 const getAddress = (address: unknown): string => {
   if (typeof address === "string") {
     return address;

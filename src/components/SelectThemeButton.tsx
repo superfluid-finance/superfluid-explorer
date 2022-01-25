@@ -12,8 +12,9 @@ const SelectThemeButton: FC = () => {
 
   const isDarkTheme = theme.palette.mode === 'dark';
 
-  return (      <IconButton sx={{ ml: 1 }} onClick={() => dispatch(changeThemePreference(isDarkTheme ? 'light' : 'dark'))} color="inherit">
-    {isDarkTheme ? <Brightness7Icon /> : <Brightness4Icon />}
+  return (<IconButton sx={{ml: 1}} onClick={() => dispatch(changeThemePreference(isDarkTheme ? 'light' : 'dark'))}
+                      color="inherit">
+    {isDarkTheme ? <Brightness7Icon/> : <Brightness4Icon/>}
   </IconButton>);
 }
 

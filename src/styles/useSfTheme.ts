@@ -3,25 +3,33 @@ import useSystemTheme from './useSystemTheme';
 import {useAppSelector} from "../redux/hooks";
 import {createSfTheme} from "./theme";
 import {useEffect, useState} from "react";
+import { isClient } from "../utils/isServer";
+import {getRenderedThemeMode} from "../pages/_app";
 
 const useSfTheme = (): Theme => {
   const isSystemDarkTheme = useSystemTheme();
 
   const {themePreference} = useAppSelector((state) => state.appPreferences);
 
-  const [ muiTheme, setMuiTheme ] = useState<Theme>(themePreference === 'system' ? createSfTheme('light') : createSfTheme(themePreference));
+  let initialTheme = themePreference === 'system' ? createSfTheme('light') : createSfTheme(themePreference);
+
+  if (isClient()) {
+    if (getRenderedThemeMode() !== initialTheme.palette.mode) {
+      // We're running into a theme mismatch which is caused by rehydration. Best to fall back to the one that got rendered first and then change it in `useEffect`. This will cause a flicker but is the safest option.
+      initialTheme = createSfTheme(getRenderedThemeMode())
+    }
+  }
+
+  const [muiTheme, setMuiTheme] =
+    useState<Theme>(initialTheme);
 
   // System theme we'll handle client-side because server has no knowledge of system preferences.
   // NOTE: UseEffect runs only on client-side.
   useEffect(() => {
-    if (themePreference === 'system') {
-      if (isSystemDarkTheme && muiTheme.palette.mode !== 'dark') {
-        setMuiTheme(createSfTheme('dark'));
-      }
-    } else {
-      if (muiTheme.palette.mode !== themePreference) {
-        setMuiTheme(createSfTheme(themePreference));
-      }
+    const currentTheme = getRenderedThemeMode();
+    const actualThemePreference = themePreference === 'system' ? ((isSystemDarkTheme) ? 'dark' : 'light') : themePreference;
+    if (currentTheme !== actualThemePreference) {
+      setMuiTheme(createSfTheme(actualThemePreference));
     }
   }, [themePreference]);
 

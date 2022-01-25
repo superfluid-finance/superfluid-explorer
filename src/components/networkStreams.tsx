@@ -87,13 +87,13 @@ const SenderReceiver: FC<{ network: Network, fromAddress: string, toAddress: str
                                                                                           }) => {
   return (
     <Grid container spacing={0} sx={{lineHeight: "1.5"}}>
-      <Grid container xs={2}>
+      <Grid container item xs={2}>
         <Grid item xs={12}>From:
         </Grid>
         <Grid item xs={12}>To:
         </Grid>
       </Grid>
-      <Grid container xs={10}>
+      <Grid container item xs={10}>
         <Grid item xs={12}><AccountAddress network={network} address={fromAddress}/>
         </Grid>
         <Grid item xs={12}><AccountAddress network={network} address={toAddress}/>

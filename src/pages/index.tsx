@@ -54,12 +54,6 @@ const Home: NextPage = () => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(store => async () => {
-  return {
-    props: {},
-  };
-})
-
 export default Home;
 
 

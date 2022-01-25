@@ -1,19 +1,13 @@
 import dynamic from "next/dynamic";
 import {NextPage} from "next";
-import {wrapper} from "../redux/store";
 
 const DynamicLazyComponent = dynamic(() => import('../components/SubgraphExplorer'), {
   ssr: false,
 })
 
+// NOTE: Don't start loading the Subgraph component on the server.
 const SubgraphPage: NextPage = () => {
   return (<DynamicLazyComponent />);
 }
-
-export const getServerSideProps = wrapper.getServerSideProps(store => async () => {
-  return {
-    props: {},
-  };
-})
 
 export default SubgraphPage;

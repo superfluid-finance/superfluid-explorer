@@ -111,12 +111,6 @@ const AccountPage: NextPage = () => {
   </Container>);
 }
 
-export const getServerSideProps = wrapper.getServerSideProps(store => async () => {
-  return {
-    props: {},
-  };
-})
-
 interface TabPanelProps {
   children?: ReactNode;
   index: number;
