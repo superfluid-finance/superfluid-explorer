@@ -85,11 +85,6 @@ const getGraphQLIntrospectionClientSchemaMemoized = _.memoize(
     )
 );
 
-
-// const SubgraphPageWrapper = () => {
-//   return (<>);
-// }
-
 const SubgraphExplorer: React.FC = () => {
   const [chainId, setChainId] = useState(100);
   const theme = useSfTheme();
@@ -145,7 +140,7 @@ const SubgraphExplorer: React.FC = () => {
       {isInitializing ? (
         <FullPageLoader />
       ) : (
-        <Box component="div" className="graphiql-container" sx={{height: "100%", filter: `invert(${isDarkTheme? 1 : 0})`}}>
+        <Box component="div" className="graphiql-container" sx={{height: "100%", filter: `invert(${isDarkTheme? 0.9 : 0})`}}>
           <GraphiQLExplorer
             schema={schema}
             query={query}
