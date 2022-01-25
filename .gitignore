@@ -1,4 +1,5 @@
 .npmrc
+.vercel
 
 # Above are custom rules, below are generated rules
 
