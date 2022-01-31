@@ -27,7 +27,7 @@ function MyApp(props: MyAppProps) {
 
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_HJID && process.env.NEXT_PUBLIC_HJSV) {
-      hotjar.initialize(Number(process.env.NEXT_PUBLIC_HJID), Number(process.env.NEXT_PUBLIC_HJSV))
+        hotjar.initialize(Number(process.env.NEXT_PUBLIC_HJID), Number(process.env.NEXT_PUBLIC_HJSV))
     } else {
       console.log("Hotjar not initialized.")
     }
