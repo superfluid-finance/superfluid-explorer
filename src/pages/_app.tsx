@@ -12,6 +12,7 @@ import "../styles/graphiql.min.css"
 import "../styles/app.css"
 import {ThemeProvider} from "@mui/material/styles";
 import useSfTheme from "../styles/useSfTheme";
+import {hotjar} from "react-hotjar";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -23,6 +24,14 @@ interface MyAppProps extends AppProps {
 function MyApp(props: MyAppProps) {
   const {Component, emotionCache = clientSideEmotionCache, pageProps} = props;
   const theme = useSfTheme();
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_HJID && process.env.NEXT_PUBLIC_HJSV) {
+      hotjar.initialize(Number(process.env.NEXT_PUBLIC_HJID), Number(process.env.NEXT_PUBLIC_HJSV))
+    } else {
+      console.log("Hotjar not initialized.")
+    }
+  })
 
   return (
     <CacheProvider value={emotionCache}>

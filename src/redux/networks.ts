@@ -1,3 +1,5 @@
+import {ensureDefined} from "../utils/ensureDefined";
+
 export const chainIds = [
   3, // ROPSTEN
   4, // RINKEBY
@@ -14,11 +16,6 @@ export type Network = {
   chainId: number,
   subgraphUrl: string
   getLinkForTransaction(txHash: string): string;
-}
-
-function ensureDefined<T>(value: T | undefined): T {
-  if (!value) throw Error('Value has to be defined.');
-  return value;
 }
 
 export const networks: Network[] = [
