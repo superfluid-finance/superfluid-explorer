@@ -3,7 +3,7 @@ import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef} from "@mui/x-data-grid";
 import {
   IndexSubscription,
-  IndexSubscriptionOrderBy,
+  IndexSubscription_OrderBy,
   Ordering,
   PagedResult,
   SkipPaging
@@ -20,8 +20,8 @@ interface Props {
     data?: PagedResult<IndexSubscription>
   }
   setPaging: (paging: SkipPaging) => void;
-  ordering: Ordering<IndexSubscriptionOrderBy> | undefined;
-  setOrdering: (ordering?: Ordering<IndexSubscriptionOrderBy>) => void;
+  ordering: Ordering<IndexSubscription_OrderBy> | undefined;
+  setOrdering: (ordering?: Ordering<IndexSubscription_OrderBy>) => void;
 }
 
 const IndexSubscriptionDataGrid: FC<Props> = ({network, queryResult, setPaging, ordering, setOrdering}) => {

@@ -1,7 +1,7 @@
 import {FC, ReactElement, useState} from "react";
 import {sfSubgraph} from "../redux/store";
 import {
-  AccountTokenSnapshotOrderBy,
+  AccountTokenSnapshot_OrderBy,
   createSkipPaging,
   Ordering,
   SkipPaging
@@ -17,7 +17,7 @@ const AccountTokens: FC<{
   const [accountTokenSnapshotPaging, setAccountTokenSnapshotPaging] = useState<SkipPaging>(createSkipPaging({
     take: 10
   }));
-  const [accountTokenSnapshotOrdering, setAccountTokenSnapshotOrdering] = useState<Ordering<AccountTokenSnapshotOrderBy> | undefined>({
+  const [accountTokenSnapshotOrdering, setAccountTokenSnapshotOrdering] = useState<Ordering<AccountTokenSnapshot_OrderBy> | undefined>({
     orderBy: "balanceUntilUpdatedAt",
     orderDirection: "desc"
   });

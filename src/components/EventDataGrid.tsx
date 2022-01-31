@@ -7,10 +7,6 @@ import {Network} from "../redux/networks";
 import {timeAgo} from "../utils/dateTime";
 import {TransactionHash} from "./TransactionHash";
 
-export type EventOrderBy = Event_OrderBy;
-
-// TODO(KK): bad import
-
 interface Props {
   network: Network,
   queryResult: {
@@ -18,8 +14,8 @@ interface Props {
     data?: PagedResult<AllEvents>
   }
   setPaging: (paging: SkipPaging) => void;
-  ordering: Ordering<EventOrderBy> | undefined;
-  setOrdering: (ordering?: Ordering<EventOrderBy>) => void;
+  ordering: Ordering<Event_OrderBy> | undefined;
+  setOrdering: (ordering?: Ordering<Event_OrderBy>) => void;
 }
 
 const EventDataGrid: FC<Props> = ({network, queryResult, setPaging, ordering, setOrdering}) => {

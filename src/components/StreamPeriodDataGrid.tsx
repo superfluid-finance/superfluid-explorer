@@ -6,7 +6,7 @@ import {
   PagedResult,
   SkipPaging,
   StreamPeriod,
-  StreamPeriodOrderBy
+  StreamPeriod_OrderBy
 } from "@superfluid-finance/sdk-core";
 import FlowingBalance from "./FlowingBalance";
 import FlowRate from "./FlowRate";
@@ -17,8 +17,8 @@ interface Props {
     data?: PagedResult<StreamPeriod>
   }
   setPaging: (paging: SkipPaging) => void;
-  ordering: Ordering<StreamPeriodOrderBy> | undefined;
-  setOrdering: (ordering?: Ordering<StreamPeriodOrderBy>) => void;
+  ordering: Ordering<StreamPeriod_OrderBy> | undefined;
+  setOrdering: (ordering?: Ordering<StreamPeriod_OrderBy>) => void;
 }
 
 const columns: GridColDef[] = [

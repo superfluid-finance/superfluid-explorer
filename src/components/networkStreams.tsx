@@ -2,13 +2,10 @@ import * as React from "react";
 import {FC, useMemo, useState} from "react";
 import {Network} from "../redux/networks";
 import {DataGridProps, GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
-import SuperTokenAddress from "./SuperTokenAddress";
-import FlowRate from "./FlowRate";
 import AccountAddress from "./AccountAddress";
-import {createSkipPaging, Ordering, SkipPaging, Stream, StreamOrderBy} from "@superfluid-finance/sdk-core";
+import {createSkipPaging, Ordering, SkipPaging, Stream, Stream_OrderBy} from "@superfluid-finance/sdk-core";
 import FlowingBalance from "./FlowingBalance";
 import {timeAgo} from "../utils/dateTime";
-import {StreamDetailsDialog} from "./StreamDetails";
 import {sfSubgraph} from "../redux/store";
 import {AppDataGrid} from "./AppDataGrid";
 import {Divider, Grid, Typography} from "@mui/material";
@@ -51,7 +48,7 @@ export const NetworkStreams: FC<{ network: Network }> = ({network}) => {
     }
   ], [network.chainId]);
 
-  const [ordering, setOrdering] = useState<Ordering<StreamOrderBy> | undefined>({
+  const [ordering, setOrdering] = useState<Ordering<Stream_OrderBy> | undefined>({
     orderBy: "createdAtTimestamp",
     orderDirection: "desc"
   });

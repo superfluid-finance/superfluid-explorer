@@ -1,5 +1,5 @@
 import {sfSubgraph} from "../redux/store";
-import {createSkipPaging, Ordering, SkipPaging, Stream, StreamOrderBy} from "@superfluid-finance/sdk-core";
+import {createSkipPaging, Ordering, SkipPaging, Stream, Stream_OrderBy} from "@superfluid-finance/sdk-core";
 import {FC, ReactElement, useState} from "react";
 import {GridColDef} from "@mui/x-data-grid";
 import AccountAddress from "./AccountAddress";
@@ -17,7 +17,7 @@ const SuperTokenStreams: FC<Props> = ({network, tokenAddress}): ReactElement => 
   const [streamPaging, setStreamPaging] = useState<SkipPaging>(createSkipPaging({
     take: 10
   }));
-  const [streamOrdering, setStreamOrdering] = useState<Ordering<StreamOrderBy> | undefined>({
+  const [streamOrdering, setStreamOrdering] = useState<Ordering<Stream_OrderBy> | undefined>({
     orderBy: "createdAtTimestamp",
     orderDirection: "desc"
   });

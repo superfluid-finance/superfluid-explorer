@@ -1,8 +1,8 @@
 import {FC, useState} from "react";
 import {sfSubgraph} from "../redux/store";
 import {
-  createSkipPaging, Index, IndexSubscriptionOrderBy,
-  IndexUpdatedEventOrderBy,
+  createSkipPaging, Index, IndexSubscription_OrderBy,
+  IndexUpdatedEvent_OrderBy,
   Ordering,
   SkipPaging
 } from "@superfluid-finance/sdk-core";
@@ -37,7 +37,7 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
   const [indexUpdatedEventPaging, setIndexUpdatedEventPaging] = useState<SkipPaging>(createSkipPaging({
     take: 10
   }))
-  const [indexUpdatedEventPagingOrdering, setIndexUpdatedEventOrdering] = useState<Ordering<IndexUpdatedEventOrderBy> | undefined>({
+  const [indexUpdatedEventPagingOrdering, setIndexUpdatedEventOrdering] = useState<Ordering<IndexUpdatedEvent_OrderBy> | undefined>({
     orderBy: "timestamp",
     orderDirection: "desc"
   })
@@ -53,7 +53,7 @@ const IndexPublicationDetails: FC<Props> = ({network, indexId}) => {
   const [indexSubscriptionPaging, setIndexSubscriptionPaging] = useState<SkipPaging>(createSkipPaging({
     take: 10
   }))
-  const [indexSubscriptionPagingOrdering, setIndexSubscriptionOrdering] = useState<Ordering<IndexSubscriptionOrderBy> | undefined>()
+  const [indexSubscriptionPagingOrdering, setIndexSubscriptionOrdering] = useState<Ordering<IndexSubscription_OrderBy> | undefined>()
   const indexSubscriptionEventQuery = sfSubgraph.useIndexSubscriptionsQuery({
     chainId: network.chainId,
     filter: {
