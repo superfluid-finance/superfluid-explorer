@@ -1,7 +1,7 @@
 import {sfApi} from "../redux/store";
-import {createSkipPaging, Ordering, SkipPaging} from "@superfluid-finance/sdk-core";
+import {createSkipPaging, Ordering, SkipPaging, Event_OrderBy} from "@superfluid-finance/sdk-core";
 import {FC, ReactElement, useState} from "react";
-import EventDataGrid, {EventOrderBy} from "./EventDataGrid";
+import EventDataGrid from "./EventDataGrid";
 import {Network} from "../redux/networks";
 
 interface Props {
@@ -14,7 +14,7 @@ const EventList: FC<Props> = ({network, address}): ReactElement => {
     take: 10
   }));
 
-  const [eventOrdering, setEventOrdering] = useState<Ordering<EventOrderBy> | undefined>({
+  const [eventOrdering, setEventOrdering] = useState<Ordering<Event_OrderBy> | undefined>({
     orderBy: "timestamp",
     orderDirection: "desc"
   });

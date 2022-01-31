@@ -2,7 +2,7 @@ import {FC} from "react";
 import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef} from "@mui/x-data-grid";
 import {
-  AccountTokenSnapshot, AccountTokenSnapshotOrderBy,
+  AccountTokenSnapshot, AccountTokenSnapshot_OrderBy,
   Ordering,
   PagedResult,
   SkipPaging
@@ -18,8 +18,8 @@ interface Props {
     data?: PagedResult<AccountTokenSnapshot>
   }
   setPaging: (paging: SkipPaging) => void;
-  ordering: Ordering<AccountTokenSnapshotOrderBy> | undefined;
-  setOrdering: (ordering?: Ordering<AccountTokenSnapshotOrderBy>) => void;
+  ordering: Ordering<AccountTokenSnapshot_OrderBy> | undefined;
+  setOrdering: (ordering?: Ordering<AccountTokenSnapshot_OrderBy>) => void;
 }
 
 

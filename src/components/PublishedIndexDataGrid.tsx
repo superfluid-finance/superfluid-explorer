@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef} from "@mui/x-data-grid";
-import {Index, Ordering, PagedResult, SkipPaging, IndexOrderBy} from "@superfluid-finance/sdk-core";
+import {Index, Ordering, PagedResult, SkipPaging, Index_OrderBy} from "@superfluid-finance/sdk-core";
 import {IndexPublicationDetailsDialog} from "./IndexPublicationDetails";
 import SuperTokenAddress from "./SuperTokenAddress";
 import {Network} from "../redux/networks";
@@ -14,8 +14,8 @@ interface Props {
     data?: PagedResult<Index>
   }
   setPaging: (paging: SkipPaging) => void;
-  ordering: Ordering<IndexOrderBy> | undefined;
-  setOrdering: (ordering?: Ordering<IndexOrderBy>) => void;
+  ordering: Ordering<Index_OrderBy> | undefined;
+  setOrdering: (ordering?: Ordering<Index_OrderBy>) => void;
   // columnsToHide: string[];
 }
 

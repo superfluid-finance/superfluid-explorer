@@ -1,6 +1,6 @@
 import {sfSubgraph} from "../redux/store";
 import {FC, ReactElement, useState} from "react";
-import {createSkipPaging, Ordering, SkipPaging, Stream, StreamOrderBy} from "@superfluid-finance/sdk-core";
+import {createSkipPaging, Ordering, SkipPaging, Stream, Stream_OrderBy} from "@superfluid-finance/sdk-core";
 import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef} from "@mui/x-data-grid";
 import {Box, Typography} from "@mui/material";
@@ -49,7 +49,7 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
     }
   ];
 
-  const [incomingStreamOrdering, setIncomingStreamOrdering] = useState<Ordering<StreamOrderBy> | undefined>({
+  const [incomingStreamOrdering, setIncomingStreamOrdering] = useState<Ordering<Stream_OrderBy> | undefined>({
     orderBy: "createdAtTimestamp",
     orderDirection: "desc"
   });
@@ -68,7 +68,7 @@ const AccountStreams: FC<Props> = ({network, accountAddress}): ReactElement => {
 
   const incomingStreamRows: Stream[] = incomingStreamsQuery.data ? incomingStreamsQuery.data.data : [];
 
-  const [outgoingStreamOrdering, setOutgoingStreamOrdering] = useState<Ordering<StreamOrderBy> | undefined>({
+  const [outgoingStreamOrdering, setOutgoingStreamOrdering] = useState<Ordering<Stream_OrderBy> | undefined>({
     orderBy: "createdAtTimestamp",
     orderDirection: "desc"
   });

@@ -4,7 +4,7 @@ import {
   initializeSfApiSlice,
   initializeSubgraphSlice,
   initializeSfTransactionSlice,
-  setFrameworkForSdkRedux
+  setFrameworkForSdkRedux, allSubgraphSliceEndpoints
 } from "@superfluid-finance/sdk-redux";
 import {Framework} from "@superfluid-finance/sdk-core";
 import {ethers} from "ethers";
@@ -20,7 +20,7 @@ import {isServer} from "../utils/isServer";
 import {searchHistorySlice} from "./slices/searchHistory.slice";
 
 export const {sfApi} = initializeSfApiSlice(createApiWithReactHooks);
-export const {sfSubgraph} = initializeSubgraphSlice(createApiWithReactHooks);
+export const sfSubgraph = initializeSubgraphSlice(createApiWithReactHooks).injectEndpoints(allSubgraphSliceEndpoints);
 export const {sfTransactions} = initializeSfTransactionSlice();
 
 const infuraProviders = chainIds.map((chainId) => ({

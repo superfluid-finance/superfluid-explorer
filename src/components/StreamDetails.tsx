@@ -4,7 +4,7 @@ import {
   createSkipPaging,
   Ordering,
   SkipPaging, Stream,
-  StreamPeriodOrderBy
+  StreamPeriod_OrderBy
 } from "@superfluid-finance/sdk-core";
 import Container from "@mui/material/Container";
 import StreamPeriodDataGrid from "./StreamPeriodDataGrid";
@@ -36,7 +36,7 @@ const StreamDetails: FC<Props> = ({network, streamId}) => {
   const stream: Stream | undefined | null = streamQuery.data
 
   const [streamPeriodPaging, setStreamPeriodPaging] = useState<SkipPaging>(createSkipPaging())
-  const [streamPeriodOrdering, setStreamPeriodOrdering] = useState<Ordering<StreamPeriodOrderBy> | undefined>({
+  const [streamPeriodOrdering, setStreamPeriodOrdering] = useState<Ordering<StreamPeriod_OrderBy> | undefined>({
     orderBy: "startedAtTimestamp",
     orderDirection: "desc"
   })

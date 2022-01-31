@@ -3,7 +3,7 @@ import {AppDataGrid} from "./AppDataGrid";
 import {GridColDef} from "@mui/x-data-grid";
 import {
   Index,
-  IndexUpdatedEventOrderBy,
+  IndexUpdatedEvent_OrderBy,
   Ordering,
   PagedResult,
   SkipPaging
@@ -18,8 +18,8 @@ interface Props {
     data?: PagedResult<IndexUpdatedEvent>
   }
   setPaging: (paging: SkipPaging) => void;
-  ordering: Ordering<IndexUpdatedEventOrderBy> | undefined;
-  setOrdering: (ordering?: Ordering<IndexUpdatedEventOrderBy>) => void;
+  ordering: Ordering<IndexUpdatedEvent_OrderBy> | undefined;
+  setOrdering: (ordering?: Ordering<IndexUpdatedEvent_OrderBy>) => void;
 }
 
 

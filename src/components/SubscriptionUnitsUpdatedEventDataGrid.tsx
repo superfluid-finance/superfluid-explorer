@@ -6,7 +6,7 @@ import {
   PagedResult,
   SkipPaging,
   SubscriptionUnitsUpdatedEvent,
-  SubscriptionUnitsUpdatedEventOrderBy
+  SubscriptionUnitsUpdatedEvent_OrderBy
 } from "@superfluid-finance/sdk-core";
 
 interface Props {
@@ -15,8 +15,8 @@ interface Props {
     data?: PagedResult<SubscriptionUnitsUpdatedEvent>
   }
   setPaging: (paging: SkipPaging) => void;
-  ordering: Ordering<SubscriptionUnitsUpdatedEventOrderBy> | undefined;
-  setOrdering: (ordering?: Ordering<SubscriptionUnitsUpdatedEventOrderBy>) => void;
+  ordering: Ordering<SubscriptionUnitsUpdatedEvent_OrderBy> | undefined;
+  setOrdering: (ordering?: Ordering<SubscriptionUnitsUpdatedEvent_OrderBy>) => void;
 }
 
 const columns: GridColDef[] = [

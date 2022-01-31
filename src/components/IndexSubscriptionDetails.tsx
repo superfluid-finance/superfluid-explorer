@@ -3,7 +3,7 @@ import {sfSubgraph} from "../redux/store";
 import {
   createSkipPaging, Index, IndexSubscription,
   Ordering,
-  SkipPaging, SubscriptionUnitsUpdatedEventOrderBy
+  SkipPaging, SubscriptionUnitsUpdatedEvent_OrderBy
 } from "@superfluid-finance/sdk-core";
 import Container from "@mui/material/Container";
 import {
@@ -46,7 +46,7 @@ const IndexSubscriptionDetails: FC<Props> = ({network, indexSubscriptionId}) => 
   const [subscriptionUnitsUpdatedEventPaging, setSubscriptionUnitsUpdatedEventPaging] = useState<SkipPaging>(createSkipPaging({
     take: 10
   }))
-  const [subscriptionUnitsUpdatedEventPagingOrdering, setSubscriptionUnitsUpdatedEventOrdering] = useState<Ordering<SubscriptionUnitsUpdatedEventOrderBy> | undefined>()
+  const [subscriptionUnitsUpdatedEventPagingOrdering, setSubscriptionUnitsUpdatedEventOrdering] = useState<Ordering<SubscriptionUnitsUpdatedEvent_OrderBy> | undefined>()
   const subscriptionUnitsUpdatedEventQuery = sfSubgraph.useSubscriptionUnitsUpdatedEventsQuery({
     chainId: network.chainId,
     filter: {
