@@ -18,6 +18,7 @@
     "@mui/material": "latest",
     "@mui/x-data-grid": "latest",
     "@reduxjs/toolkit": "latest",
+    "@sentry/nextjs": "^6.17.3",
     "@superfluid-finance/sdk-core": "^0.2.2-PR571.ca54b4e.0",
     "@superfluid-finance/sdk-redux": "^0.1.1-PR571.ca54b4e.0",
     "ethers": "latest",
@@ -30,6 +31,7 @@
     "next-redux-wrapper": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "react-hotjar": "^4.0.0",
     "react-redux": "latest",
     "redux": "latest",
     "redux-persist": "latest"
