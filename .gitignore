@@ -320,7 +320,6 @@ $RECYCLE.BIN/
 
 # Above are generates rules, below are custom rules
 
-.npmrc
 .vercel
 
 # Sentry
