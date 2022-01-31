@@ -1,9 +1,3 @@
-.npmrc
-.vercel
-
-# Above are custom rules, below are generated rules
-
-
 # Created by https://www.toptal.com/developers/gitignore/api/windows,linux,node,visualstudiocode,webstorm,nextjs
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,node,visualstudiocode,webstorm,nextjs
 
@@ -323,3 +317,12 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,node,visualstudiocode,webstorm,nextjs
+
+# Above are generates rules, below are custom rules
+
+.npmrc
+.vercel
+
+# Sentry
+.sentryclirc
+
