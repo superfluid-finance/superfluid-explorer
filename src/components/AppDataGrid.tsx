@@ -13,9 +13,7 @@ interface Props {
   columns: GridColumns,
   rows: GridRowsProp,
   queryResult: {
-    isError: boolean,
     isFetching: boolean,
-    isLoading: boolean,
     data?: PagedResult<ILightEntity>
   }
   setPaging: (paging: SkipPaging) => void;
