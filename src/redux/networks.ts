@@ -1,4 +1,4 @@
-import {ensureDefined} from "../utils/ensureDefined";
+import {getEnvironmentVariableOrThrow} from "../utils/getEnvironmentVariableOrThrow";
 
 export const chainIds = [
   3, // ROPSTEN
@@ -26,8 +26,8 @@ export const networks: Network[] = [
     slugName: "ropsten",
     chainId: 3,
     isTestnet: true,
-    rpcUrl: ensureDefined(process.env.NEXT_PUBLIC_ROPSTEN_RPC),
-    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_ROPSTEN_SUBGRAPH),
+    rpcUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_ROPSTEN_RPC"),
+    subgraphUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_ROPSTEN_SUBGRAPH"),
     getLinkForTransaction: (txHash: string): string => `https://ropsten.etherscan.io/tx/${txHash}`,
   },
   {
@@ -35,8 +35,8 @@ export const networks: Network[] = [
     slugName: "rinkeby",
     chainId: 4,
     isTestnet: true,
-    rpcUrl: ensureDefined(process.env.NEXT_PUBLIC_RINKEBY_RPC),
-    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_RINKEBY_SUBGRAPH),
+    rpcUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_RINKEBY_RPC"),
+    subgraphUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_RINKEBY_SUBGRAPH"),
     getLinkForTransaction: (txHash: string): string => `https://rinkeby.etherscan.io/tx/${txHash}`
   },
   {
@@ -44,8 +44,8 @@ export const networks: Network[] = [
     slugName: "goerli",
     chainId: 5,
     isTestnet: true,
-    rpcUrl: ensureDefined(process.env.NEXT_PUBLIC_GOERLI_RPC),
-    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_GOERLI_SUBGRAPH),
+    rpcUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_GOERLI_RPC"),
+    subgraphUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_GOERLI_SUBGRAPH"),
     getLinkForTransaction: (txHash: string): string => `https://goerli.etherscan.io/tx/${txHash}`
   },
   {
@@ -53,8 +53,8 @@ export const networks: Network[] = [
     slugName: "kovan",
     chainId: 42,
     isTestnet: true,
-    rpcUrl: ensureDefined(process.env.NEXT_PUBLIC_KOVAN_RPC),
-    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_KOVAN_SUBGRAPH),
+    rpcUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_KOVAN_RPC"),
+    subgraphUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_KOVAN_SUBGRAPH"),
     getLinkForTransaction: (txHash: string): string => `https://kovan.etherscan.io/tx/${txHash}`
   },
   {
@@ -62,8 +62,8 @@ export const networks: Network[] = [
     slugName: "xdai",
     chainId: 100,
     isTestnet: false,
-    rpcUrl: ensureDefined(process.env.NEXT_PUBLIC_XDAI_RPC),
-    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_XDAI_SUBGRAPH),
+    rpcUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_XDAI_RPC"),
+    subgraphUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_XDAI_SUBGRAPH"),
     getLinkForTransaction: (txHash: string): string => `https://blockscout.com/xdai/mainnet/tx/${txHash}`
   },
   {
@@ -71,8 +71,8 @@ export const networks: Network[] = [
     slugName: "matic",
     chainId: 137,
     isTestnet: false,
-    rpcUrl: ensureDefined(process.env.NEXT_PUBLIC_MATIC_RPC),
-    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_MATIC_SUBGRAPH),
+    rpcUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_MATIC_RPC"),
+    subgraphUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_MATIC_SUBGRAPH"),
     getLinkForTransaction: (txHash: string): string => `https://polygonscan.com/tx/${txHash}`
   },
   {
@@ -80,8 +80,8 @@ export const networks: Network[] = [
     slugName: "mumbai",
     chainId: 80001,
     isTestnet: true,
-    rpcUrl: ensureDefined(process.env.NEXT_PUBLIC_MUMBAI_RPC),
-    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_MUMBAI_SUBGRAPH),
+    rpcUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_MUMBAI_RPC"),
+    subgraphUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_MUMBAI_SUBGRAPH"),
     getLinkForTransaction: (txHash: string): string => `https://mumbai.polygonscan.com/tx/${txHash}`
   },
   {
@@ -89,8 +89,8 @@ export const networks: Network[] = [
     slugName: "arbitrum-rinkeby",
     chainId: 421611,
     isTestnet: true,
-    rpcUrl: ensureDefined(process.env.NEXT_PUBLIC_ARBITRUM_RINKEBY_RPC),
-    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_ARBITRUM_RINKEBY_SUBGRAPH),
+    rpcUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_ARBITRUM_RINKEBY_RPC"),
+    subgraphUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_ARBITRUM_RINKEBY_SUBGRAPH"),
     getLinkForTransaction: (txHash: string): string => `https://rinkeby-explorer.arbitrum.io/tx/${txHash}`
   },
   {
@@ -98,8 +98,8 @@ export const networks: Network[] = [
     slugName: "optimism-kovan",
     chainId: 69,
     isTestnet: true,
-    rpcUrl: ensureDefined(process.env.NEXT_PUBLIC_OPTIMISM_KOVAN_RPC),
-    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_OPTIMISM_KOVAN_SUBGRAPH),
+    rpcUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_OPTIMISM_KOVAN_RPC"),
+    subgraphUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_OPTIMISM_KOVAN_SUBGRAPH"),
     getLinkForTransaction: (txHash: string): string => `https://kovan-optimistic.etherscan.io/tx/${txHash}`
   },
   {
@@ -107,8 +107,8 @@ export const networks: Network[] = [
     slugName: "avalanche-fuji",
     chainId: 43113,
     isTestnet: true,
-    rpcUrl: ensureDefined(process.env.NEXT_PUBLIC_AVALANCHE_FUJI_RPC),
-    subgraphUrl: ensureDefined(process.env.NEXT_PUBLIC_AVALANCHE_FUJI_SUBGRAPH),
+    rpcUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_AVALANCHE_FUJI_RPC"),
+    subgraphUrl: getEnvironmentVariableOrThrow("NEXT_PUBLIC_AVALANCHE_FUJI_SUBGRAPH"),
     getLinkForTransaction: (txHash: string): string => `https://testnet.snowtrace.io/tx/${txHash}`
   },
 ];
