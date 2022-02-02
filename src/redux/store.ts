@@ -12,7 +12,7 @@ import {createWrapper} from "next-redux-wrapper";
 import {nextReduxCookieMiddleware, SERVE_COOKIES, wrapMakeStore} from "next-redux-cookie-wrapper";
 import {themePreferenceSlice} from "./slices/appPreferences.slice";
 import {addressBookSlice} from "./slices/addressBook.slice";
-import {chainIds} from "./networks";
+import {chainIds, networks} from "./networks";
 import storageLocal from "redux-persist/lib/storage";
 import storageSession from "redux-persist/lib/storage/session";
 import {FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE} from "redux-persist";
@@ -23,15 +23,15 @@ export const {sfApi} = initializeSfApiSlice(createApiWithReactHooks);
 export const sfSubgraph = initializeSubgraphSlice(createApiWithReactHooks).injectEndpoints(allSubgraphSliceEndpoints);
 export const {sfTransactions} = initializeSfTransactionSlice();
 
-const infuraProviders = chainIds.map((chainId) => ({
-  chainId,
+const infuraProviders = networks.map(network => ({
+  chainId: network.chainId,
   frameworkGetter: () =>
     Framework.create({
-      chainId,
-      provider: new ethers.providers.InfuraProvider(
-        chainId,
-        process.env.NEXT_PUBLIC_INFURA_ID
-      ),
+      chainId: network.chainId,
+      provider:
+        new ethers.providers.JsonRpcProvider(
+          network.rpcUrl
+        ),
     }),
 }));
 
