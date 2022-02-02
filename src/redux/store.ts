@@ -12,7 +12,7 @@ import {createWrapper} from "next-redux-wrapper";
 import {nextReduxCookieMiddleware, SERVE_COOKIES, wrapMakeStore} from "next-redux-cookie-wrapper";
 import {themePreferenceSlice} from "./slices/appPreferences.slice";
 import {addressBookSlice} from "./slices/addressBook.slice";
-import {chainIds, networks} from "./networks";
+import {networks} from "./networks";
 import storageLocal from "redux-persist/lib/storage";
 import storageSession from "redux-persist/lib/storage/session";
 import {FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE} from "redux-persist";
