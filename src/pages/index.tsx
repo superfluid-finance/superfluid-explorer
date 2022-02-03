@@ -1,13 +1,14 @@
 import * as React from 'react';
-import type {NextPage} from 'next';
+import type { NextPage } from 'next';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import {Card, Divider, Tab} from "@mui/material";
-import {TabContext, TabList, TabPanel} from "@mui/lab";
-import {networks} from "../redux/networks";
-import {NetworkStreams} from "../components/networkStreams";
+import { Button, Card, Divider, Grid, Stack, Tab } from "@mui/material";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { networks } from "../redux/networks";
+import { NetworkStreams } from "../components/networkStreams";
 import _ from 'lodash';
+import SearchBar from '../components/SearchBar';
 
 const Home: NextPage = () => {
   const [value, setValue] = React.useState('matic');
@@ -15,43 +16,61 @@ const Home: NextPage = () => {
   const networksOrdered = _.sortBy(networks, x => x.isTestnet, x => x.slugName)
 
   return (
-    <Container maxWidth="lg">
+    <>
       <Box
         sx={{
-          my: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
+          width: "100%",
+          pt: 8,
+          pb: 6,
         }}
       >
-        <Typography variant="h4" component="h1" gutterBottom>
-          Welcome to Superfluid Console
-        </Typography>
+        <Container maxWidth="sm">
+          <Typography
+            component="h1"
+            variant="h4"
+            align="center"
+            color="text.primary"
+            gutterBottom
+          >
+            Welcome to Superfluid Console
+          </Typography>
+          <Typography variant="body1" align="center" color="text.secondary" paragraph>
+            Superfluid Console is a tool meant for developers and advanced users of the Superfluid Protocol.
+          </Typography>
+          <Stack
+            sx={{ pt: 4 }}
+            direction="row"
+            spacing={2}
+            justifyContent="center"
+          >
+          </Stack>
+        </Container>
       </Box>
-      <Card>
-        <Typography variant="h5" sx={{m: 2}}>
-          Network Data
-        </Typography>
-        <Divider/>
-        <TabContext value={value}>
-          <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-            <TabList variant="scrollable"
-                     scrollButtons="auto"
-                     onChange={(_event, newValue: string) => setValue(newValue)}>
-              {
-                networksOrdered.map((network) => <Tab key={`Tab_${network.slugName}`} label={network.displayName} value={network.slugName}/>)
-              }
-            </TabList>
-          </Box>
-          {
-            networksOrdered.map((network) => <TabPanel key={`TabPanel_${network.slugName}`} value={network.slugName}>
-              <NetworkStreams network={network} />
-            </TabPanel>)
-          }
-        </TabContext>
-      </Card>
-    </Container>
+      <Container maxWidth="lg">
+        <Card>
+          <Typography variant="h5" sx={{ m: 2 }}>
+            Network Data
+          </Typography>
+          <Divider />
+          <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <TabList variant="scrollable"
+                scrollButtons="auto"
+                onChange={(_event, newValue: string) => setValue(newValue)}>
+                {
+                  networksOrdered.map((network) => <Tab key={`Tab_${network.slugName}`} label={network.displayName} value={network.slugName} />)
+                }
+              </TabList>
+            </Box>
+            {
+              networksOrdered.map((network) => <TabPanel key={`TabPanel_${network.slugName}`} value={network.slugName}>
+                <NetworkStreams network={network} />
+              </TabPanel>)
+            }
+          </TabContext>
+        </Card>
+      </Container>
+    </>
   );
 };
 

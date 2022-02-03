@@ -131,14 +131,12 @@ const useSearchHook = (address: string): NetworkSearchResult[] => {
   return chainResults;
 }
 
-const AppSearch: FC<BoxProps> = (boxProps) => {
+const AppSearch: FC<{ open: boolean, close: () => void; } & BoxProps> = ({open, close, ...boxProps}) => {
   const lastSearches = useAppSelector((state) => searchHistorySelectors.selectAll(state)).slice(0, 5);
   const addressBookEntries = useAppSelector((state) => addressBookSelectors.selectAll(state));
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => {
-    setOpen(false);
+    close();
     setSearchTerm("")
   };
 
@@ -164,13 +162,6 @@ const AppSearch: FC<BoxProps> = (boxProps) => {
 
   return (
     <Box {...boxProps} >
-      <Button id="search-button"
-              aria-controls="network-menu"
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleOpen}
-              size="medium"
-              variant="contained">Search</Button>
       <Dialog
         fullWidth
         maxWidth="lg"
