@@ -35,10 +35,6 @@ export const IndexPageContent: FC<{ indexId: string, network: Network }> = ({ in
 
     const index: Index | null | undefined = indexQuery.data;
 
-    if (!indexQuery.isLoading && !indexQuery.data) {
-        return <Error statusCode={404} />;
-    }
-
     const [indexUpdatedEventPaging, setIndexUpdatedEventPaging] = useState<SkipPaging>(createSkipPaging({
         take: 10
     }))
@@ -67,6 +63,10 @@ export const IndexPageContent: FC<{ indexId: string, network: Network }> = ({ in
         pagination: indexSubscriptionPaging,
         order: indexSubscriptionPagingOrdering
     });
+
+    if (!indexQuery.isLoading && !indexQuery.data) {
+        return <Error statusCode={404} />;
+    }
 
     return (<Container component={Box} sx={{ my: 2, py: 2 }}>
         <Grid container spacing={3}>
