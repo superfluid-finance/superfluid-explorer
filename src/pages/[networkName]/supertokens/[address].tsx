@@ -1,20 +1,20 @@
-import {ReactNode, SyntheticEvent, useEffect, useState} from "react";
-import {useRouter} from "next/router";
-import {sfSubgraph, sfApi, wrapper} from "../../../redux/store";
-import {skipToken} from "@reduxjs/toolkit/query";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { sfSubgraph, sfApi } from "../../../redux/store";
+import { skipToken } from "@reduxjs/toolkit/query";
 import {
+  Breadcrumbs,
   Card,
-  Container, Divider, Grid,
+  Container, Grid,
   List,
   ListItem,
-  ListItemText, Paper, Tab,
-  Tabs,
+  ListItemText, Skeleton, Tab,
   Typography
 } from "@mui/material";
-import {Box} from "@mui/system";
+import { Box } from "@mui/system";
 import NetworkDisplay from "../../../components/NetworkDisplay";
-import {Token} from "@superfluid-finance/sdk-core";
-import {NextPage} from "next";
+import { Token } from "@superfluid-finance/sdk-core";
+import { NextPage } from "next";
 import SuperTokenIndexes from "../../../components/SuperTokenIndexes";
 import SuperTokenStreams from "../../../components/SuperTokenStreams";
 import SkeletonNetwork from "../../../components/skeletons/SkeletonNetwork";
@@ -22,14 +22,12 @@ import SkeletonTokenSymbol from "../../../components/skeletons/SkeletonTokenSymb
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
 import SkeletonTokenName from "../../../components/skeletons/SkeletonTokenName";
 import EventList from "../../../components/EventList";
-import {findNetwork, networks} from "../../../redux/networks";
-import {TabContext, TabList, TabPanel} from "@mui/lab";
-import {NetworkStreams} from "../../../components/networkStreams";
-import * as React from "react";
+import { findNetwork } from "../../../redux/networks";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 const SuperTokenPage: NextPage = () => {
   const router = useRouter()
-  const {networkName, address} = router.query;
+  const { networkName, address } = router.query;
 
   const network = typeof networkName === "string" ? findNetwork(networkName) : undefined;
 
@@ -51,73 +49,83 @@ const SuperTokenPage: NextPage = () => {
 
   const superToken: Token | null | undefined = tokenQuery.data;
 
-  const [totalSupply, setTotalSupply] = useState<string | undefined>();
-
   const [tabValue, setTabValue] = useState<string>("streams");
 
   return (
-    <Container component={Paper} elevation={1} sx={{my: 2, py: 2}}>
+    <Container component={Box} sx={{ my: 2, py: 2 }}>
 
       <Grid container spacing={3}>
+        
+        <Grid item xs={12}>
+          <Breadcrumbs aria-label="breadcrumb">
+            <Typography color="text.secondary">{network && network.displayName}</Typography>
+            <Typography color="text.secondary">Super Tokens</Typography>
+            <Typography color="text.secondary">{superToken && superToken.symbol}</Typography>
+          </Breadcrumbs>
+        </Grid>
 
-        <Grid item>
+        <Grid item xs={12}>
           <Typography variant="h3" component="h1">
-            Super Token
+            {superToken ? superToken.name : <SkeletonTokenName />}
           </Typography>
         </Grid>
 
         <Grid item xs={12}>
           <Card elevation={2}>
-            <Typography variant="h6" component="h2" sx={{ml: 1, mb: 2, mt: 2}}>
-              Overview
-            </Typography>
-            <Divider/>
-            <List>
-              <ListItem divider>
-                <ListItemText secondary="Network"
-                              primary={network ? <NetworkDisplay network={network}/> : <SkeletonNetwork/>}/>
-              </ListItem>
-              <ListItem divider>
-                <ListItemText secondary="Address" primary={superToken ? superToken.id : <SkeletonAddress/>}/>
-              </ListItem>
-              <ListItem divider>
-                <ListItemText primary={superToken ? superToken.name : <SkeletonTokenName/>} secondary="Name"/>
-              </ListItem>
-              <ListItem divider>
-                <ListItemText secondary="Symbol"
-                              primary={superToken ? superToken.symbol : <SkeletonTokenSymbol/>}/>
-              </ListItem>
-              <ListItem>
-                <ListItemText secondary="Underlying Token Address"
-                              primary={superToken ? superToken.underlyingAddress : <SkeletonAddress/>}/>
-              </ListItem>
-            </List>
+            <Grid container>
+              <Grid item md={6}>
+                <List>
+                  <ListItem divider>
+                    <ListItemText secondary="Symbol"
+                      primary={superToken ? superToken.symbol : <SkeletonTokenSymbol />} />
+                  </ListItem>
+                  <ListItem divider>
+                    <ListItemText secondary="Address" primary={superToken ? superToken.id : <SkeletonAddress />} />
+                  </ListItem>
+                  <ListItem divider>
+                    <ListItemText secondary="Listed" primary={superToken ? (superToken.isListed ? "Yes" : "No") : <Skeleton sx={{ width: "20px"}} />} />
+                  </ListItem>
+                </List>
+              </Grid>
+              <Grid item md={6}>
+                <List>
+                  <ListItem divider>
+                    <ListItemText secondary="Network"
+                      primary={network ? <NetworkDisplay network={network} /> : <SkeletonNetwork />} />
+                  </ListItem>
+                  <ListItem divider>
+                    <ListItemText secondary="Underlying Token Address"
+                      primary={superToken ? superToken.underlyingAddress : <SkeletonAddress />} />
+                  </ListItem>
+                </List>
+              </Grid>
+            </Grid>
           </Card>
         </Grid>
 
         <Grid item xs={12}>
           <Card elevation={2}>
             <TabContext value={tabValue}>
-              <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabList variant="scrollable"
-                         scrollButtons="auto"
-                         onChange={(_event, newValue: string) => setTabValue(newValue)}
-                         aria-label="tabs">
-                  <Tab label="Events" value="events"/>
-                  <Tab label="Streams" value="streams"/>
-                  <Tab label="Indexes" value="indexes"/>
+                  scrollButtons="auto"
+                  onChange={(_event, newValue: string) => setTabValue(newValue)}
+                  aria-label="tabs">
+                  <Tab label="Streams" value="streams" />
+                  <Tab label="Indexes" value="indexes" />
+                  <Tab label="Events" value="events" />
                 </TabList>
               </Box>
               <Box>
                 <TabPanel value="events">
-                  {(network && address) && <EventList network={network} address={getAddress(address)}/>}
+                  {(network && address) && <EventList network={network} address={getAddress(address)} />}
                 </TabPanel>
                 <TabPanel value="streams">
-                  {(network && address) && <SuperTokenStreams network={network} tokenAddress={getAddress(address)}/>}
+                  {(network && address) && <SuperTokenStreams network={network} tokenAddress={getAddress(address)} />}
                 </TabPanel>
                 <TabPanel value="indexes">
                   {(network && address) &&
-                    <SuperTokenIndexes network={network} tokenAddress={getAddress(address)}/>}
+                    <SuperTokenIndexes network={network} tokenAddress={getAddress(address)} />}
                 </TabPanel>
               </Box>
             </TabContext>

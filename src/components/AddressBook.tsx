@@ -7,36 +7,37 @@ import {
   DialogContentText,
   DialogTitle, Divider,
   IconButton,
+  SvgIconProps,
   TextField
 } from "@mui/material";
-import {FC, useState} from "react";
+import { FC, useState } from "react";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import {useAppDispatch, useAppSelector} from "../redux/hooks";
-import {addressBookSelectors, addressBookSlice, createEntryId, getEntryId} from "../redux/slices/addressBook.slice";
-import {Network} from "../redux/networks";
-import {ethers} from "ethers";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { addressBookSelectors, addressBookSlice, createEntryId, getEntryId } from "../redux/slices/addressBook.slice";
+import { Network } from "../redux/networks";
+import { ethers } from "ethers";
 
-export const FavouriteButton: FC<{ network: Network, address: string }> = ({network, address}) => {
+export const FavouriteButton: FC<{ network: Network, address: string, iconProps?: SvgIconProps }> = ({ network, address, iconProps }) => {
   const entry = useAppSelector(state => addressBookSelectors.selectById(state, createEntryId(network, address)));
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (<><IconButton
     onClick={() => setIsDialogOpen(!isDialogOpen)}
   >
-    {entry ? (<StarIcon/>) : (<StarBorderIcon/>)}
+    {entry ? (<StarIcon {...iconProps} />) : (<StarBorderIcon {...iconProps} />)}
   </IconButton>
     <FavouriteDialog network={network} address={address} open={isDialogOpen}
-                     handleClose={() => setIsDialogOpen(false)}/>
+      handleClose={() => setIsDialogOpen(false)} />
   </>);
 }
 
 export const FavouriteDialog: FC<{ network: Network, address: string, open: boolean, handleClose: () => void }> = ({
-                                                                                                                     network,
-                                                                                                                     address,
-                                                                                                                     open,
-                                                                                                                     handleClose
-                                                                                                                   }) => {
+  network,
+  address,
+  open,
+  handleClose
+}) => {
   const getInitialNameTag = () => existingEntry?.nameTag ?? "";
 
   const existingEntry = useAppSelector(state => addressBookSelectors.selectById(state, createEntryId(network, address)));
@@ -67,9 +68,9 @@ export const FavouriteDialog: FC<{ network: Network, address: string, open: bool
   }
 
   return (<Dialog fullWidth maxWidth="xs" open={open} onClose={handleCloseWrapped}>
-    <Box sx={{pb: 1}}>
+    <Box sx={{ pb: 1 }}>
       <Box sx={{ display: "flex", justifyContent: 'center' }}>
-      <DialogTitle>{existingEntry ? "Add favourite" : "Edit favourite"}</DialogTitle>
+        <DialogTitle>{existingEntry ? "Edit favourite" : "Add favourite"}</DialogTitle>
       </Box>
       <Divider />
       <DialogContent>

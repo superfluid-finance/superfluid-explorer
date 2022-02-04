@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import GraphiQL from 'graphiql';
-import {buildClientSchema, getIntrospectionQuery} from 'graphql';
+import { buildClientSchema, getIntrospectionQuery } from 'graphql';
 import type {
   GraphQLField,
   GraphQLArgument,
@@ -8,16 +8,16 @@ import type {
   GraphQLEnumType,
   GraphQLScalarType,
 } from 'graphql';
-import {request} from 'graphql-request';
-import type {GraphQLSchema} from 'graphql';
+import { request } from 'graphql-request';
+import type { GraphQLSchema } from 'graphql';
 import useSfTheme from "../styles/useSfTheme";
 import 'graphiql/graphiql.min.css';
 // @ts-ignore
 import GraphiQLExplorer from 'graphiql-explorer';
-import {Box, Card, Container} from "@mui/material";
+import { Box, Card, Container } from "@mui/material";
 import FullPageLoader from "./FullPageLoader"
 import _ from "lodash";
-import {networks, networksByChainId} from "../redux/networks";
+import { networks, networksByChainId } from "../redux/networks";
 
 const DocumentationLinks = [
   {
@@ -139,7 +139,7 @@ const SubgraphExplorer: React.FC = () => {
       {isInitializing ? (
         <FullPageLoader />
       ) : (
-        <Box component="div" className="graphiql-container" sx={{height: "100%", filter: `invert(${isDarkTheme? 0.9 : 0})`}}>
+        <Box component="div" className="graphiql-container" sx={{ height: "100%", filter: `invert(${isDarkTheme ? 0.9 : 0})` }}>
           <GraphiQLExplorer
             schema={schema}
             query={query}
@@ -174,7 +174,7 @@ const SubgraphExplorer: React.FC = () => {
               }}
             >
               <GraphiQL.Logo>&nbsp;</GraphiQL.Logo>
-              <GraphiQL.Toolbar>
+              <Box component={GraphiQL.Toolbar}>
                 <GraphiQL.Button
                   onClick={handlePrettifyQuery}
                   label="Prettify"
@@ -232,7 +232,7 @@ const SubgraphExplorer: React.FC = () => {
                     );
                   })}
                 </GraphiQL.Menu>
-              </GraphiQL.Toolbar>
+              </Box>
               {fetchedFromUrl ? (
                 <GraphiQL.Footer>
                   Result from: {fetchedFromUrl}

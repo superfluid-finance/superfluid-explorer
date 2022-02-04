@@ -54,8 +54,8 @@ function MyApp(props: MyAppProps) {
           <SfAppBar />
           <Box component="main" sx={{ height: "100vh" }}>
             <Component {...pageProps} />
-            <Footer />
           </Box>
+          <Footer />
         </Box>
       </ThemeProvider>
     </CacheProvider>

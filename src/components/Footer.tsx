@@ -7,7 +7,7 @@ const Footer: FC = () => {
         <Box sx={{
             display: "flex",
             justifyContent: "center",
-            mt: 3,
+            mt: 1,
             opacity: 0.6
         }}>
             <p>
