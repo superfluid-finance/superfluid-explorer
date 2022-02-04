@@ -18,16 +18,18 @@ const StreamPage: NextPage = () => {
 
     const network = typeof networkName === "string" ? findNetwork(networkName) : undefined;
     if (!network) {
-        return <></>;
+        return <Error statusCode={404} />;
     }
 
     return <StreamPageContent streamId={getId(id)} network={network} />;
 }
 
-export const StreamPageContent: FC<{ streamId: string, network: Network }> = ({ streamId: id, network }) => {
+export default StreamPage;
+
+export const StreamPageContent: FC<{ streamId: string, network: Network }> = ({ streamId, network }) => {
     const streamQuery = sfSubgraph.useStreamQuery({
         chainId: network.chainId,
-        id: id
+        id: streamId
     });
 
     const stream: Stream | null | undefined = streamQuery.data;
@@ -40,7 +42,7 @@ export const StreamPageContent: FC<{ streamId: string, network: Network }> = ({ 
     const streamPeriodListQuery = sfSubgraph.useStreamPeriodsQuery({
         chainId: network.chainId,
         filter: {
-            stream: id
+            stream: streamId
         },
         pagination: streamPeriodPaging,
         order: streamPeriodOrdering
@@ -95,12 +97,9 @@ export const StreamPageContent: FC<{ streamId: string, network: Network }> = ({ 
             </Grid>
 
             <Grid item xs={12}>
-                <Typography variant="h5" component="h2">
+                <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
                     Stream periods
                 </Typography>
-            </Grid>
-
-            <Grid item xs={12}>
                 <Card elevation={2}>
                     <StreamPeriodDataGrid queryResult={streamPeriodListQuery} setPaging={setStreamPeriodPaging}
                         ordering={streamPeriodOrdering} setOrdering={setStreamPeriodOrdering} />
@@ -108,11 +107,8 @@ export const StreamPageContent: FC<{ streamId: string, network: Network }> = ({ 
             </Grid>
 
         </Grid>
-
     </Container>;
 }
-
-export default StreamPage;
 
 const getId = (id: unknown): string => {
     if (typeof id === "string") {

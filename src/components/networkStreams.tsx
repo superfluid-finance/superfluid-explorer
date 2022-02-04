@@ -24,7 +24,7 @@ export const NetworkStreams: FC<{ network: Network }> = ({network}) => {
     },
     {
       field: 'from-to',
-      headerName: "From & To",
+      headerName: "Sender & Receiver",
       sortable: false,
       flex: 5,
       renderCell: (params: GridRenderCellParams<any, Stream>) => (
@@ -85,9 +85,9 @@ const SenderReceiver: FC<{ network: Network, fromAddress: string, toAddress: str
   return (
     <Grid container spacing={0} sx={{lineHeight: "1.5"}}>
       <Grid container item xs={2}>
-        <Grid item xs={12}>From:
+        <Grid item xs={12}>Sender:
         </Grid>
-        <Grid item xs={12}>To:
+        <Grid item xs={12}>Receiver:
         </Grid>
       </Grid>
       <Grid container item xs={10}>
