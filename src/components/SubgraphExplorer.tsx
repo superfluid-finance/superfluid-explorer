@@ -174,7 +174,7 @@ const SubgraphExplorer: React.FC = () => {
               }}
             >
               <GraphiQL.Logo>&nbsp;</GraphiQL.Logo>
-              <Box component={GraphiQL.Toolbar}>
+              <GraphiQL.Toolbar>
                 <GraphiQL.Button
                   onClick={handlePrettifyQuery}
                   label="Prettify"
@@ -186,13 +186,13 @@ const SubgraphExplorer: React.FC = () => {
                   label="Explorer"
                 />
                 <GraphiQL.Menu
-                  label={isNetworkLoading ? 'Loading...' : network.slugName}
+                  label={isNetworkLoading ? 'Loading...' : network.displayName}
                   title="Select Network"
                 >
                   {Object.values(networks).map((network) => (
                     <GraphiQL.MenuItem
                       key={network.chainId}
-                      label={network.slugName}
+                      label={network.displayName}
                       title={network.subgraphUrl}
                       onSelect={() => setChainId(Number(network.chainId))}
                     />
@@ -232,7 +232,7 @@ const SubgraphExplorer: React.FC = () => {
                     );
                   })}
                 </GraphiQL.Menu>
-              </Box>
+              </GraphiQL.Toolbar>
               {fetchedFromUrl ? (
                 <GraphiQL.Footer>
                   Result from: {fetchedFromUrl}
