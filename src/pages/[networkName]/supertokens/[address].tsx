@@ -24,6 +24,7 @@ import SkeletonTokenName from "../../../components/skeletons/SkeletonTokenName";
 import EventList from "../../../components/EventList";
 import { findNetwork } from "../../../redux/networks";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
+import Error from "next/error";
 
 const SuperTokenPage: NextPage = () => {
   const router = useRouter()
@@ -50,6 +51,10 @@ const SuperTokenPage: NextPage = () => {
   const superToken: Token | null | undefined = tokenQuery.data;
 
   const [tabValue, setTabValue] = useState<string>("streams");
+
+  if (!tokenQuery.isLoading && !tokenQuery.data) {
+    return <Error statusCode={404} />;
+  }
 
   return (
     <Container component={Box} sx={{ my: 2, py: 2 }}>
@@ -142,7 +147,7 @@ const getAddress = (address: unknown): string => {
   if (typeof address === "string") {
     return address;
   }
-  throw Error(`Address ${address} not found. TODO(KK): error page`)
+  throw `Address ${address} not found. TODO(KK): error page`;
 }
 
 export default SuperTokenPage;

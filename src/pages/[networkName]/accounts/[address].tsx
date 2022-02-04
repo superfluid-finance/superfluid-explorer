@@ -6,14 +6,13 @@ import {
   Grid,
   List,
   ListItem,
-  ListItemText, Paper, Skeleton,
+  ListItemText, Skeleton,
   Tab,
-  Tabs,
   Typography
 } from "@mui/material";
-import { ReactNode, SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { sfApi, sfSubgraph, wrapper } from "../../../redux/store";
+import { sfApi, sfSubgraph } from "../../../redux/store";
 import { skipToken } from "@reduxjs/toolkit/query";
 import AccountStreams from "../../../components/AccountStreams";
 import AccountIndexes from "../../../components/AccountIndexes";
@@ -22,7 +21,6 @@ import { NextPage } from "next";
 import NetworkDisplay from "../../../components/NetworkDisplay";
 import SkeletonNetwork from "../../../components/skeletons/SkeletonNetwork";
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
-import { AccountAddressFormatted } from "../../../components/AccountAddress";
 import EventList from "../../../components/EventList";
 import { findNetwork } from "../../../redux/networks";
 import { FavouriteButton } from "../../../components/AddressBook";
@@ -30,13 +28,14 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { addressBookSelectors, createEntryId } from "../../../redux/slices/addressBook.slice";
 import { useAppSelector } from "../../../redux/hooks";
 import { ethers } from "ethers";
+import Error from "next/error";
 
 const getAddress = (address: unknown): string => {
   if (typeof address === "string") {
     return address;
   }
 
-  throw Error(`Address ${address} not found. TODO(KK): error page`)
+  throw `Address ${address} not found. TODO(KK): error page`
 }
 
 const AccountPage: NextPage = () => {
@@ -62,6 +61,10 @@ const AccountPage: NextPage = () => {
 
   const [tabValue, setTabValue] = useState<string>("streams");
   const addressBookEntry = useAppSelector(state => network ? addressBookSelectors.selectById(state, createEntryId(network, getAddress(address))) : undefined);
+
+  if (!accountQuery.isLoading && !accountQuery.data) {
+    return <Error statusCode={404} />;
+  }
 
   return (
     <Container component={Box} sx={{ my: 2, py: 2 }}>

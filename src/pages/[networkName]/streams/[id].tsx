@@ -63,7 +63,6 @@ export const StreamPageContent: FC<{ streamId: string, network: Network }> = ({ 
             <Grid item xs={12}>
                 <Card elevation={2}>
                     <List>
-
                         <ListItem divider>
                             <ListItemText secondary="Token" primary={(stream) ? <SuperTokenAddress network={network} address={stream.token} /> : <SkeletonAddress />} />
                         </ListItem>
