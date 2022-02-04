@@ -36,7 +36,7 @@ const Home: NextPage = () => {
             Welcome to Superfluid Console
           </Typography>
           <Typography variant="body1" align="center" color="text.secondary" paragraph>
-            Superfluid Console is a tool meant for developers and advanced users of the <AppLink href="https://docs.superfluid.finance/superfluid/protocol-overview/what-is-superfluid" target="_blank"
+            Superfluid Console is an explorer meant for developers and advanced users of the <AppLink href="https://docs.superfluid.finance/superfluid/protocol-overview/what-is-superfluid" target="_blank"
               rel="noreferrer">Superfluid Protocol</AppLink>.
           </Typography>
           <Stack
