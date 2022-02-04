@@ -9,6 +9,7 @@ import { networks } from "../redux/networks";
 import { NetworkStreams } from "../components/networkStreams";
 import _ from 'lodash';
 import SearchBar from '../components/SearchBar';
+import AppLink from '../components/AppLink';
 
 const Home: NextPage = () => {
   const [value, setValue] = React.useState('matic');
@@ -35,7 +36,8 @@ const Home: NextPage = () => {
             Welcome to Superfluid Console
           </Typography>
           <Typography variant="body1" align="center" color="text.secondary" paragraph>
-            Superfluid Console is a tool meant for developers and advanced users of the Superfluid Protocol.
+            Superfluid Console is a tool meant for developers and advanced users of the <AppLink href="https://docs.superfluid.finance/superfluid/protocol-overview/what-is-superfluid" target="_blank"
+              rel="noreferrer">Superfluid Protocol</AppLink>.
           </Typography>
           <Stack
             sx={{ pt: 4 }}
