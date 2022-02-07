@@ -18,7 +18,6 @@ import {
   Box,
   Breadcrumbs,
   Card,
-  CircularProgress,
   Container,
   Grid,
   List,
@@ -41,166 +40,8 @@ import _ from "lodash";
 import { GridColDef } from "@mui/x-data-grid";
 import { AppDataGrid } from "../../../components/AppDataGrid";
 import Decimal from "decimal.js";
-import LinkIcon from "@mui/icons-material/Link";
 import CopyLink from "../../../components/CopyLink";
-
-const IndexSubscriptionDistributions: FC<{
-  network: Network;
-  indexSubscriptionId: string;
-}> = ({ network, indexSubscriptionId }) => {
-  const indexSubscriptionQuery = sfSubgraph.useIndexSubscriptionQuery({
-    chainId: network.chainId,
-    id: indexSubscriptionId,
-  });
-
-  const indexSubscription: IndexSubscription | undefined | null =
-    indexSubscriptionQuery.data;
-
-  const indexQuery = sfSubgraph.useIndexQuery(
-    indexSubscription
-      ? {
-          chainId: network.chainId,
-          id: indexSubscription.index,
-        }
-      : skipToken
-  );
-
-  const index: Index | undefined | null = indexQuery.data;
-
-  const [indexUpdatedEventPaging, setIndexUpdatedEventPaging] =
-    useState<SkipPaging>(
-      createSkipPaging({
-        take: 10,
-      })
-    );
-  const [indexUpdatedEventOrdering, setIndexUpdatedEventOrdering] = useState<
-    Ordering<IndexUpdatedEvent_OrderBy> | undefined
-  >({
-    orderBy: "timestamp",
-    orderDirection: "desc",
-  });
-
-  const subscriptionUnitsUpdatedEventsQuery =
-    sfSubgraph.useSubscriptionUnitsUpdatedEventsQuery({
-      chainId: network.chainId,
-      filter: {
-        subscription: indexSubscriptionId,
-      },
-      pagination: {
-        take: 999,
-        skip: 0,
-      },
-      // Very important to order by timestamp in descending direction. Later `distributionAmount` logic depends on it.
-      order: {
-        orderBy: "timestamp",
-        orderDirection: "desc",
-      },
-    });
-
-  const subscriptionUnitsUpdatedEvents:
-    | SubscriptionUnitsUpdatedEvent[]
-    | undefined = subscriptionUnitsUpdatedEventsQuery.data?.data ?? [];
-
-  const indexUpdatedEventsQuery = sfSubgraph.useIndexUpdatedEventsQuery(
-    index && subscriptionUnitsUpdatedEvents.length
-      ? {
-          chainId: network.chainId,
-          filter: {
-            index: index.id,
-            timestamp_gte: _.last(
-              subscriptionUnitsUpdatedEvents
-            )!.timestamp.toString(),
-          },
-          order: indexUpdatedEventOrdering,
-          pagination: indexUpdatedEventPaging,
-        }
-      : skipToken
-  );
-
-  const indexUpdatedEvents: IndexUpdatedEvent[] | undefined =
-    indexUpdatedEventsQuery.data?.data ?? [];
-
-  const columns: GridColDef[] = useMemo(
-    () => [
-      { field: "id", hide: true, sortable: false, flex: 1 },
-      {
-        field: "timestamp",
-        headerName: "Distribution Date",
-        sortable: true,
-        flex: 1,
-        renderCell: (params) => <TimeAgo subgraphTime={params.value} />,
-      },
-      {
-        field: "newIndexValue",
-        headerName: "Amount Received",
-        hide: false,
-        sortable: false,
-        flex: 1,
-        renderCell: (params) => {
-          if (!index || !subscriptionUnitsUpdatedEvents?.length) {
-            return <Skeleton sx={{ width: "100px" }} />;
-          }
-
-          // Crazy logic below...
-
-          const indexUpdatedEvent = params.row as IndexUpdatedEvent;
-          const closestSubscriptionUnitsUpdatedEvent = _.first(
-            subscriptionUnitsUpdatedEvents.filter(
-              (x) => x.timestamp <= indexUpdatedEvent.timestamp
-            )
-          )!;
-
-          const totalUnits = new Decimal(
-            indexUpdatedEvent.totalUnitsPending
-          ).add(new Decimal(indexUpdatedEvent.totalUnitsApproved));
-
-          const subscriptionUnits = new Decimal(
-            closestSubscriptionUnitsUpdatedEvent.units
-          );
-          const poolFraction =
-            totalUnits.isZero() || subscriptionUnits.isZero()
-              ? new Decimal(0)
-              : totalUnits.div(subscriptionUnits);
-
-          const indexDistributionAmount = new Decimal(
-            indexUpdatedEvent.newIndexValue
-          ).sub(new Decimal(indexUpdatedEvent.oldIndexValue));
-
-          const subscriptionDistributionAmount = indexDistributionAmount
-            .mul(poolFraction)
-            .toFixed(0);
-
-          return (
-            <>
-              {ethers.utils.formatEther(
-                subscriptionDistributionAmount.toString()
-              )}
-              &nbsp;
-              <SuperTokenAddress
-                network={network}
-                address={index.token}
-                format={(token) => token.symbol}
-                formatLoading={() => ""}
-              />
-            </>
-          );
-        },
-      },
-    ],
-    [network, index, subscriptionUnitsUpdatedEvents]
-  );
-
-  return (
-    <AppDataGrid
-      rows={indexUpdatedEvents}
-      columns={columns}
-      queryResult={indexUpdatedEventsQuery}
-      setOrdering={(x) => setIndexUpdatedEventOrdering(x as any)}
-      ordering={indexUpdatedEventOrdering}
-      setPaging={setIndexUpdatedEventPaging}
-    />
-  );
-};
+import calculateEtherAmountReceived from "../../../logic/calculateEtherAmountReceived";
 
 const IndexSubscriptionPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -302,10 +143,7 @@ export const IndexSubscriptionPageContent: FC<{
               {network && network.displayName}
             </Typography>
             <Typography color="text.secondary">Index Subscriptions</Typography>
-            <Typography
-              color="text.secondary"
-              sx={{ whiteSpace: "nowrap"}}
-            >
+            <Typography color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
               {indexSubscriptionId.substring(0, 6) + "..."}
             </Typography>
           </Breadcrumbs>
@@ -494,17 +332,160 @@ export const IndexSubscriptionPageContent: FC<{
   );
 };
 
-const calculateEtherAmountReceived = (
-  publisherIndexValue: BigNumber,
-  subscriberTotalAmountReceivedUntilUpdatedAt: BigNumber,
-  subscriberIndexValueUntilUpdatedAt: BigNumber,
-  subscriberUnits: number
-) => {
-  const totalUnitsReceived = subscriberTotalAmountReceivedUntilUpdatedAt.add(
-    publisherIndexValue
-      .sub(subscriberIndexValueUntilUpdatedAt)
-      .mul(subscriberUnits)
+export const IndexSubscriptionDistributions: FC<{
+  network: Network;
+  indexSubscriptionId: string;
+}> = ({ network, indexSubscriptionId }) => {
+  const indexSubscriptionQuery = sfSubgraph.useIndexSubscriptionQuery({
+    chainId: network.chainId,
+    id: indexSubscriptionId,
+  });
+
+  const indexSubscription: IndexSubscription | undefined | null =
+    indexSubscriptionQuery.data;
+
+  const indexQuery = sfSubgraph.useIndexQuery(
+    indexSubscription
+      ? {
+          chainId: network.chainId,
+          id: indexSubscription.index,
+        }
+      : skipToken
   );
 
-  return ethers.utils.formatEther(totalUnitsReceived);
+  const index: Index | undefined | null = indexQuery.data;
+
+  const [indexUpdatedEventPaging, setIndexUpdatedEventPaging] =
+    useState<SkipPaging>(
+      createSkipPaging({
+        take: 10,
+      })
+    );
+  const [indexUpdatedEventOrdering, setIndexUpdatedEventOrdering] = useState<
+    Ordering<IndexUpdatedEvent_OrderBy> | undefined
+  >({
+    orderBy: "timestamp",
+    orderDirection: "desc",
+  });
+
+  const subscriptionUnitsUpdatedEventsQuery =
+    sfSubgraph.useSubscriptionUnitsUpdatedEventsQuery({
+      chainId: network.chainId,
+      filter: {
+        subscription: indexSubscriptionId,
+      },
+      pagination: {
+        take: 999,
+        skip: 0,
+      },
+      // Very important to order by timestamp in descending direction. Later `distributionAmount` logic depends on it.
+      order: {
+        orderBy: "timestamp",
+        orderDirection: "desc",
+      },
+    });
+
+  const subscriptionUnitsUpdatedEvents:
+    | SubscriptionUnitsUpdatedEvent[]
+    | undefined = subscriptionUnitsUpdatedEventsQuery.data?.data ?? [];
+
+  const indexUpdatedEventsQuery = sfSubgraph.useIndexUpdatedEventsQuery(
+    index && subscriptionUnitsUpdatedEvents.length
+      ? {
+          chainId: network.chainId,
+          filter: {
+            index: index.id,
+            timestamp_gte: _.last(
+              subscriptionUnitsUpdatedEvents
+            )!.timestamp.toString(),
+          },
+          order: indexUpdatedEventOrdering,
+          pagination: indexUpdatedEventPaging,
+        }
+      : skipToken
+  );
+
+  const indexUpdatedEvents: IndexUpdatedEvent[] | undefined =
+    indexUpdatedEventsQuery.data?.data ?? [];
+
+  const columns: GridColDef[] = useMemo(
+    () => [
+      { field: "id", hide: true, sortable: false, flex: 1 },
+      {
+        field: "timestamp",
+        headerName: "Distribution Date",
+        sortable: true,
+        flex: 1,
+        renderCell: (params) => <TimeAgo subgraphTime={params.value} />,
+      },
+      {
+        field: "newIndexValue",
+        headerName: "Amount Received",
+        hide: false,
+        sortable: false,
+        flex: 1,
+        renderCell: (params) => {
+          if (!index || !subscriptionUnitsUpdatedEvents?.length) {
+            return <Skeleton sx={{ width: "100px" }} />;
+          }
+
+          // Crazy logic below...
+
+          const indexUpdatedEvent = params.row as IndexUpdatedEvent;
+          const closestSubscriptionUnitsUpdatedEvent = _.first(
+            subscriptionUnitsUpdatedEvents.filter(
+              (x) => x.timestamp <= indexUpdatedEvent.timestamp
+            )
+          )!;
+
+          const totalUnits = new Decimal(
+            indexUpdatedEvent.totalUnitsPending
+          ).add(new Decimal(indexUpdatedEvent.totalUnitsApproved));
+
+          const subscriptionUnits = new Decimal(
+            closestSubscriptionUnitsUpdatedEvent.units
+          );
+          const poolFraction =
+            totalUnits.isZero() || subscriptionUnits.isZero()
+              ? new Decimal(0)
+              : totalUnits.div(subscriptionUnits);
+
+          const indexDistributionAmount = new Decimal(
+            indexUpdatedEvent.newIndexValue
+          ).sub(new Decimal(indexUpdatedEvent.oldIndexValue));
+
+          const subscriptionDistributionAmount = indexDistributionAmount
+            .mul(poolFraction)
+            .toFixed(0);
+
+          return (
+            <>
+              {ethers.utils.formatEther(
+                subscriptionDistributionAmount.toString()
+              )}
+              &nbsp;
+              <SuperTokenAddress
+                network={network}
+                address={index.token}
+                format={(token) => token.symbol}
+                formatLoading={() => ""}
+              />
+            </>
+          );
+        },
+      },
+    ],
+    [network, index, subscriptionUnitsUpdatedEvents]
+  );
+
+  return (
+    <AppDataGrid
+      rows={indexUpdatedEvents}
+      columns={columns}
+      queryResult={indexUpdatedEventsQuery}
+      setOrdering={(x) => setIndexUpdatedEventOrdering(x as any)}
+      ordering={indexUpdatedEventOrdering}
+      setPaging={setIndexUpdatedEventPaging}
+    />
+  );
 };
