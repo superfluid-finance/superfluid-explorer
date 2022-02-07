@@ -1,23 +1,29 @@
-import { FC, useState } from "react";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { Box, SvgIconProps, Tooltip, TooltipProps } from "@mui/material";
-import { DefaultComponentProps } from "@mui/material/OverridableComponent";
+import { FC, useEffect, useState } from "react";
+import { SvgIcon, SvgIconProps, Tooltip, TooltipProps } from "@mui/material";
 import _ from "lodash";
+import LinkIcon from "@mui/icons-material/Link";
+import { useRouter } from "next/router";
 
 /**
  * Inspired by: https://blog.logrocket.com/implementing-copy-to-clipboard-in-react-with-clipboard-api/
  */
-const ClipboardCopy: FC<{
-  copyText: string;
+const CopyLink: FC<{
+  localPath: string;
   TooltipProps?: Partial<TooltipProps>;
   IconProps?: Partial<SvgIconProps>;
-}> = ({ copyText, TooltipProps, IconProps }) => {
+}> = ({ localPath, TooltipProps, IconProps }) => {
+  const [absoluteUrl, setAbsoluteUrl] = useState<string>("");
+  
+  useEffect(() => {
+    setAbsoluteUrl(new URL(localPath, document.baseURI).href);
+  }, [])
+
   const [isCopied, setIsCopied] = useState(false);
 
   // onClick handler function for the copy button
   const handleCopyClick = () => {
     // Asynchronously call copyTextToClipboard
-    copyTextToClipboard(copyText)
+    copyTextToClipboard(absoluteUrl)
       .then(() => {
         // If successful, update the isCopied state value
         setIsCopied(true);
@@ -31,28 +37,29 @@ const ClipboardCopy: FC<{
   };
 
   return (
-      <Tooltip
+    <Tooltip
+      {..._.merge(
+        {
+          title: isCopied ? "Link copied!" : "Copy link to clipboard",
+        },
+        TooltipProps
+      )}
+    >
+      <SvgIcon
+        component={LinkIcon}
+        onClick={handleCopyClick}
         {..._.merge(
           {
-            title: isCopied ? "Copied!" : "Copy to clipboard",
+            sx: { fontSize: "inherit", cursor: "pointer", ml: 1 },
           },
-          TooltipProps
+          IconProps
         )}
-      >
-        <ContentCopyIcon
-          onClick={handleCopyClick}
-          {..._.merge(
-            {
-              sx: { fontSize: "small", cursor: "pointer", ml: 0.5 },
-            },
-            IconProps
-          )}
-        />
-      </Tooltip>
+      />
+    </Tooltip>
   );
 };
 
-export default ClipboardCopy;
+export default CopyLink;
 
 async function copyTextToClipboard(text: string) {
   if ("clipboard" in navigator) {

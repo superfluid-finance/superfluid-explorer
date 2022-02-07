@@ -34,12 +34,14 @@ import SubscriptionUnitsUpdatedEventDataGrid from "../../../components/Subscript
 import NetworkContext from "../../../contexts/NetworkContext";
 import IdContext from "../../../contexts/IdContext";
 import Error from "next/error";
-import ClipboardCopy from "../../../components/ClipboardCopy";
+import CopyClipboard from "../../../components/CopyClipboard";
 import TimeAgo from "../../../components/TimeAgo";
 import _ from "lodash";
 import { GridColDef } from "@mui/x-data-grid";
 import { AppDataGrid } from "../../../components/AppDataGrid";
 import Decimal from "decimal.js";
+import LinkIcon from "@mui/icons-material/Link";
+import CopyLink from "../../../components/CopyLink";
 
 const IndexSubscriptionDistributions: FC<{
   network: Network;
@@ -151,17 +153,21 @@ const IndexSubscriptionDistributions: FC<{
             indexUpdatedEvent.totalUnitsPending
           ).add(new Decimal(indexUpdatedEvent.totalUnitsApproved));
 
-          const poolFraction = totalUnits.isZero()
-            ? new Decimal(0)
-            : totalUnits.div(
-                new Decimal(closestSubscriptionUnitsUpdatedEvent.units)
-              );
+          const subscriptionUnits = new Decimal(
+            closestSubscriptionUnitsUpdatedEvent.units
+          );
+          const poolFraction =
+            totalUnits.isZero() || subscriptionUnits.isZero()
+              ? new Decimal(0)
+              : totalUnits.div(subscriptionUnits);
 
           const indexDistributionAmount = new Decimal(
             indexUpdatedEvent.newIndexValue
           ).sub(new Decimal(indexUpdatedEvent.oldIndexValue));
 
-          const subscriptionDistributionAmount = indexDistributionAmount.mul(poolFraction).toFixed(0);
+          const subscriptionDistributionAmount = indexDistributionAmount
+            .mul(poolFraction)
+            .toFixed(0);
 
           return (
             <>
@@ -255,7 +261,9 @@ export const IndexSubscriptionPageContent: FC<{
     });
 
   const [poolPercentage, setPoolPercentage] = useState<Decimal | undefined>();
-  const [totalEtherAmountReceived, setTotalEtherAmountReceived] = useState<string | undefined>();
+  const [totalEtherAmountReceived, setTotalEtherAmountReceived] = useState<
+    string | undefined
+  >();
 
   useEffect(() => {
     if (index && indexSubscription) {
@@ -265,16 +273,14 @@ export const IndexSubscriptionPageContent: FC<{
           .mul(100)
       );
 
-      setTotalEtherAmountReceived(calculateEtherAmountReceived(
-        BigNumber.from(index.indexValue),
-        BigNumber.from(
-          indexSubscription.totalAmountReceivedUntilUpdatedAt
-        ),
-        BigNumber.from(
-          indexSubscription.indexValueUntilUpdatedAt
-        ),
-        Number(indexSubscription.units)
-      ));
+      setTotalEtherAmountReceived(
+        calculateEtherAmountReceived(
+          BigNumber.from(index.indexValue),
+          BigNumber.from(indexSubscription.totalAmountReceivedUntilUpdatedAt),
+          BigNumber.from(indexSubscription.indexValueUntilUpdatedAt),
+          Number(indexSubscription.units)
+        )
+      );
     }
   }, [indexSubscription && index]);
 
@@ -290,11 +296,23 @@ export const IndexSubscriptionPageContent: FC<{
     <Container component={Box} sx={{ my: 2, py: 2 }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Typography variant="h3" component="h1">
-            Index Subscription
+          <Typography
+            variant="h4"
+            component="h1"
+          >
+            <Grid
+              container
+              alignItems="center"
+            >
+              <Grid item>Index Subscription</Grid>
+              <Grid
+                item
+                component={CopyLink}
+                localPath={`/${network.slugName}/index-subscriptions/${indexSubscriptionId}`}
+              ></Grid>
+            </Grid>
           </Typography>
         </Grid>
-
         <Grid item xs={12}>
           <Card elevation={2}>
             <List>
@@ -350,7 +368,9 @@ export const IndexSubscriptionPageContent: FC<{
                     indexSubscription && index ? (
                       <>
                         {indexSubscription.units} / {index.totalUnits} (
-                        {poolPercentage && poolPercentage.toFixed(2).toString() + " %"})
+                        {poolPercentage &&
+                          poolPercentage.toFixed(2).toString() + " %"}
+                        )
                       </>
                     ) : (
                       <Skeleton sx={{ width: "150px" }} />
@@ -425,7 +445,7 @@ export const IndexSubscriptionPageContent: FC<{
                   primary={
                     <>
                       {indexSubscriptionId}
-                      <ClipboardCopy copyText={indexSubscriptionId} />
+                      <CopyClipboard copyText={indexSubscriptionId} />
                     </>
                   }
                 />

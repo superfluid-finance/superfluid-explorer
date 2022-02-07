@@ -26,6 +26,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Error from "next/error";
 import NetworkContext from "../../../contexts/NetworkContext";
 import IdContext from "../../../contexts/IdContext";
+import CopyLink from "../../../components/CopyLink";
 
 const SuperTokenPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -76,8 +77,19 @@ const SuperTokenPage: NextPage = () => {
         </Grid>
 
         <Grid item xs={12}>
-          <Typography variant="h3" component="h1">
-            {superToken ? superToken.name : <SkeletonTokenName />}
+          <Typography variant="h4" component="h1">
+            {superToken ? (
+              <Grid container alignItems="center">
+                <Grid item>{superToken.name}</Grid>
+                <Grid
+                  item
+                  component={CopyLink}
+                  localPath={`/${network.slugName}/token/${address}`}
+                ></Grid>
+              </Grid>
+            ) : (
+              <SkeletonTokenName />
+            )}
           </Typography>
         </Grid>
 

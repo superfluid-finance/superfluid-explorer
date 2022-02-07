@@ -29,10 +29,11 @@ import IndexUpdatedEventDataGrid from "../../../components/IndexUpdatedEventData
 import IndexSubscriptionDataGrid from "../../../components/IndexSubscriptionDataGrid";
 import NetworkContext from "../../../contexts/NetworkContext";
 import IdContext from "../../../contexts/IdContext";
-import ClipboardCopy from "../../../components/ClipboardCopy";
+import CopyClipboard from "../../../components/CopyClipboard";
 import DateTime from "../../../components/Date";
 import TimeAgo from "../../../components/TimeAgo";
 import { ethers } from "ethers";
+import CopyLink from "../../../components/CopyLink";
 
 const IndexPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -103,11 +104,17 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
     <Container component={Box} sx={{ my: 2, py: 2 }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Typography variant="h3" component="h1">
-            Index
+          <Typography variant="h4" component="h1">
+            <Grid container alignItems="center">
+              <Grid item>Index</Grid>
+              <Grid
+                item
+                component={CopyLink}
+                localPath={`/${network.slugName}/indexes/${indexId}`}
+              ></Grid>
+            </Grid>
           </Typography>
         </Grid>
-
         <Grid item xs={12}>
           <Card elevation={2}>
             <List>
@@ -185,7 +192,8 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
                       <>
                         {ethers.utils.formatEther(
                           index.totalAmountDistributedUntilUpdatedAt
-                        )}&nbsp;
+                        )}
+                        &nbsp;
                         <SuperTokenAddress
                           network={network}
                           address={index.token}
@@ -229,7 +237,7 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
                   primary={
                     <>
                       {indexId}
-                      <ClipboardCopy copyText={indexId} />
+                      <CopyClipboard copyText={indexId} />
                     </>
                   }
                 />

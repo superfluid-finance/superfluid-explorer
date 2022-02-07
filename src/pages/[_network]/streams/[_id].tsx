@@ -20,7 +20,8 @@ import { NextPage } from "next";
 import Error from "next/error";
 import { FC, useContext, useState } from "react";
 import AccountAddress from "../../../components/AccountAddress";
-import ClipboardCopy from "../../../components/ClipboardCopy";
+import CopyClipboard from "../../../components/CopyClipboard";
+import CopyLink from "../../../components/CopyLink";
 import FlowingBalance from "../../../components/FlowingBalance";
 import FlowRate from "../../../components/FlowRate";
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
@@ -81,8 +82,12 @@ export const StreamPageContent: FC<{ streamId: string; network: Network }> = ({
     <Container component={Box} sx={{ my: 2, py: 2 }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Typography variant="h3" component="h1">
-            Stream
+          <Typography variant="h4" component="h1">
+            <Grid container alignItems="center">
+              <Grid item>Stream</Grid>
+              <Grid item component={CopyLink} localPath={`/${network.slugName}/streams/${streamId}`}>
+              </Grid>
+            </Grid>
           </Typography>
         </Grid>
 
@@ -158,7 +163,8 @@ export const StreamPageContent: FC<{ streamId: string; network: Network }> = ({
                             balanceTimestamp: stream.updatedAtTimestamp,
                             flowRate: stream.currentFlowRate,
                           }}
-                        />&nbsp;
+                        />
+                        &nbsp;
                         <SuperTokenAddress
                           network={network}
                           address={stream.token}
@@ -190,7 +196,7 @@ export const StreamPageContent: FC<{ streamId: string; network: Network }> = ({
                   primary={
                     <>
                       {streamId}
-                      <ClipboardCopy copyText={streamId} />
+                      <CopyClipboard copyText={streamId} />
                     </>
                   }
                 />
