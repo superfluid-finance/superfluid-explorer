@@ -27,6 +27,7 @@ import Error from "next/error";
 import NetworkContext from "../../../contexts/NetworkContext";
 import IdContext from "../../../contexts/IdContext";
 import CopyLink from "../../../components/CopyLink";
+import { useRouter } from "next/router";
 
 const SuperTokenPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -51,7 +52,20 @@ const SuperTokenPage: NextPage = () => {
     }
   }, [superToken]);
 
-  const [tabValue, setTabValue] = useState<string>("streams");
+  const router = useRouter();
+  const { tab } = router.query;
+  const [tabValue, setTabValue] = useState<string>(
+    (tab as string) ?? "streams"
+  );
+  useEffect(() => {
+    router.replace({
+      query: {
+        _network: network.slugName,
+        _id: address,
+        tab: tabValue,
+      },
+    });
+  }, [tabValue]);
 
   if (
     !tokenQuery.isUninitialized &&
@@ -70,10 +84,7 @@ const SuperTokenPage: NextPage = () => {
               {network.displayName}
             </Typography>
             <Typography color="text.secondary">Super Tokens</Typography>
-            <Typography
-              color="text.secondary"
-              sx={{ whiteSpace: "nowrap"}}
-            >
+            <Typography color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
               {superToken && superToken.symbol}
             </Typography>
           </Breadcrumbs>

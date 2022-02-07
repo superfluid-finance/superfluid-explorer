@@ -49,6 +49,7 @@ import {
 import NetworkContext from "../../../contexts/NetworkContext";
 import IdContext from "../../../contexts/IdContext";
 import CopyLink from "../../../components/CopyLink";
+import { useRouter } from "next/router";
 
 const AccountPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -78,12 +79,26 @@ const AccountPage: NextPage = () => {
   const prefetchTokensQuery = sfSubgraph.usePrefetch("accountTokenSnapshots");
   const prefetchEventsQuery = sfSubgraph.usePrefetch("events");
 
-  const [tabValue, setTabValue] = useState<string>("streams");
+  const router = useRouter();
+  const { tab } = router.query;
+  const [tabValue, setTabValue] = useState<string>(tab as string ?? "streams");
+  useEffect(() => {
+    router.replace({
+      query: {
+        _network: network.slugName,
+        _id: address,
+        tab: tabValue
+      }
+    })
+  }, [tabValue])
+
   const addressBookEntry = useAppSelector((state) =>
     network
       ? addressBookSelectors.selectById(state, createEntryId(network, address))
       : undefined
   );
+
+
 
   if (
     !accountQuery.isUninitialized &&
@@ -256,6 +271,7 @@ const AccountPage: NextPage = () => {
                   <Tab label="Events" value="events" />
                 </TabList>
               </Box>
+
               <Box>
                 <TabPanel value="events">
                   <EventList network={network} address={address} />
@@ -270,6 +286,7 @@ const AccountPage: NextPage = () => {
                   <AccountIndexes network={network} accountAddress={address} />
                 </TabPanel>
               </Box>
+
             </TabContext>
           </Card>
         </Grid>
