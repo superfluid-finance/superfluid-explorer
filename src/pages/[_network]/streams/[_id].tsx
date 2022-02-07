@@ -1,5 +1,6 @@
 import {
   Box,
+  Breadcrumbs,
   Card,
   Container,
   Grid,
@@ -82,11 +83,29 @@ export const StreamPageContent: FC<{ streamId: string; network: Network }> = ({
     <Container component={Box} sx={{ my: 2, py: 2 }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
+          <Breadcrumbs aria-label="breadcrumb">
+            <Typography color="text.secondary">
+              {network.displayName}
+            </Typography>
+            <Typography color="text.secondary">Streams</Typography>
+            <Typography
+              color="text.secondary"
+              sx={{ whiteSpace: "nowrap"}}
+            >
+              {streamId.substring(0, 6) + "..."}
+            </Typography>
+          </Breadcrumbs>
+        </Grid>
+
+        <Grid item xs={12}>
           <Typography variant="h4" component="h1">
             <Grid container alignItems="center">
               <Grid item>Stream</Grid>
-              <Grid item component={CopyLink} localPath={`/${network.slugName}/streams/${streamId}`}>
-              </Grid>
+              <Grid
+                item
+                component={CopyLink}
+                localPath={`/${network.slugName}/streams/${streamId}`}
+              ></Grid>
             </Grid>
           </Typography>
         </Grid>

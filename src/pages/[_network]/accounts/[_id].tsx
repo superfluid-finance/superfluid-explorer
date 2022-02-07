@@ -102,7 +102,10 @@ const AccountPage: NextPage = () => {
               {network && network.displayName}
             </Typography>
             <Typography color="text.secondary">Accounts</Typography>
-            <Typography color="text.secondary">
+            <Typography
+              color="text.secondary"
+              sx={{ whiteSpace: "nowrap"}}
+            >
               {accountQuery.data && accountQuery.data.id}
             </Typography>
           </Breadcrumbs>
@@ -111,10 +114,7 @@ const AccountPage: NextPage = () => {
         <Grid item xs={12}>
           {network && accountQuery.data && (
             <Typography variant="h4" component="h1">
-              <Grid
-                container
-                alignItems="center"
-              >
+              <Grid container alignItems="center">
                 <Grid item>
                   <FavouriteButton
                     iconProps={{ fontSize: "large" }}

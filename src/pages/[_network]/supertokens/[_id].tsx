@@ -70,7 +70,10 @@ const SuperTokenPage: NextPage = () => {
               {network.displayName}
             </Typography>
             <Typography color="text.secondary">Super Tokens</Typography>
-            <Typography color="text.secondary">
+            <Typography
+              color="text.secondary"
+              sx={{ whiteSpace: "nowrap"}}
+            >
               {superToken && superToken.symbol}
             </Typography>
           </Breadcrumbs>

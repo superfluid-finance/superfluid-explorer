@@ -13,6 +13,7 @@ import {
 } from "@superfluid-finance/sdk-core";
 import {
   Box,
+  Breadcrumbs,
   Card,
   Container,
   Grid,
@@ -34,6 +35,7 @@ import DateTime from "../../../components/Date";
 import TimeAgo from "../../../components/TimeAgo";
 import { ethers } from "ethers";
 import CopyLink from "../../../components/CopyLink";
+import CopyClipboardTooltip from "../../../components/CopyClipboardTooltip";
 
 const IndexPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -104,6 +106,17 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
     <Container component={Box} sx={{ my: 2, py: 2 }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
+          <Breadcrumbs aria-label="breadcrumb">
+            <Typography color="text.secondary">
+              {network.displayName}
+            </Typography>
+            <Typography color="text.secondary">Indexes</Typography>
+            <Typography color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+              {indexId.substring(0, 6) + "..."}
+            </Typography>
+          </Breadcrumbs>
+        </Grid>
+        <Grid item xs={12}>
           <Typography variant="h4" component="h1">
             <Grid container alignItems="center">
               <Grid item>Index</Grid>
@@ -145,6 +158,14 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
                     ) : (
                       <SkeletonAddress />
                     )
+                  }
+                />
+              </ListItem>
+              <ListItem divider>
+                <ListItemText
+                  secondary="Index ID"
+                  primary={
+                    index ? index.indexId : <Skeleton sx={{ width: "20px" }} />
                   }
                 />
               </ListItem>

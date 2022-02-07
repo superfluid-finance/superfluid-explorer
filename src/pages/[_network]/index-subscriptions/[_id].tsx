@@ -16,6 +16,7 @@ import {
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 import {
   Box,
+  Breadcrumbs,
   Card,
   CircularProgress,
   Container,
@@ -296,14 +297,23 @@ export const IndexSubscriptionPageContent: FC<{
     <Container component={Box} sx={{ my: 2, py: 2 }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Typography
-            variant="h4"
-            component="h1"
-          >
-            <Grid
-              container
-              alignItems="center"
+          <Breadcrumbs aria-label="breadcrumb">
+            <Typography color="text.secondary">
+              {network && network.displayName}
+            </Typography>
+            <Typography color="text.secondary">Index Subscriptions</Typography>
+            <Typography
+              color="text.secondary"
+              sx={{ whiteSpace: "nowrap"}}
             >
+              {indexSubscriptionId.substring(0, 6) + "..."}
+            </Typography>
+          </Breadcrumbs>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h4" component="h1">
+            <Grid container alignItems="center">
               <Grid item>Index Subscription</Grid>
               <Grid
                 item
