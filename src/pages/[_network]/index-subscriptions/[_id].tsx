@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { FC, useContext, useMemo, useState } from "react";
+import { FC, useContext, useEffect, useMemo, useState } from "react";
 import { Network } from "../../../redux/networks";
 import { sfSubgraph } from "../../../redux/store";
 import {
@@ -39,6 +39,7 @@ import TimeAgo from "../../../components/TimeAgo";
 import _ from "lodash";
 import { GridColDef } from "@mui/x-data-grid";
 import { AppDataGrid } from "../../../components/AppDataGrid";
+import Decimal from "decimal.js";
 
 const IndexSubscriptionDistributions: FC<{
   network: Network;
@@ -95,10 +96,10 @@ const IndexSubscriptionDistributions: FC<{
 
   const subscriptionUnitsUpdatedEvents:
     | SubscriptionUnitsUpdatedEvent[]
-    | undefined = subscriptionUnitsUpdatedEventsQuery.data?.data;
+    | undefined = subscriptionUnitsUpdatedEventsQuery.data?.data ?? [];
 
   const indexUpdatedEventsQuery = sfSubgraph.useIndexUpdatedEventsQuery(
-    index && subscriptionUnitsUpdatedEvents?.length
+    index && subscriptionUnitsUpdatedEvents.length
       ? {
           chainId: network.chainId,
           filter: {
@@ -145,21 +146,29 @@ const IndexSubscriptionDistributions: FC<{
               (x) => x.timestamp <= indexUpdatedEvent.timestamp
             )
           )!;
-          const poolFraction = BigNumber.from(
-            indexUpdatedEvent.totalUnitsPending
-          )
-            .add(BigNumber.from(indexUpdatedEvent.totalUnitsApproved))
-            .div(BigNumber.from(closestSubscriptionUnitsUpdatedEvent.units));
 
-          const indexDistributionAmount = BigNumber.from(
+          const totalUnits = new Decimal(
+            indexUpdatedEvent.totalUnitsPending
+          ).add(new Decimal(indexUpdatedEvent.totalUnitsApproved));
+
+          const poolFraction = totalUnits.isZero()
+            ? new Decimal(0)
+            : totalUnits.div(
+                new Decimal(closestSubscriptionUnitsUpdatedEvent.units)
+              );
+
+          const indexDistributionAmount = new Decimal(
             indexUpdatedEvent.newIndexValue
-          ).sub(BigNumber.from(indexUpdatedEvent.oldIndexValue));
-          const subscriptionDistributionAmount =
-            indexDistributionAmount.mul(poolFraction);
+          ).sub(new Decimal(indexUpdatedEvent.oldIndexValue));
+
+          const subscriptionDistributionAmount = indexDistributionAmount.mul(poolFraction).toFixed(0);
 
           return (
             <>
-              {ethers.utils.formatEther(subscriptionDistributionAmount)}&nbsp;
+              {ethers.utils.formatEther(
+                subscriptionDistributionAmount.toString()
+              )}
+              &nbsp;
               <SuperTokenAddress
                 network={network}
                 address={index.token}
@@ -245,6 +254,30 @@ export const IndexSubscriptionPageContent: FC<{
       order: subscriptionUnitsUpdatedEventPagingOrdering,
     });
 
+  const [poolPercentage, setPoolPercentage] = useState<Decimal | undefined>();
+  const [totalEtherAmountReceived, setTotalEtherAmountReceived] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (index && indexSubscription) {
+      setPoolPercentage(
+        new Decimal(indexSubscription.units)
+          .div(new Decimal(index.totalUnits))
+          .mul(100)
+      );
+
+      setTotalEtherAmountReceived(calculateEtherAmountReceived(
+        BigNumber.from(index.indexValue),
+        BigNumber.from(
+          indexSubscription.totalAmountReceivedUntilUpdatedAt
+        ),
+        BigNumber.from(
+          indexSubscription.indexValueUntilUpdatedAt
+        ),
+        Number(indexSubscription.units)
+      ));
+    }
+  }, [indexSubscription && index]);
+
   if (
     !indexQuery.isUninitialized &&
     !indexQuery.isLoading &&
@@ -317,11 +350,7 @@ export const IndexSubscriptionPageContent: FC<{
                     indexSubscription && index ? (
                       <>
                         {indexSubscription.units} / {index.totalUnits} (
-                        {BigNumber.from(indexSubscription.units)
-                          .div(BigNumber.from(index.totalUnits))
-                          .mul(100)
-                          .toString()}
-                        %)
+                        {poolPercentage && poolPercentage.toFixed(2).toString() + " %"})
                       </>
                     ) : (
                       <Skeleton sx={{ width: "150px" }} />
@@ -345,18 +374,9 @@ export const IndexSubscriptionPageContent: FC<{
                 <ListItemText
                   secondary="Total Amount Received"
                   primary={
-                    indexSubscription && index ? (
+                    indexSubscription && index && totalEtherAmountReceived ? (
                       <>
-                        {calculateEtherAmountReceived(
-                          BigNumber.from(index.indexValue),
-                          BigNumber.from(
-                            indexSubscription.totalAmountReceivedUntilUpdatedAt
-                          ),
-                          BigNumber.from(
-                            indexSubscription.indexValueUntilUpdatedAt
-                          ),
-                          Number(indexSubscription.units)
-                        ).toString()}
+                        {totalEtherAmountReceived}
                         &nbsp;
                         <SuperTokenAddress
                           network={network}
