@@ -10,14 +10,16 @@ export type Network = {
   isTestnet: boolean
 }
 
+const infuraId = ensureEnvironmentVariable(process.env.NEXT_PUBLIC_INFURA_ID, "NEXT_PUBLIC_INFURA_ID");
+
 export const networks: Network[] = [
   {
     displayName: "Ropsten",
     slugName: "ropsten",
     chainId: 3,
     isTestnet: true,
-    rpcUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_ROPSTEN_RPC, "NEXT_PUBLIC_ROPSTEN_RPC"),
-    subgraphUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_ROPSTEN_SUBGRAPH, "NEXT_PUBLIC_ROPSTEN_SUBGRAPH"),
+    rpcUrl: `https://ropsten.infura.io/v3/${infuraId}`,
+    subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-ropsten",
     getLinkForTransaction: (txHash: string): string => `https://ropsten.etherscan.io/tx/${txHash}`,
   },
   {
@@ -25,8 +27,8 @@ export const networks: Network[] = [
     slugName: "rinkeby",
     chainId: 4,
     isTestnet: true,
-    rpcUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_RINKEBY_RPC, "NEXT_PUBLIC_RINKEBY_RPC"),
-    subgraphUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_RINKEBY_SUBGRAPH, "NEXT_PUBLIC_RINKEBY_SUBGRAPH"),
+    rpcUrl: `https://rinkeby.infura.io/v3/${infuraId}`,
+    subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-rinkeby",
     getLinkForTransaction: (txHash: string): string => `https://rinkeby.etherscan.io/tx/${txHash}`
   },
   {
@@ -34,8 +36,8 @@ export const networks: Network[] = [
     slugName: "goerli",
     chainId: 5,
     isTestnet: true,
-    rpcUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_GOERLI_RPC, "NEXT_PUBLIC_GOERLI_RPC"),
-    subgraphUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_GOERLI_SUBGRAPH, "NEXT_PUBLIC_GOERLI_SUBGRAPH"),
+    rpcUrl: `https://goerli.infura.io/v3/${infuraId}`,
+    subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-goerli",
     getLinkForTransaction: (txHash: string): string => `https://goerli.etherscan.io/tx/${txHash}`
   },
   {
@@ -43,8 +45,8 @@ export const networks: Network[] = [
     slugName: "kovan",
     chainId: 42,
     isTestnet: true,
-    rpcUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_KOVAN_RPC, "NEXT_PUBLIC_KOVAN_RPC"),
-    subgraphUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_KOVAN_SUBGRAPH, "NEXT_PUBLIC_KOVAN_SUBGRAPH"),
+    rpcUrl: `https://kovan.infura.io/v3/${infuraId}`,
+    subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-kovan",
     getLinkForTransaction: (txHash: string): string => `https://kovan.etherscan.io/tx/${txHash}`
   },
   {
@@ -52,8 +54,8 @@ export const networks: Network[] = [
     slugName: "xdai",
     chainId: 100,
     isTestnet: false,
-    rpcUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_XDAI_RPC, "NEXT_PUBLIC_XDAI_RPC"),
-    subgraphUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_XDAI_SUBGRAPH, "NEXT_PUBLIC_XDAI_SUBGRAPH"),
+    rpcUrl: "https://rpc.xdaichain.com/",
+    subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-xdai",
     getLinkForTransaction: (txHash: string): string => `https://blockscout.com/xdai/mainnet/tx/${txHash}`
   },
   {
@@ -61,8 +63,8 @@ export const networks: Network[] = [
     slugName: "matic",
     chainId: 137,
     isTestnet: false,
-    rpcUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_MATIC_RPC, "NEXT_PUBLIC_MATIC_RPC"),
-    subgraphUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_MATIC_SUBGRAPH, "NEXT_PUBLIC_MATIC_SUBGRAPH"),
+    rpcUrl: `https://polygon-mainnet.infura.io/v3/${infuraId}`,
+    subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-matic",
     getLinkForTransaction: (txHash: string): string => `https://polygonscan.com/tx/${txHash}`
   },
   {
@@ -70,8 +72,8 @@ export const networks: Network[] = [
     slugName: "mumbai",
     chainId: 80001,
     isTestnet: true,
-    rpcUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_MUMBAI_RPC, "NEXT_PUBLIC_MUMBAI_RPC"),
-    subgraphUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_MUMBAI_SUBGRAPH, "NEXT_PUBLIC_MUMBAI_SUBGRAPH"),
+    rpcUrl: `https://polygon-mumbai.infura.io/v3/${infuraId}`,
+    subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-mumbai",
     getLinkForTransaction: (txHash: string): string => `https://mumbai.polygonscan.com/tx/${txHash}`
   },
   {
@@ -79,8 +81,8 @@ export const networks: Network[] = [
     slugName: "arbitrum-rinkeby",
     chainId: 421611,
     isTestnet: true,
-    rpcUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_ARBITRUM_RINKEBY_RPC, "NEXT_PUBLIC_ARBITRUM_RINKEBY_RPC"),
-    subgraphUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_ARBITRUM_RINKEBY_SUBGRAPH, "NEXT_PUBLIC_ARBITRUM_RINKEBY_SUBGRAPH"),
+    rpcUrl: `https://arbitrum-rinkeby.infura.io/v3/${infuraId}`,
+    subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-arbitrum-rinkeby",
     getLinkForTransaction: (txHash: string): string => `https://rinkeby-explorer.arbitrum.io/tx/${txHash}`
   },
   {
@@ -88,8 +90,8 @@ export const networks: Network[] = [
     slugName: "optimism-kovan",
     chainId: 69,
     isTestnet: true,
-    rpcUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_OPTIMISM_KOVAN_RPC, "NEXT_PUBLIC_OPTIMISM_KOVAN_RPC"),
-    subgraphUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_OPTIMISM_KOVAN_SUBGRAPH, "NEXT_PUBLIC_OPTIMISM_KOVAN_SUBGRAPH"),
+    rpcUrl: `https://optimism-kovan.infura.io/v3/${infuraId}`,
+    subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-kovan",
     getLinkForTransaction: (txHash: string): string => `https://kovan-optimistic.etherscan.io/tx/${txHash}`
   },
   {
@@ -97,8 +99,8 @@ export const networks: Network[] = [
     slugName: "avalanche-fuji",
     chainId: 43113,
     isTestnet: true,
-    rpcUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_AVALANCHE_FUJI_RPC, "NEXT_PUBLIC_AVALANCHE_FUJI_RPC"),
-    subgraphUrl: ensureEnvironmentVariable(process.env.NEXT_PUBLIC_AVALANCHE_FUJI_SUBGRAPH, "NEXT_PUBLIC_AVALANCHE_FUJI_SUBGRAPH"),
+    rpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
+    subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-avalanche-fuji",
     getLinkForTransaction: (txHash: string): string => `https://testnet.snowtrace.io/tx/${txHash}`
   },
 ];
