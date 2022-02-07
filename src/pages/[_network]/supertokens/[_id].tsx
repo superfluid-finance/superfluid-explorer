@@ -98,7 +98,7 @@ const SuperTokenPage: NextPage = () => {
                 <Grid
                   item
                   component={CopyLink}
-                  localPath={`/${network.slugName}/token/${address}`}
+                  localPath={`/${network.slugName}/supertokens/${address}`}
                 ></Grid>
               </Grid>
             ) : (
