@@ -25,7 +25,7 @@ import {
 import { Network } from "../redux/networks";
 import { ethers } from "ethers";
 
-export const FavouriteButton: FC<{
+export const AddressBookButton: FC<{
   network: Network;
   address: string;
   iconProps?: SvgIconProps;
@@ -48,7 +48,7 @@ export const FavouriteButton: FC<{
           </Tooltip>
         )}
       </IconButton>
-      <FavouriteDialog
+      <AddressBookDialog
         network={network}
         address={address}
         open={isDialogOpen}
@@ -58,7 +58,7 @@ export const FavouriteButton: FC<{
   );
 };
 
-export const FavouriteDialog: FC<{
+export const AddressBookDialog: FC<{
   network: Network;
   address: string;
   open: boolean;
@@ -104,7 +104,7 @@ export const FavouriteDialog: FC<{
       <Box sx={{ pb: 1 }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <DialogTitle>
-            {existingEntry ? "Edit favourite" : "Add favourite"}
+            {existingEntry ? "Edit entry" : "Add entry"}
           </DialogTitle>
         </Box>
         <Divider />
@@ -125,7 +125,7 @@ export const FavouriteDialog: FC<{
         <DialogActions>
           {existingEntry ? (
             <Button onClick={handleRemove} variant="outlined">
-              Remove favourite
+              Remove entry
             </Button>
           ) : (
             <Button onClick={handleCloseWrapped}>Cancel</Button>

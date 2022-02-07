@@ -8,7 +8,7 @@ import {
   Dialog,
 } from "@mui/material";
 import AppLink from "./AppLink";
-import AppSearch from "./AppSearch";
+import SearchDialog from "./SearchDialog";
 import SelectThemeButton from "./SelectThemeButton";
 import Image from "next/image";
 import SearchBar from "./SearchBar";
@@ -55,7 +55,7 @@ export const SfAppBar = () => {
           </SearchBar>
         </Container>
 
-        <AppSearch open={isSearchOpen} close={() => setIsSearchOpen(false)} />
+        <SearchDialog open={isSearchOpen} close={() => setIsSearchOpen(false)} />
 
         <Stack
           direction="row"

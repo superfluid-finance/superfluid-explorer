@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import { Button, Card, Divider, Grid, Stack, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { networks } from "../redux/networks";
-import { defaultStreamQueryOrdering, defaultStreamQueryPaging, NetworkStreams } from "../components/networkStreams";
+import { defaultStreamQueryOrdering, defaultStreamQueryPaging, NetworkStreams } from "../components/NetworkStreams";
 import _ from 'lodash';
 import SearchBar from '../components/SearchBar';
 import AppLink from '../components/AppLink';

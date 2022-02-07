@@ -21,7 +21,7 @@ import NetworkDisplay from "../../../components/NetworkDisplay";
 import SkeletonNetwork from "../../../components/skeletons/SkeletonNetwork";
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
 import EventList from "../../../components/EventList";
-import { FavouriteButton } from "../../../components/AddressBook";
+import { AddressBookButton } from "../../../components/AddressBook";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import {
   addressBookSelectors,
@@ -98,8 +98,6 @@ const AccountPage: NextPage = () => {
       : undefined
   );
 
-
-
   if (
     !accountQuery.isUninitialized &&
     !accountQuery.isLoading &&
@@ -131,7 +129,7 @@ const AccountPage: NextPage = () => {
             <Typography variant="h4" component="h1">
               <Grid container alignItems="center">
                 <Grid item>
-                  <FavouriteButton
+                  <AddressBookButton
                     iconProps={{ fontSize: "large" }}
                     network={network}
                     address={accountQuery.data.id}
