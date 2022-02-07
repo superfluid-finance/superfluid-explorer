@@ -10,10 +10,8 @@ import {
   Tab,
   Typography
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
 import { sfApi, sfSubgraph } from "../../../redux/store";
-import { skipToken } from "@reduxjs/toolkit/query";
 import AccountStreams from "../../../components/AccountStreams";
 import AccountIndexes from "../../../components/AccountIndexes";
 import AccountTokens from "../../../components/AccountTokens";
@@ -22,31 +20,27 @@ import NetworkDisplay from "../../../components/NetworkDisplay";
 import SkeletonNetwork from "../../../components/skeletons/SkeletonNetwork";
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
 import EventList from "../../../components/EventList";
-import { findNetwork } from "../../../redux/networks";
 import { FavouriteButton } from "../../../components/AddressBook";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { addressBookSelectors, createEntryId } from "../../../redux/slices/addressBook.slice";
 import { useAppSelector } from "../../../redux/hooks";
 import { ethers } from "ethers";
 import Error from "next/error";
-
-const getAddress = (address: unknown): string => {
-  if (typeof address === "string") {
-    return address;
-  }
-
-  throw `Address ${address} not found. TODO(KK): error page`
-}
+import { incomingStreamOrderingDefault, incomingStreamPagingDefault } from "../../../components/AccountStreamsIncomingDataGrid";
+import { outgoingStreamOrderingDefault, outgoingStreamPagingDefault } from "../../../components/AccountStreamsOutgoingDataGrid";
+import { publishedIndexOrderingDefault, publishedIndexPagingDefault } from "../../../components/AccountIndexesDataGrid";
+import { indexSubscriptionOrderingDefault, indexSubscriptionPagingDefault } from "../../../components/AccountIndexSubscriptionsDataGrid";
+import NetworkContext from "../../../contexts/NetworkContext";
+import IdContext from "../../../contexts/IdContext";
 
 const AccountPage: NextPage = () => {
-  const router = useRouter()
-  const { networkName, address } = router.query;
+  const network = useContext(NetworkContext);
+  const address = useContext(IdContext);
 
-  const network = typeof networkName === "string" ? findNetwork(networkName) : undefined;
-  const accountQuery = sfSubgraph.useAccountQuery(network ? {
+  const accountQuery = sfSubgraph.useAccountQuery({
     chainId: network.chainId,
-    id: getAddress(address)
-  } : skipToken);
+    id: address
+  });
 
   const [triggerMonitoring, monitorResult] = sfApi.useMonitorForEventsToInvalidateCacheMutation();
   useEffect(() => {
@@ -59,10 +53,20 @@ const AccountPage: NextPage = () => {
     }
   }, [])
 
-  const [tabValue, setTabValue] = useState<string>("streams");
-  const addressBookEntry = useAppSelector(state => network ? addressBookSelectors.selectById(state, createEntryId(network, getAddress(address))) : undefined);
+  const prefetchStreamsQuery = sfSubgraph.usePrefetch('streams')
+  const prefetchIndexesQuery = sfSubgraph.usePrefetch('indexes')
+  const prefetchIndexSubscriptionsQuery = sfSubgraph.usePrefetch('indexSubscriptions')
+  const prefetchTokensQuery = sfSubgraph.usePrefetch('accountTokenSnapshots')
+  const prefetchEventsQuery = sfSubgraph.usePrefetch('events')
 
-  if (!accountQuery.isLoading && !accountQuery.data) {
+  const [tabValue, setTabValue] = useState<string>("streams");
+  const addressBookEntry = useAppSelector(state => network ? addressBookSelectors.selectById(state, createEntryId(network, address)) : undefined);
+
+  if (
+    !accountQuery.isUninitialized &&
+    !accountQuery.isLoading &&
+    !accountQuery.data
+  ) {
     return <Error statusCode={404} />;
   }
 
@@ -124,24 +128,63 @@ const AccountPage: NextPage = () => {
                   scrollButtons="auto"
                   onChange={(_event, newValue: string) => setTabValue(newValue)}
                   aria-label="tabs">
-                  <Tab label="Streams" value="streams" />
-                  <Tab label="Indexes" value="indexes" />
+                  <Tab label="Streams" value="streams" onMouseEnter={() => {
+                    if (network) {
+                      prefetchStreamsQuery({
+                        chainId: network.chainId,
+                        filter: {
+                          receiver: address
+                        },
+                        order: incomingStreamOrderingDefault,
+                        pagination: incomingStreamPagingDefault
+                      })
+                      prefetchStreamsQuery({
+                        chainId: network.chainId,
+                        filter: {
+                          sender: address
+                        },
+                        order: outgoingStreamOrderingDefault,
+                        pagination: outgoingStreamPagingDefault
+                      })
+                    }
+                  }} />
+                  <Tab label="Indexes" value="indexes"
+                    onMouseEnter={() => {
+                      if (network) {
+                        prefetchIndexesQuery({
+                          chainId: network.chainId,
+                          filter: {
+                            publisher: address
+                          },
+                          order: publishedIndexOrderingDefault,
+                          pagination: publishedIndexPagingDefault
+                        })
+                        prefetchIndexSubscriptionsQuery({
+                          chainId: network.chainId,
+                          filter: {
+                            subscriber: address
+                          },
+                          order: indexSubscriptionOrderingDefault,
+                          pagination: indexSubscriptionPagingDefault
+                        })
+                      }
+                    }} />
                   <Tab label="Super Tokens" value="tokens" />
                   <Tab label="Events" value="events" />
                 </TabList>
               </Box>
               <Box>
                 <TabPanel value="events">
-                  {(network && address) && <EventList network={network} address={getAddress(address)} />}
+                  <EventList network={network} address={address} />
                 </TabPanel>
                 <TabPanel value="tokens">
-                  {(network && address) && <AccountTokens network={network} accountAddress={getAddress(address)} />}
+                  <AccountTokens network={network} accountAddress={address} />
                 </TabPanel>
                 <TabPanel value="streams">
-                  {(network && address) && <AccountStreams network={network} accountAddress={getAddress(address)} />}
+                  <AccountStreams network={network} accountAddress={address} />
                 </TabPanel>
                 <TabPanel value="indexes">
-                  {(network && address) && <AccountIndexes network={network} accountAddress={getAddress(address)} />}
+                  <AccountIndexes network={network} accountAddress={address} />
                 </TabPanel>
               </Box>
             </TabContext>
