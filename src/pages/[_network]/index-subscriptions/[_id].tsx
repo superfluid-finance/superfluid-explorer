@@ -445,16 +445,18 @@ export const IndexSubscriptionDistributions: FC<{
           const subscriptionUnits = new Decimal(
             closestSubscriptionUnitsUpdatedEvent.units
           );
+
           const poolFraction =
             totalUnits.isZero() || subscriptionUnits.isZero()
               ? new Decimal(0)
               : totalUnits.div(subscriptionUnits);
-
+              
           const indexDistributionAmount = new Decimal(
             indexUpdatedEvent.newIndexValue
           ).sub(new Decimal(indexUpdatedEvent.oldIndexValue));
 
           const subscriptionDistributionAmount = indexDistributionAmount
+            .mul(totalUnits)
             .mul(poolFraction)
             .toFixed(0);
 
