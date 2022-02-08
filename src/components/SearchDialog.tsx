@@ -28,7 +28,7 @@ import { searchHistorySelectors } from "../redux/slices/searchHistory.slice";
 import { timeAgo } from "../utils/dateTime";
 import { addressBookSelectors } from "../redux/slices/addressBook.slice";
 import { searchBarPlaceholderText } from "./SearchBar";
-import useSearchSubgraphOld, { useSearch } from "../hooks/useSearchHook";
+import { useSearch } from "../hooks/useSearchHook";
 
 const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
   open,
@@ -50,6 +50,7 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState("");
+  const networkSearchResults = useSearch(searchTerm.trim());
 
   useEffect(() => {
     const handleRouteChange = () => {
@@ -64,8 +65,6 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
       router.events.off("routeChangeStart", handleRouteChange);
     };
   }, []);
-
-  const networkSearchResults = useSearch(searchTerm);
 
   return (
     <Dialog
@@ -95,7 +94,7 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
               </InputAdornment>
             ),
           }}
-          onChange={(e) => _.debounce(setSearchTerm(e.currentTarget.value.trim()), 200)}
+          onChange={(e) => setSearchTerm(e.currentTarget.value)}
         />
         {!networkSearchResults.length && lastSearches.length ? (
           <Card sx={{ mt: 2 }}>
@@ -169,6 +168,7 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
                               name={token.name}
                               symbol={token.symbol}
                               address={token.id}
+                              isListed={token.isListed}
                             />
                           </ListItemButton>
                         </NextLink>

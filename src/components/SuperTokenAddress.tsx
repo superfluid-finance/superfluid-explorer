@@ -2,9 +2,10 @@ import { FC } from "react";
 import { ethers } from "ethers";
 import AppLink from "./AppLink";
 import { sfSubgraph } from "../redux/store";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Tooltip, Typography } from "@mui/material";
 import { Network } from "../redux/networks";
 import { Token } from "@superfluid-finance/sdk-core";
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 const SuperTokenAddress: FC<{
   network: Network;
@@ -36,11 +37,12 @@ export const SuperTokenFormatted: FC<{
   address: string;
   name: string;
   symbol: string;
-}> = ({ address, name, symbol }) => {
+  isListed: boolean;
+}> = ({ address, name, symbol, isListed }) => {
   return (
-    <Grid>
+    <Grid container>
       <Grid item xs={12}>
-        {name} ({symbol})
+        {name} ({symbol}){" "}{isListed && <Tooltip title="Is listed"><VerifiedIcon sx={{fontSize: "inherit"}} /></Tooltip>}
       </Grid>
       <Grid item xs={12}>
         <Typography variant="caption" component="span">

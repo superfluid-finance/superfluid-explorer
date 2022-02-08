@@ -3,11 +3,10 @@ import { skipToken } from "@reduxjs/toolkit/query";
 import { ethers } from "ethers";
 import { gql } from "graphql-request";
 import { PossibleErrors } from "@superfluid-finance/sdk-redux";
-import _, { map } from "lodash";
+import _ from "lodash";
 import { Network, networks, networksByChainId } from "../redux/networks";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { searchHistorySlice } from "../redux/slices/searchHistory.slice";
-import { useCallback, useMemo, useState } from "react";
+import { useAppSelector } from "../redux/hooks";
+import { useMemo } from "react";
 import { addressBookSelectors } from "../redux/slices/addressBook.slice";
 
 const searchByAddressDocument = gql`
@@ -16,6 +15,7 @@ const searchByAddressDocument = gql`
       id
       symbol
       name
+      isListed
     }
     tokensByUnderlyingAddress: tokens(
       where: { isSuperToken: true, underlyingAddress: $addressBytes }
@@ -23,6 +23,7 @@ const searchByAddressDocument = gql`
       id
       symbol
       name
+      isListed
     }
     accounts(where: { id: $addressId }) {
       id
@@ -38,6 +39,7 @@ const searchByTokenSymbolDocument = gql`
       id
       symbol
       name
+      isListed
     }
   }
 `;
@@ -47,11 +49,13 @@ type SubgraphSearchByAddressResult = {
     id: string;
     symbol: string;
     name: string;
+    isListed: boolean;
   }[];
   tokensByUnderlyingAddress: {
     id: string;
     symbol: string;
     name: string;
+    isListed: boolean;
   }[];
   accounts: {
     id: string;
@@ -63,6 +67,7 @@ type SubgraphSearchByTokenSymbolResult = {
     id: string;
     symbol: string;
     name: string;
+    isListed: boolean;
   }[];
 };
 
@@ -74,6 +79,7 @@ type NetworkSearchResult = {
     id: string;
     symbol: string;
     name: string;
+    isListed: boolean;
   }[];
   accounts: {
     id: string;
@@ -238,7 +244,7 @@ const useSearchSubgraphTokens = (searchTerm: string) => {
 
   return networks.map((network) =>
     sfSubgraph.useCustomQuery(
-      !isSearchTermAddress && searchTerm !== ""
+      !isSearchTermAddress && searchTerm.length > 2
         ? {
             chainId: network.chainId,
             document: searchByTokenSymbolDocument,
@@ -250,78 +256,3 @@ const useSearchSubgraphTokens = (searchTerm: string) => {
     )
   );
 };
-
-const useSearchSubgraphOld = (searchTerm: string): NetworkSearchResult[] => {
-  const dispatch = useAppDispatch();
-  const isSearchTermAddress = useMemo(
-    () => ethers.utils.isAddress(searchTerm),
-    [searchTerm]
-  );
-
-  const [networkSearchResultsDict, setNetworkSearchResultsDict] = useState<
-    Record<string, NetworkSearchResult>
-  >({});
-  const networkSearchResults = Object.values(networkSearchResultsDict);
-
-  networks.forEach((network) => {
-    // The number & order of networks is deterministic, that's why we're okay using the hook inside a for-loop.
-    const searchQuery = sfSubgraph.useCustomQuery(
-      isSearchTermAddress
-        ? {
-            chainId: network.chainId,
-            document: searchByAddressDocument,
-            variables: {
-              addressId: searchTerm.toLowerCase(),
-              addressBytes: searchTerm.toLowerCase(),
-            },
-          }
-        : skipToken
-    );
-
-    if (isSearchTermAddress) {
-      const searchResult =
-        (searchQuery.data as SubgraphSearchByAddressResult) ?? {
-          accounts: [],
-          tokensByAddress: [],
-          tokensByUnderlyingAddress: [],
-        };
-
-      setNetworkSearchResultsDict({
-        ...networkSearchResultsDict,
-        [network.chainId]: {
-          network: network,
-          isFetching: searchQuery.isFetching,
-          error: searchQuery.error,
-          tokens: _.uniq(
-            searchResult.tokensByAddress.concat(
-              searchResult.tokensByUnderlyingAddress
-            )
-          ),
-          accounts: searchResult.accounts,
-        },
-      });
-    }
-  });
-
-  const lastSearchAddress = useAppSelector(
-    (state) => state.searchHistory.ids[0]
-  );
-
-  if (
-    isSearchTermAddress &&
-    lastSearchAddress !== searchTerm.toLowerCase() &&
-    (networkSearchResults.some((x) => x.tokens.length) ||
-      networkSearchResults.some((x) => x.accounts.length))
-  ) {
-    dispatch(
-      searchHistorySlice.actions.searchMatched({
-        address: ethers.utils.getAddress(searchTerm),
-        timestamp: new Date().getTime(),
-      })
-    );
-  }
-
-  return networkSearchResults;
-};
-
-export default useSearchSubgraphOld;
