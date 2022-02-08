@@ -57,7 +57,7 @@ const PublishedIndexDataGrid: FC<Props> = ({
       },
       {
         field: "totalAmountDistributedUntilUpdatedAt",
-        headerName: "Total Distributed",
+        headerName: "Total Units Distributed",
         sortable: true,
         flex: 1,
         renderCell: (params) => (
