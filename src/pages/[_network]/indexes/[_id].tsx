@@ -31,11 +31,9 @@ import IndexSubscriptionDataGrid from "../../../components/IndexSubscriptionData
 import NetworkContext from "../../../contexts/NetworkContext";
 import IdContext from "../../../contexts/IdContext";
 import CopyClipboard from "../../../components/CopyClipboard";
-import DateTime from "../../../components/Date";
 import TimeAgo from "../../../components/TimeAgo";
 import { ethers } from "ethers";
 import CopyLink from "../../../components/CopyLink";
-import CopyClipboardTooltip from "../../../components/CopyClipboardTooltip";
 
 const IndexPage: NextPage = () => {
   const network = useContext(NetworkContext);
