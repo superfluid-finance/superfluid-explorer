@@ -120,7 +120,7 @@ export const IndexSubscriptionPageContent: FC<{
           BigNumber.from(index.indexValue),
           BigNumber.from(indexSubscription.totalAmountReceivedUntilUpdatedAt),
           BigNumber.from(indexSubscription.indexValueUntilUpdatedAt),
-          Number(indexSubscription.units)
+          BigNumber.from(indexSubscription.units)
         )
       );
     }
