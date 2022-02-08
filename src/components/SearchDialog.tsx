@@ -28,7 +28,7 @@ import { searchHistorySelectors } from "../redux/slices/searchHistory.slice";
 import { timeAgo } from "../utils/dateTime";
 import { addressBookSelectors } from "../redux/slices/addressBook.slice";
 import { searchBarPlaceholderText } from "./SearchBar";
-import useSearchHook from "../hooks/useSearchHook";
+import useSearchSubgraphOld, { useSearch } from "../hooks/useSearchHook";
 
 const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
   open,
@@ -65,7 +65,7 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
     };
   }, []);
 
-  const networkSearchResults = useSearchHook(searchTerm);
+  const networkSearchResults = useSearch(searchTerm);
 
   return (
     <Dialog
@@ -95,7 +95,7 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
               </InputAdornment>
             ),
           }}
-          onChange={(e) => setSearchTerm(e.currentTarget.value)}
+          onChange={(e) => _.debounce(setSearchTerm(e.currentTarget.value.trim()), 200)}
         />
         {!networkSearchResults.length && lastSearches.length ? (
           <Card sx={{ mt: 2 }}>
