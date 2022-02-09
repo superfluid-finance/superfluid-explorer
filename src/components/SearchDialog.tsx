@@ -28,7 +28,7 @@ import { searchHistorySelectors } from "../redux/slices/searchHistory.slice";
 import { timeAgo } from "../utils/dateTime";
 import { addressBookSelectors } from "../redux/slices/addressBook.slice";
 import { searchBarPlaceholderText } from "./SearchBar";
-import {useSearch} from "../hooks/useSearch";
+import { useSearch } from "../hooks/useSearch";
 
 const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
   open,
@@ -110,7 +110,7 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
               <InputAdornment position="start">
                 {networkSearchResults.some((x) => x.isFetching) ? (
                   <CircularProgress
-                    size="small"
+                    size={24}
                     sx={{ color: "text.secondary" }}
                   />
                 ) : (
