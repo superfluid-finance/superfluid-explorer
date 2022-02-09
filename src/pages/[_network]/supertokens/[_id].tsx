@@ -94,12 +94,15 @@ const SuperTokenPage: NextPage = () => {
           <Typography variant="h4" component="h1">
             {superToken ? (
               <Grid container alignItems="center">
-                <Grid item>{superToken.name}</Grid>
-                <Grid
-                  item
-                  component={CopyLink}
-                  localPath={`/${network.slugName}/supertokens/${address}`}
-                ></Grid>
+                <Grid item sx={{ mx: 0.5 }}>
+                  {superToken.name}
+                </Grid>
+                <Grid item>
+                  <CopyLink
+                    IconProps={{ fontSize: "large" }}
+                    localPath={`/${network.slugName}/supertokens/${address}`}
+                  />
+                </Grid>
               </Grid>
             ) : (
               <SkeletonTokenName />

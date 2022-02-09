@@ -88,10 +88,7 @@ export const StreamPageContent: FC<{ streamId: string; network: Network }> = ({
               {network.displayName}
             </Typography>
             <Typography color="text.secondary">Streams</Typography>
-            <Typography
-              color="text.secondary"
-              sx={{ whiteSpace: "nowrap"}}
-            >
+            <Typography color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
               {streamId.substring(0, 6) + "..."}
             </Typography>
           </Breadcrumbs>
@@ -100,12 +97,15 @@ export const StreamPageContent: FC<{ streamId: string; network: Network }> = ({
         <Grid item xs={12}>
           <Typography variant="h4" component="h1">
             <Grid container alignItems="center">
-              <Grid item>Stream</Grid>
-              <Grid
-                item
-                component={CopyLink}
-                localPath={`/${network.slugName}/streams/${streamId}`}
-              ></Grid>
+              <Grid item sx={{ mx: 0.5 }}>
+                Stream
+              </Grid>
+              <Grid item>
+                <CopyLink
+                  IconProps={{ fontSize: "large" }}
+                  localPath={`/${network.slugName}/streams/${streamId}`}
+                />
+              </Grid>
             </Grid>
           </Typography>
         </Grid>

@@ -152,12 +152,15 @@ export const IndexSubscriptionPageContent: FC<{
         <Grid item xs={12}>
           <Typography variant="h4" component="h1">
             <Grid container alignItems="center">
-              <Grid item>Index Subscription</Grid>
-              <Grid
-                item
-                component={CopyLink}
-                localPath={`/${network.slugName}/index-subscriptions/${indexSubscriptionId}`}
-              ></Grid>
+              <Grid item sx={{ mx: 0.5 }}>
+                Index Subscription
+              </Grid>
+              <Grid item>
+                <CopyLink
+                  IconProps={{ fontSize: "large" }}
+                  localPath={`/${network.slugName}/index-subscriptions/${indexSubscriptionId}`}
+                />
+              </Grid>
             </Grid>
           </Typography>
         </Grid>
@@ -450,7 +453,7 @@ export const IndexSubscriptionDistributions: FC<{
             totalUnits.isZero() || subscriptionUnits.isZero()
               ? new Decimal(0)
               : totalUnits.div(subscriptionUnits);
-              
+
           const indexDistributionAmount = new Decimal(
             indexUpdatedEvent.newIndexValue
           ).sub(new Decimal(indexUpdatedEvent.oldIndexValue));

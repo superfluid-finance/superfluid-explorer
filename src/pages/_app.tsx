@@ -1,4 +1,3 @@
-import * as React from "react";
 import Head from "next/head";
 import { AppProps } from "next/app";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -6,7 +5,7 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import createEmotionCache from "../utils/createEmotionCache";
 import { wrapper } from "../redux/store";
 import SfAppBar from "../components/SfAppBar";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import Box from "@mui/material/Box";
 import "../styles/graphiql.min.css";
 import "../styles/app.css";
@@ -14,11 +13,9 @@ import { ThemeProvider } from "@mui/material/styles";
 import useSfTheme from "../styles/useSfTheme";
 import { hotjar } from "react-hotjar";
 import Footer from "../components/Footer";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { tryGetNetwork, tryGetString } from "../redux/networks";
 import { isDynamicRoute } from "../utils/isDynamicRoute";
-import FullPageLoader from "../components/FullPageLoader";
 import Error from "next/error";
 import NetworkContext from "../contexts/NetworkContext";
 import IdContext from "../contexts/IdContext";
@@ -125,8 +122,4 @@ export const getRenderedThemeMode = (): "light" | "dark" => {
     return "light"; // *sigh*, default to light.
   }
   return themeModeMetaElement.getAttribute("content") as "light" | "dark";
-};
-
-const Noop: FC = ({ children }) => {
-  return <>{children}</>;
 };

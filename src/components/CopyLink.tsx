@@ -1,5 +1,12 @@
 import { FC, useEffect, useState } from "react";
-import { SvgIcon, SvgIconProps, Tooltip, TooltipProps } from "@mui/material";
+import {
+  Icon,
+  IconButton,
+  SvgIcon,
+  SvgIconProps,
+  Tooltip,
+  TooltipProps,
+} from "@mui/material";
 import _ from "lodash";
 import LinkIcon from "@mui/icons-material/Link";
 import { useRouter } from "next/router";
@@ -13,10 +20,10 @@ const CopyLink: FC<{
   IconProps?: Partial<SvgIconProps>;
 }> = ({ localPath, TooltipProps, IconProps }) => {
   const [absoluteUrl, setAbsoluteUrl] = useState<string>("");
-  
+
   useEffect(() => {
     setAbsoluteUrl(new URL(localPath, document.baseURI).href);
-  }, [])
+  }, []);
 
   const [isCopied, setIsCopied] = useState(false);
 
@@ -37,25 +44,21 @@ const CopyLink: FC<{
   };
 
   return (
-    <Tooltip
-      {..._.merge(
-        {
-          title: isCopied ? "Link copied!" : "Copy link to clipboard",
-        },
-        TooltipProps
-      )}
-    >
-      <SvgIcon
-        component={LinkIcon}
-        onClick={handleCopyClick}
+    <IconButton>
+      <Tooltip
         {..._.merge(
           {
-            sx: { fontSize: "inherit", cursor: "pointer", ml: 1 },
+            title: isCopied ? "Link copied!" : "Copy link to clipboard",
           },
-          IconProps
+          TooltipProps
         )}
-      />
-    </Tooltip>
+      >
+        <LinkIcon
+          onClick={handleCopyClick}
+          {..._.merge(IconProps)}
+        />
+      </Tooltip>
+    </IconButton>
   );
 };
 

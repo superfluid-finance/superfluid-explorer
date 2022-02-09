@@ -117,12 +117,15 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
         <Grid item xs={12}>
           <Typography variant="h4" component="h1">
             <Grid container alignItems="center">
-              <Grid item>Index</Grid>
-              <Grid
-                item
-                component={CopyLink}
-                localPath={`/${network.slugName}/indexes/${indexId}`}
-              ></Grid>
+              <Grid item sx={{ mx: 0.5 }}>
+                Index
+              </Grid>
+              <Grid item>
+                <CopyLink
+                  IconProps={{ fontSize: "large" }}
+                  localPath={`/${network.slugName}/indexes/${indexId}`}
+                />
+              </Grid>
             </Grid>
           </Typography>
         </Grid>

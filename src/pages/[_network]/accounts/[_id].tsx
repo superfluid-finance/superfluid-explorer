@@ -81,16 +81,18 @@ const AccountPage: NextPage = () => {
 
   const router = useRouter();
   const { tab } = router.query;
-  const [tabValue, setTabValue] = useState<string>(tab as string ?? "streams");
+  const [tabValue, setTabValue] = useState<string>(
+    (tab as string) ?? "streams"
+  );
   useEffect(() => {
     router.replace({
       query: {
         _network: network.slugName,
         _id: address,
-        tab: tabValue
-      }
-    })
-  }, [tabValue])
+        tab: tabValue,
+      },
+    });
+  }, [tabValue]);
 
   const addressBookEntry = useAppSelector((state) =>
     network
@@ -115,10 +117,7 @@ const AccountPage: NextPage = () => {
               {network && network.displayName}
             </Typography>
             <Typography color="text.secondary">Accounts</Typography>
-            <Typography
-              color="text.secondary"
-              sx={{ whiteSpace: "nowrap"}}
-            >
+            <Typography color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
               {accountQuery.data && accountQuery.data.id}
             </Typography>
           </Breadcrumbs>
@@ -135,18 +134,19 @@ const AccountPage: NextPage = () => {
                     address={accountQuery.data.id}
                   />
                 </Grid>
-                <Grid item>
+                <Grid item sx={{ mx: 0.5 }}>
                   {addressBookEntry
                     ? addressBookEntry.nameTag
                     : accountQuery.data.isSuperApp
                     ? "Super App"
                     : "Account"}
                 </Grid>
-                <Grid
-                  item
-                  component={CopyLink}
-                  localPath={`/${network.slugName}/accounts/${address}`}
-                ></Grid>
+                <Grid item>
+                  <CopyLink
+                    IconProps={{ fontSize: "large" }}
+                    localPath={`/${network.slugName}/accounts/${address}`}
+                  />
+                </Grid>
               </Grid>
             </Typography>
           )}
@@ -284,7 +284,6 @@ const AccountPage: NextPage = () => {
                   <AccountIndexes network={network} accountAddress={address} />
                 </TabPanel>
               </Box>
-
             </TabContext>
           </Card>
         </Grid>
