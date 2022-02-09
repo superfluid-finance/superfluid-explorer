@@ -23,7 +23,7 @@ const CopyLink: FC<{
 
   useEffect(() => {
     setAbsoluteUrl(new URL(localPath, document.baseURI).href);
-  }, []);
+  }, [localPath]);
 
   const [isCopied, setIsCopied] = useState(false);
 

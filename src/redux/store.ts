@@ -19,7 +19,6 @@ import { themePreferenceSlice } from "./slices/appPreferences.slice";
 import { addressBookSlice } from "./slices/addressBook.slice";
 import { networks } from "./networks";
 import storageLocal from "redux-persist/lib/storage";
-import storageSession from "redux-persist/lib/storage/session";
 import {
   FLUSH,
   PAUSE,
@@ -31,7 +30,6 @@ import {
   REHYDRATE,
 } from "redux-persist";
 import { isServer } from "../utils/isServer";
-import { searchHistorySlice } from "./slices/searchHistory.slice";
 import { addDays } from "../utils/dateTime";
 
 export const { sfApi } = initializeSfApiSlice(createApiWithReactHooks);
@@ -59,19 +57,13 @@ export const makeStore = wrapMakeStore(() => {
     addressBookSlice.reducer
   );
 
-  const searchHistoryReducer = persistReducer(
-    { key: "search-history", version: 1, storage: storageSession },
-    searchHistorySlice.reducer
-  );
-
   const store = configureStore({
     reducer: {
       sfApi: sfApi.reducer,
       sfSubgraph: sfSubgraph.reducer,
       sfTransactions: sfTransactions.reducer,
       [themePreferenceSlice.name]: themePreferenceSlice.reducer,
-      [addressBookSlice.name]: addressBookReducer,
-      [searchHistorySlice.name]: searchHistoryReducer,
+      [addressBookSlice.name]: addressBookReducer
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

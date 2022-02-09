@@ -1,10 +1,8 @@
 import {useMemo} from "react";
 import {ethers} from "ethers";
-import {useAppDispatch, useAppSelector} from "../redux/hooks";
 import {networks} from "../redux/networks";
 import {sfSubgraph} from "../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
-import {searchHistorySlice} from "../redux/slices/searchHistory.slice";
 import {gql} from "graphql-request";
 
 const searchByAddressDocument = gql`
@@ -53,12 +51,7 @@ export const useSearchSubgraphByAddress = (searchTerm: string) => {
     [searchTerm]
   );
 
-  const dispatch = useAppDispatch();
-  const lastSearchAddress = useAppSelector(
-    (state) => state.searchHistory.ids[0] as string
-  );
-
-  const results = networks.map((network) =>
+  return networks.map((network) =>
     sfSubgraph.useCustomQuery(
       isSearchTermAddress
         ? {
@@ -72,37 +65,4 @@ export const useSearchSubgraphByAddress = (searchTerm: string) => {
         : skipToken
     )
   );
-
-  if (
-    isSearchTermAddress &&
-    searchTerm.toLowerCase() !== lastSearchAddress?.toLowerCase()
-  ) {
-    const areThereAnyResults =
-      results
-        .map(
-          (x) =>
-            (x.data as SubgraphSearchByAddressResult | undefined) ?? {
-              tokensByAddress: [],
-              tokensByUnderlyingAddress: [],
-              accounts: [],
-            }
-        )
-        .map((x) =>
-          ([] as any)
-            .concat(x.tokensByAddress)
-            .concat(x.tokensByUnderlyingAddress)
-            .concat(x.accounts)
-        ).length >= 1;
-
-    if (areThereAnyResults) {
-      dispatch(
-        searchHistorySlice.actions.searchMatched({
-          address: ethers.utils.getAddress(searchTerm),
-          timestamp: new Date().getTime(),
-        })
-      );
-    }
-  }
-
-  return results;
 };

@@ -9,7 +9,6 @@ import {
   List,
   ListItemButton,
   CircularProgress,
-  Grid,
   Card,
   Divider,
   ListItemText,
@@ -24,8 +23,6 @@ import NextLink from "next/link";
 import NetworkFormatted from "./NetworkDisplay";
 import { networksByChainId } from "../redux/networks";
 import { useAppSelector } from "../redux/hooks";
-import { searchHistorySelectors } from "../redux/slices/searchHistory.slice";
-import { timeAgo } from "../utils/dateTime";
 import { addressBookSelectors } from "../redux/slices/addressBook.slice";
 import { searchBarPlaceholderText } from "./SearchBar";
 import { useSearch } from "../hooks/useSearch";
@@ -34,10 +31,6 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
   open,
   close,
 }) => {
-  const lastSearches = useAppSelector((state) =>
-    searchHistorySelectors.selectAll(state)
-  ).slice(0, 5);
-
   const addressBookEntries = useAppSelector((state) =>
     addressBookSelectors.selectAll(state)
   );
@@ -179,31 +172,8 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
             </Card>
           ))}
 
-        {!!(lastSearches.length || addressBookEntries.length) && (
+        {!!addressBookEntries.length && (
           <Divider sx={{ my: 3, borderWidth: 1.25 }} />
-        )}
-
-        {!!lastSearches.length && (
-          <Card sx={{ mt: 2 }}>
-            <Typography variant="subtitle2" sx={{ m: 1 }} component="h3">
-              Last Searches
-            </Typography>
-            <Divider />
-            <List>
-              {lastSearches.map((lastSearch) => (
-                <ListItem key={lastSearch.address} disablePadding>
-                  <ListItemButton>
-                    <ListItemText
-                      primary={`${lastSearch.address} (${timeAgo(
-                        lastSearch.timestamp
-                      )})`}
-                      onClick={() => setSearchTerm(lastSearch.address)}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </Card>
         )}
 
         {addressBookEntries.length ? (
