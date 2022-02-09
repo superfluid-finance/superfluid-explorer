@@ -166,29 +166,26 @@ export const useSearch = (searchTerm: string) => {
     addressBookResults.map((x) => [x.network.slugName, x])
   );
 
-  return networks.map((network) => {
+  return _.orderBy(networks, (x) => x.isTestnet, "asc").map((network) => {
     const searchByAddressMappedResult =
       subgraphSearchByAddressResultsMappedDictionary[network.slugName] ?? {
         isFetching: false,
         accounts: [],
-        tokens: []
+        tokens: [],
       };
 
     const searchByTokenSymbolMappedResult =
-      subgraphSearchByTokenSymbolResultsMappedDictionary[
-        network.slugName
-      ] ?? {
+      subgraphSearchByTokenSymbolResultsMappedDictionary[network.slugName] ?? {
         isFetching: false,
         accounts: [],
-        tokens: []
+        tokens: [],
       };
 
-    const addressBookResult =
-      addressBookMappedResultsDictionary[
-        network.slugName
-      ] ?? {
-        accounts: []
-      };
+    const addressBookResult = addressBookMappedResultsDictionary[
+      network.slugName
+    ] ?? {
+      accounts: [],
+    };
 
     return {
       network: network,
@@ -198,11 +195,15 @@ export const useSearch = (searchTerm: string) => {
       error:
         searchByAddressMappedResult.error &&
         searchByTokenSymbolMappedResult.error,
-      tokens: _.uniqBy(
-        searchByAddressMappedResult.tokens
-          .concat(searchByTokenSymbolMappedResult.tokens)
-          .map((x) => ({ ...x, id: ethers.utils.getAddress(x.id) })),
-        (x) => x.id
+      tokens: _.orderBy(
+        _.uniqBy(
+          searchByAddressMappedResult.tokens
+            .concat(searchByTokenSymbolMappedResult.tokens)
+            .map((x) => ({ ...x, id: ethers.utils.getAddress(x.id) })),
+          (x) => x.id
+        ),
+        (x) => x.isListed,
+        "desc"
       ),
       accounts: _.uniqBy(
         searchByAddressMappedResult.accounts
