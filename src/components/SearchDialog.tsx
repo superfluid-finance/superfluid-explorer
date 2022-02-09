@@ -28,7 +28,7 @@ import { searchHistorySelectors } from "../redux/slices/searchHistory.slice";
 import { timeAgo } from "../utils/dateTime";
 import { addressBookSelectors } from "../redux/slices/addressBook.slice";
 import { searchBarPlaceholderText } from "./SearchBar";
-import { useSearch } from "../hooks/useSearchHook";
+import {useSearch} from "../hooks/useSearch";
 
 const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
   open,
@@ -126,7 +126,7 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
           .filter((x) => x.tokens.length || x.accounts.length)
           .map((x) => (
             <Card sx={{ mt: 2 }} component="section" key={x.network.chainId}>
-              <Typography sx={{ p: 1 }} variant="subtitle1" component="h3">
+              <Typography sx={{ p: 1 }} variant="subtitle2" component="h3">
                 <NetworkFormatted network={x.network} />
               </Typography>
               <Divider />
@@ -185,7 +185,7 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
 
         {!!lastSearches.length && (
           <Card sx={{ mt: 2 }}>
-            <Typography variant="subtitle2" sx={{ m: 1 }}>
+            <Typography variant="subtitle2" sx={{ m: 1 }} component="h3">
               Last Searches
             </Typography>
             <Divider />
@@ -208,7 +208,7 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
 
         {addressBookEntries.length ? (
           <Card sx={{ mt: 2 }}>
-            <Typography variant="subtitle2" sx={{ m: 1 }}>
+            <Typography variant="subtitle2" sx={{ m: 1 }} component="h3">
               Address Book
             </Typography>
             <Divider />

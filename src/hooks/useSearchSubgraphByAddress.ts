@@ -1,12 +1,11 @@
+import {useMemo} from "react";
+import {ethers} from "ethers";
+import {useAppDispatch, useAppSelector} from "../redux/hooks";
+import {networks} from "../redux/networks";
 import {sfSubgraph} from "../redux/store";
 import {skipToken} from "@reduxjs/toolkit/query";
-import {ethers} from "ethers";
-import {gql} from "graphql-request";
-import {networks} from "../redux/networks";
-import {useAppDispatch, useAppSelector} from "../redux/hooks";
-import {useMemo} from "react";
-import {addressBookSelectors} from "../redux/slices/addressBook.slice";
 import {searchHistorySlice} from "../redux/slices/searchHistory.slice";
+import {gql} from "graphql-request";
 
 const searchByAddressDocument = gql`
   query Search($addressId: ID, $addressBytes: Bytes) {
@@ -30,20 +29,7 @@ const searchByAddressDocument = gql`
   }
 `;
 
-const searchByTokenSymbolDocument = gql`
-  query Search($tokenSymbol: String) {
-    tokensBySymbol: tokens(
-      where: { isSuperToken: true, symbol_contains: $tokenSymbol }
-    ) {
-      id
-      symbol
-      name
-      isListed
-    }
-  }
-`;
-
-type SubgraphSearchByAddressResult = {
+export type SubgraphSearchByAddressResult = {
   tokensByAddress: {
     id: string;
     symbol: string;
@@ -61,39 +47,6 @@ type SubgraphSearchByAddressResult = {
   }[];
 };
 
-type SubgraphSearchByTokenSymbolResult = {
-  tokensBySymbol: {
-    id: string;
-    symbol: string;
-    name: string;
-    isListed: boolean;
-  }[];
-};
-
-export const useSearchAddressBook = (searchTerm: string) => {
-  const isSearchTermAddress = useMemo(
-    () => ethers.utils.isAddress(searchTerm),
-    [searchTerm]
-  );
-
-  return networks.map((network) => {
-    const addressBookEntries = useAppSelector((state) =>
-      searchTerm !== "" && !isSearchTermAddress
-        ? addressBookSelectors
-            .selectAll(state)
-            .filter((x) => x.chainId === network.chainId)
-        : []
-    );
-
-    return {
-      network: network,
-      accounts: addressBookEntries
-        .filter((x) => x.nameTag.toLowerCase().includes(searchTerm))
-        .map((x) => ({ id: x.address })),
-    };
-  });
-};
-
 export const useSearchSubgraphByAddress = (searchTerm: string) => {
   const isSearchTermAddress = useMemo(
     () => ethers.utils.isAddress(searchTerm),
@@ -109,13 +62,13 @@ export const useSearchSubgraphByAddress = (searchTerm: string) => {
     sfSubgraph.useCustomQuery(
       isSearchTermAddress
         ? {
-            chainId: network.chainId,
-            document: searchByAddressDocument,
-            variables: {
-              addressId: searchTerm.toLowerCase(),
-              addressBytes: searchTerm.toLowerCase(),
-            },
-          }
+          chainId: network.chainId,
+          document: searchByAddressDocument,
+          variables: {
+            addressId: searchTerm.toLowerCase(),
+            addressBytes: searchTerm.toLowerCase(),
+          },
+        }
         : skipToken
     )
   );
@@ -152,25 +105,4 @@ export const useSearchSubgraphByAddress = (searchTerm: string) => {
   }
 
   return results;
-};
-
-export const useSearchSubgraphByTokenSymbol = (searchTerm: string) => {
-  const isSearchTermAddress = useMemo(
-    () => ethers.utils.isAddress(searchTerm),
-    [searchTerm]
-  );
-
-  return networks.map((network) =>
-    sfSubgraph.useCustomQuery(
-      !isSearchTermAddress && searchTerm.length > 2
-        ? {
-            chainId: network.chainId,
-            document: searchByTokenSymbolDocument,
-            variables: {
-              tokenSymbol: searchTerm,
-            },
-          }
-        : skipToken
-    )
-  );
 };
