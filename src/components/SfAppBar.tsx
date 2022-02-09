@@ -4,8 +4,7 @@ import {
   Button,
   Toolbar,
   Container,
-  Stack,
-  Dialog,
+  Stack
 } from "@mui/material";
 import AppLink from "./AppLink";
 import SearchDialog from "./SearchDialog";
@@ -21,7 +20,7 @@ export const SfAppBar = () => {
     <AppBar position="sticky">
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <AppLink href="/">
-          <Box sx={{ filter: "invert(1)" }}>
+          <Box>
             <Image
               src="/superfluid-logo.svg"
               width={150}
