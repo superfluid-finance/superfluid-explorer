@@ -5,9 +5,10 @@ import { gql } from "graphql-request";
 import { PossibleErrors } from "@superfluid-finance/sdk-redux";
 import _ from "lodash";
 import { Network, networks, networksByChainId } from "../redux/networks";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { useMemo } from "react";
 import { addressBookSelectors } from "../redux/slices/addressBook.slice";
+import { searchHistorySlice } from "../redux/slices/searchHistory.slice";
 
 const searchByAddressDocument = gql`
   query Search($addressId: ID, $addressBytes: Bytes) {
@@ -94,7 +95,7 @@ const useSearchAddressBook = (searchTerm: string) => {
 
   return networks.map((network) => {
     const addressBookEntries = useAppSelector((state) =>
-      !isSearchTermAddress
+      searchTerm !== "" && !isSearchTermAddress
         ? addressBookSelectors
             .selectAll(state)
             .filter((x) => x.chainId === network.chainId)
@@ -111,9 +112,9 @@ const useSearchAddressBook = (searchTerm: string) => {
 };
 
 export const useSearch = (searchTerm: string) => {
-  const subgraphSearchByAddressResults = useSearchSubgraph(searchTerm);
+  const subgraphSearchByAddressResults = useSearchSubgraphByAddress(searchTerm);
   const subgraphSearchByTokenSymbolResults =
-    useSearchSubgraphTokens(searchTerm);
+    useSearchSubgraphByTokenSymbol(searchTerm);
   const addressBookResults = useSearchAddressBook(searchTerm);
 
   const subgraphSearchByAddressMappedResults: NetworkSearchResult[] =
@@ -215,13 +216,18 @@ export const useSearch = (searchTerm: string) => {
   });
 };
 
-const useSearchSubgraph = (searchTerm: string) => {
+const useSearchSubgraphByAddress = (searchTerm: string) => {
   const isSearchTermAddress = useMemo(
     () => ethers.utils.isAddress(searchTerm),
     [searchTerm]
   );
 
-  return networks.map((network) =>
+  const dispatch = useAppDispatch();
+  const lastSearchAddress = useAppSelector(
+    (state) => state.searchHistory.ids[0] as string
+  );
+
+  const results = networks.map((network) =>
     sfSubgraph.useCustomQuery(
       isSearchTermAddress
         ? {
@@ -235,9 +241,42 @@ const useSearchSubgraph = (searchTerm: string) => {
         : skipToken
     )
   );
+
+  if (
+    isSearchTermAddress &&
+    searchTerm.toLowerCase() !== lastSearchAddress?.toLowerCase()
+  ) {
+    const areThereAnyResults =
+      results
+        .map(
+          (x) =>
+            (x.data as SubgraphSearchByAddressResult | undefined) ?? {
+              tokensByAddress: [],
+              tokensByUnderlyingAddress: [],
+              accounts: [],
+            }
+        )
+        .map((x) =>
+          ([] as any)
+            .concat(x.tokensByAddress)
+            .concat(x.tokensByUnderlyingAddress)
+            .concat(x.accounts)
+        ).length >= 1;
+
+    if (areThereAnyResults) {
+      dispatch(
+        searchHistorySlice.actions.searchMatched({
+          address: ethers.utils.getAddress(searchTerm),
+          timestamp: new Date().getTime(),
+        })
+      );
+    }
+  }
+
+  return results;
 };
 
-const useSearchSubgraphTokens = (searchTerm: string) => {
+const useSearchSubgraphByTokenSymbol = (searchTerm: string) => {
   const isSearchTermAddress = useMemo(
     () => ethers.utils.isAddress(searchTerm),
     [searchTerm]

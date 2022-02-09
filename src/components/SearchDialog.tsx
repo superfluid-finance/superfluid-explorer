@@ -48,13 +48,14 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
     setTimeout(() => {
       setSearchTermVisible("");
       _setSearchTermDebounced("");
-    }, 50)
+    }, 50);
   };
 
   const router = useRouter();
 
   const [searchTermVisible, setSearchTermVisible] = useState("");
-  const [searchTermDebounced, _setSearchTermDebounced] = useState(searchTermVisible);
+  const [searchTermDebounced, _setSearchTermDebounced] =
+    useState(searchTermVisible);
 
   const [setSearchTermDebounced] = useState(() =>
     _.debounce((searchTerm) => {
@@ -62,7 +63,12 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
     }, 250)
   );
 
-  const networkSearchResults = useSearch(searchTermDebounced.trim());
+  const setSearchTerm = (searchTerm: string) => {
+    setSearchTermVisible(searchTerm);
+    setSearchTermDebounced(searchTerm.trim());
+  };
+
+  const networkSearchResults = useSearch(searchTermDebounced);
 
   useEffect(() => {
     const handleRouteChange = () => {
@@ -102,16 +108,82 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon />
+                {networkSearchResults.some((x) => x.isFetching) ? (
+                  <CircularProgress
+                    size="small"
+                    sx={{ color: "text.secondary" }}
+                  />
+                ) : (
+                  <SearchIcon />
+                )}
               </InputAdornment>
             ),
           }}
-          onChange={(e) => {
-            setSearchTermVisible(e.currentTarget.value);
-            setSearchTermDebounced(e.currentTarget.value);
-          }}
+          onChange={(e) => setSearchTerm(e.currentTarget.value)}
         />
-        {!networkSearchResults.length && lastSearches.length ? (
+
+        {networkSearchResults
+          .filter((x) => x.tokens.length || x.accounts.length)
+          .map((x) => (
+            <Card sx={{ mt: 2 }} component="section" key={x.network.chainId}>
+              <Typography sx={{ p: 1 }} variant="subtitle1" component="h3">
+                <NetworkFormatted network={x.network} />
+              </Typography>
+              <Divider />
+              {x.error ? (
+                <QueryError error={x.error} />
+              ) : (
+                <List disablePadding>
+                  {x.accounts.map((account) => (
+                    <ListItem
+                      disablePadding
+                      sx={{ pt: 0.5, pb: 0.5 }}
+                      key={`${x.network.chainId}_${account.id}`}
+                    >
+                      <NextLink
+                        href={`/${x.network.slugName}/accounts/${account.id}`}
+                        passHref
+                      >
+                        <ListItemButton component="a">
+                          <AccountAddressFormatted
+                            network={x.network}
+                            address={account.id}
+                          />
+                        </ListItemButton>
+                      </NextLink>
+                    </ListItem>
+                  ))}
+                  {x.tokens.map((token) => (
+                    <ListItem
+                      disablePadding
+                      sx={{ mt: 1, mb: 1 }}
+                      key={`${x.network.chainId}_${token.id}`}
+                    >
+                      <NextLink
+                        href={`/${x.network.slugName}/supertokens/${token.id}`}
+                        passHref
+                      >
+                        <ListItemButton component="a">
+                          <SuperTokenFormatted
+                            name={token.name}
+                            symbol={token.symbol}
+                            address={token.id}
+                            isListed={token.isListed}
+                          />
+                        </ListItemButton>
+                      </NextLink>
+                    </ListItem>
+                  ))}
+                </List>
+              )}
+            </Card>
+          ))}
+
+        {(lastSearches.length || addressBookEntries.length) && (
+          <Divider sx={{ my: 3, borderWidth: 1.25 }} />
+        )}
+
+        {lastSearches.length && (
           <Card sx={{ mt: 2 }}>
             <Typography variant="subtitle2" sx={{ m: 1 }}>
               Last Searches
@@ -125,76 +197,16 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
                       primary={`${lastSearch.address} (${timeAgo(
                         lastSearch.timestamp
                       )})`}
-                      onClick={() => setSearchTermVisible(lastSearch.address)}
+                      onClick={() => setSearchTerm(lastSearch.address)}
                     />
                   </ListItemButton>
                 </ListItem>
               ))}
             </List>
           </Card>
-        ) : networkSearchResults.some((x) => x.isFetching) ? (
-          <Grid container justifyContent="center" sx={{ mt: 3 }}>
-            <CircularProgress />
-          </Grid>
-        ) : (
-          networkSearchResults
-            .filter((x) => x.tokens.length || x.accounts.length)
-            .map((x) => (
-              <Card sx={{ mt: 2 }} component="section" key={x.network.chainId}>
-                <Typography sx={{ p: 1 }} variant="subtitle1" component="h3">
-                  <NetworkFormatted network={x.network} />
-                </Typography>
-                <Divider />
-                {x.error ? (
-                  <QueryError error={x.error} />
-                ) : (
-                  <List disablePadding>
-                    {x.accounts.map((account) => (
-                      <ListItem
-                        disablePadding
-                        sx={{ pt: 0.5, pb: 0.5 }}
-                        key={`${x.network.chainId}_${account.id}`}
-                      >
-                        <NextLink
-                          href={`/${x.network.slugName}/accounts/${account.id}`}
-                          passHref
-                        >
-                          <ListItemButton component="a">
-                            <AccountAddressFormatted
-                              network={x.network}
-                              address={account.id}
-                            />
-                          </ListItemButton>
-                        </NextLink>
-                      </ListItem>
-                    ))}
-                    {x.tokens.map((token) => (
-                      <ListItem
-                        disablePadding
-                        sx={{ mt: 1, mb: 1 }}
-                        key={`${x.network.chainId}_${token.id}`}
-                      >
-                        <NextLink
-                          href={`/${x.network.slugName}/supertokens/${token.id}`}
-                          passHref
-                        >
-                          <ListItemButton component="a">
-                            <SuperTokenFormatted
-                              name={token.name}
-                              symbol={token.symbol}
-                              address={token.id}
-                              isListed={token.isListed}
-                            />
-                          </ListItemButton>
-                        </NextLink>
-                      </ListItem>
-                    ))}
-                  </List>
-                )}
-              </Card>
-            ))
         )}
-        {!networkSearchResults.length && addressBookEntries.length ? (
+
+        {addressBookEntries.length ? (
           <Card sx={{ mt: 2 }}>
             <Typography variant="subtitle2" sx={{ m: 1 }}>
               Address Book
