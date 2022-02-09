@@ -1,43 +1,49 @@
-# Next.js with TypeScript example
+<h1 align="center">Welcome to Superfluid Console repository 👋</h1>
+
+<p>
+  <a href="https://twitter.com/Superfluid_HQ/status/" target="_blank">
+    <img alt="Twitter: Superfluid_HQ" src="https://img.shields.io/twitter/follow/Superfluid_HQ.svg?style=social" />
+  </a>
+</p>
+
+### 🏠 [Homepage](https://superfluid.finance)
+
+### ✨ [Superfluid App](https://app.superfluid.finance/)
+
+### ✨ [Superfluid Console](https://console.superfluid.finance/)
+
+### 📖 [Docs](https://docs.superfluid.finance)
+
+The Superfluid Protocol is a framework that realizes the real-time finance vision
+where user accounts are connected together, and transactions can happen between
+user accounts instantaneously as a result.
+
+# Superfluid Console
+
+Superfluid Console is an explorer meant for developers and advanced users of the Superfluid Protocol.
 
 ## How to use
-
-Download the example [or clone the repo](https://github.com/mui-org/material-ui):
-
-<!-- #default-branch-switch -->
-
-```sh
-curl https://codeload.github.com/mui-org/material-ui/tar.gz/master | tar -xz --strip=2  material-ui-master/examples/nextjs-with-typescript
-cd nextjs-with-typescript
-```
 
 Install it and run:
 
 ```sh
-npm install
-npm run dev
+yarn install
+yarn run dev
 ```
 
-or:
+## Technologies
 
-<!-- #default-branch-switch -->
+* TypeScript
+* React
+* Next.js
+* MUI (formerly Material-UI)
+* Redux
+* SDK-redux by Superfluid Finance
 
-[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/mui-org/material-ui/tree/master/examples/nextjs-with-typescript)
+## Deployment
 
-## The idea behind the example
+The `master` branch is automatically deployed using Vercel. PR branches automatically get their own temporary deployments.
 
-The project uses [Next.js](https://github.com/zeit/next.js), which is a framework for server-rendered React apps.
-It includes `@mui/material` and its peer dependencies, including `emotion`, the default style engine in MUI v5. If you prefer, you can [use styled-components instead](https://mui.com/guides/interoperability/#styled-components).
+## Contributing
 
-## The link component
-
-Next.js has [a custom Link component](https://nextjs.org/docs/api-reference/next/link).
-The example folder provides adapters for usage with MUI.
-More information [in the documentation](https://mui.com/guides/routing/#next-js).
-
-## What's next?
-
-<!-- #default-branch-switch -->
-
-You now have a working example project.
-You can head back to the documentation, continuing browsing it from the [templates](https://mui.com/getting-started/templates/) section.
+Interested in contributing? Fantastic -- we love to see it. Create an issue or fork the code and open a pull request. Someone from the Superfluid team will join for discussion and review the code. Keep and eye out for bounties as well! ;)
