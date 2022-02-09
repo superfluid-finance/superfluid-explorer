@@ -179,11 +179,11 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
             </Card>
           ))}
 
-        {(lastSearches.length || addressBookEntries.length) && (
+        {!!(lastSearches.length || addressBookEntries.length) && (
           <Divider sx={{ my: 3, borderWidth: 1.25 }} />
         )}
 
-        {lastSearches.length && (
+        {!!lastSearches.length && (
           <Card sx={{ mt: 2 }}>
             <Typography variant="subtitle2" sx={{ m: 1 }}>
               Last Searches
