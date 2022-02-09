@@ -44,7 +44,11 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
 
   const handleClose = () => {
     close();
-    setSearchTermVisible("");
+    // Give it a second to clear the inputs so the data wouldn't instantly jump for the user (before dialog disappeared).
+    setTimeout(() => {
+      setSearchTermVisible("");
+      _setSearchTermDebounced("");
+    }, 50)
   };
 
   const router = useRouter();
