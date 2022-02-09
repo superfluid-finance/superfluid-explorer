@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import {
   TextField,
   Typography,
@@ -44,13 +44,21 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
 
   const handleClose = () => {
     close();
-    setSearchTerm("");
+    setSearchTermVisible("");
   };
 
   const router = useRouter();
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const networkSearchResults = useSearch(searchTerm.trim());
+  const [searchTermVisible, setSearchTermVisible] = useState("");
+  const [searchTermDebounced, _setSearchTermDebounced] = useState(searchTermVisible);
+
+  const [setSearchTermDebounced] = useState(() =>
+    _.debounce((searchTerm) => {
+      _setSearchTermDebounced(searchTerm);
+    }, 250)
+  );
+
+  const networkSearchResults = useSearch(searchTermDebounced.trim());
 
   useEffect(() => {
     const handleRouteChange = () => {
@@ -86,7 +94,7 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
           fullWidth
           id="outlined-search"
           type="search"
-          value={searchTerm}
+          value={searchTermVisible}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -94,7 +102,10 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
               </InputAdornment>
             ),
           }}
-          onChange={(e) => setSearchTerm(e.currentTarget.value)}
+          onChange={(e) => {
+            setSearchTermVisible(e.currentTarget.value);
+            setSearchTermDebounced(e.currentTarget.value);
+          }}
         />
         {!networkSearchResults.length && lastSearches.length ? (
           <Card sx={{ mt: 2 }}>
@@ -110,7 +121,7 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
                       primary={`${lastSearch.address} (${timeAgo(
                         lastSearch.timestamp
                       )})`}
-                      onClick={() => setSearchTerm(lastSearch.address)}
+                      onClick={() => setSearchTermVisible(lastSearch.address)}
                     />
                   </ListItemButton>
                 </ListItem>
