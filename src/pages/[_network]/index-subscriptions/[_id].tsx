@@ -457,7 +457,7 @@ export const IndexSubscriptionDistributions: FC<{
             return <Skeleton sx={{ width: "100px" }} />;
           }
 
-          // Crazy logic below...
+          // Very touchy logic below...
 
           const indexUpdatedEvent = params.row as IndexUpdatedEvent;
           const closestSubscriptionUnitsUpdatedEvent = _.first(
@@ -466,27 +466,16 @@ export const IndexSubscriptionDistributions: FC<{
             )
           )!;
 
-          const totalUnits = new Decimal(
-            indexUpdatedEvent.totalUnitsPending
-          ).add(new Decimal(indexUpdatedEvent.totalUnitsApproved));
-
-          const subscriptionUnits = new Decimal(
+          const subscriptionUnits = BigNumber.from(
             closestSubscriptionUnitsUpdatedEvent.units
           );
 
-          const poolFraction =
-            totalUnits.isZero() || subscriptionUnits.isZero()
-              ? new Decimal(0)
-              : totalUnits.div(subscriptionUnits);
-
-          const indexDistributionAmount = new Decimal(
+          const indexDistributionAmount = BigNumber.from(
             indexUpdatedEvent.newIndexValue
-          ).sub(new Decimal(indexUpdatedEvent.oldIndexValue));
+          ).sub(BigNumber.from(indexUpdatedEvent.oldIndexValue));
 
           const subscriptionDistributionAmount = indexDistributionAmount
-            .mul(totalUnits)
-            .mul(poolFraction)
-            .toFixed(0);
+            .mul(subscriptionUnits);
 
           return (
             <>
