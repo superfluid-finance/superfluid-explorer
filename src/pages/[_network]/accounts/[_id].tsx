@@ -9,6 +9,7 @@ import {
   ListItemText,
   Skeleton,
   Tab,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
@@ -50,6 +51,8 @@ import NetworkContext from "../../../contexts/NetworkContext";
 import IdContext from "../../../contexts/IdContext";
 import CopyLink from "../../../components/CopyLink";
 import { useRouter } from "next/router";
+import AppLink from "../../../components/AppLink";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 const AccountPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -162,7 +165,21 @@ const AccountPage: NextPage = () => {
                       secondary="Address"
                       primary={
                         accountQuery.data ? (
-                          ethers.utils.getAddress(accountQuery.data.id)
+                          <Tooltip title="View on blockchain explorer">
+                            <AppLink
+                              href={network.getLinkForAddress(
+                                accountQuery.data.id
+                              )}
+                              target="_blank"
+                            >
+                              <Grid container alignItems="center">
+                                {ethers.utils.getAddress(accountQuery.data.id)}
+                                <OpenInNewIcon
+                                  sx={{ ml: 0.5, fontSize: "inherit" }}
+                                />
+                              </Grid>
+                            </AppLink>
+                          </Tooltip>
                         ) : (
                           <SkeletonAddress />
                         )

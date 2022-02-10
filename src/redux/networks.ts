@@ -7,6 +7,7 @@ export type Network = {
   rpcUrl: string,
   subgraphUrl: string
   getLinkForTransaction(txHash: string): string;
+  getLinkForAddress(adderss: string): string;
   isTestnet: boolean
 }
 
@@ -21,6 +22,7 @@ export const networks: Network[] = [
     rpcUrl: `https://ropsten.infura.io/v3/${infuraId}`,
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-ropsten",
     getLinkForTransaction: (txHash: string): string => `https://ropsten.etherscan.io/tx/${txHash}`,
+    getLinkForAddress: (address: string): string => `https://ropsten.etherscan.io/address/${address}`
   },
   {
     displayName: "Rinkeby",
@@ -29,7 +31,8 @@ export const networks: Network[] = [
     isTestnet: true,
     rpcUrl: `https://rinkeby.infura.io/v3/${infuraId}`,
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-rinkeby",
-    getLinkForTransaction: (txHash: string): string => `https://rinkeby.etherscan.io/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://rinkeby.etherscan.io/tx/${txHash}`,
+    getLinkForAddress: (address: string): string => `https://rinkeby.etherscan.io/address/${address}`
   },
   {
     displayName: "Goerli",
@@ -38,7 +41,8 @@ export const networks: Network[] = [
     isTestnet: true,
     rpcUrl: `https://goerli.infura.io/v3/${infuraId}`,
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-goerli",
-    getLinkForTransaction: (txHash: string): string => `https://goerli.etherscan.io/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://goerli.etherscan.io/tx/${txHash}`,
+    getLinkForAddress: (address: string): string => `https://goerli.etherscan.io/address/${address}`
   },
   {
     displayName: "Kovan",
@@ -47,7 +51,8 @@ export const networks: Network[] = [
     isTestnet: true,
     rpcUrl: `https://kovan.infura.io/v3/${infuraId}`,
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-kovan",
-    getLinkForTransaction: (txHash: string): string => `https://kovan.etherscan.io/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://kovan.etherscan.io/tx/${txHash}`,
+    getLinkForAddress: (address: string): string => `https://kovan.etherscan.io/address/${address}`
   },
   {
     displayName: "Gnosis Chain",
@@ -56,7 +61,8 @@ export const networks: Network[] = [
     isTestnet: false,
     rpcUrl: "https://rpc.xdaichain.com/",
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-xdai",
-    getLinkForTransaction: (txHash: string): string => `https://blockscout.com/xdai/mainnet/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://blockscout.com/xdai/mainnet/tx/${txHash}`,
+    getLinkForAddress: (address: string): string => `https://blockscout.com/xdai/mainnet/address/${address}`
   },
   {
     displayName: "Polygon",
@@ -65,7 +71,8 @@ export const networks: Network[] = [
     isTestnet: false,
     rpcUrl: `https://polygon-mainnet.infura.io/v3/${infuraId}`,
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-matic",
-    getLinkForTransaction: (txHash: string): string => `https://polygonscan.com/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://polygonscan.com/tx/${txHash}`,
+    getLinkForAddress: (address: string): string => `https://polygonscan.com/address/${address}`
   },
   {
     displayName: "Mumbai",
@@ -74,7 +81,8 @@ export const networks: Network[] = [
     isTestnet: true,
     rpcUrl: `https://polygon-mumbai.infura.io/v3/${infuraId}`,
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-mumbai",
-    getLinkForTransaction: (txHash: string): string => `https://mumbai.polygonscan.com/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://mumbai.polygonscan.com/tx/${txHash}`,
+    getLinkForAddress: (address: string): string => `https://mumbai.polygonscan.com/address/${address}`
   },
   {
     displayName: "Arbitrum-Rinkeby",
@@ -83,7 +91,8 @@ export const networks: Network[] = [
     isTestnet: true,
     rpcUrl: `https://arbitrum-rinkeby.infura.io/v3/${infuraId}`,
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-arbitrum-rinkeby",
-    getLinkForTransaction: (txHash: string): string => `https://rinkeby-explorer.arbitrum.io/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://rinkeby-explorer.arbitrum.io/tx/${txHash}`,
+    getLinkForAddress: (address: string): string => `https://rinkeby-explorer.arbitrum.io/address/${address}`
   },
   {
     displayName: "Optimism-Kovan",
@@ -92,7 +101,8 @@ export const networks: Network[] = [
     isTestnet: true,
     rpcUrl: `https://optimism-kovan.infura.io/v3/${infuraId}`,
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-kovan",
-    getLinkForTransaction: (txHash: string): string => `https://kovan-optimistic.etherscan.io/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://kovan-optimistic.etherscan.io/tx/${txHash}`,
+    getLinkForAddress: (address: string): string => `https://kovan-optimistic.etherscan.io/address/${address}`
   },
   {
     displayName: "Avalanche-Fuji",
@@ -101,7 +111,8 @@ export const networks: Network[] = [
     isTestnet: true,
     rpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
     subgraphUrl: "https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-avalanche-fuji",
-    getLinkForTransaction: (txHash: string): string => `https://testnet.snowtrace.io/tx/${txHash}`
+    getLinkForTransaction: (txHash: string): string => `https://testnet.snowtrace.io/tx/${txHash}`,
+    getLinkForAddress: (address: string): string => `https://testnet.snowtrace.io/address/${address}`
   },
 ];
 

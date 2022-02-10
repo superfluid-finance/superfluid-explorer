@@ -10,6 +10,7 @@ import {
   ListItemText,
   Skeleton,
   Tab,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
@@ -28,6 +29,9 @@ import NetworkContext from "../../../contexts/NetworkContext";
 import IdContext from "../../../contexts/IdContext";
 import CopyLink from "../../../components/CopyLink";
 import { useRouter } from "next/router";
+import AppLink from "../../../components/AppLink";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { ethers } from "ethers";
 
 const SuperTokenPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -126,7 +130,25 @@ const SuperTokenPage: NextPage = () => {
                   <ListItem divider>
                     <ListItemText
                       secondary="Address"
-                      primary={superToken ? superToken.id : <SkeletonAddress />}
+                      primary={
+                        superToken ? (
+                          <Tooltip title="View on blockchain explorer">
+                            <AppLink
+                              href={network.getLinkForAddress(superToken.id)}
+                              target="_blank"
+                            >
+                              <Grid container alignItems="center">
+                                {ethers.utils.getAddress(superToken.id)}
+                                <OpenInNewIcon
+                                  sx={{ ml: 0.5, fontSize: "inherit" }}
+                                />
+                              </Grid>
+                            </AppLink>
+                          </Tooltip>
+                        ) : (
+                          <SkeletonAddress />
+                        )
+                      }
                     />
                   </ListItem>
                   <ListItem divider>
@@ -160,7 +182,23 @@ const SuperTokenPage: NextPage = () => {
                       secondary="Underlying Token Address"
                       primary={
                         superToken ? (
-                          superToken.underlyingAddress
+                          <Tooltip title="View on blockchain explorer">
+                            <AppLink
+                              href={network.getLinkForAddress(
+                                superToken.underlyingAddress
+                              )}
+                              target="_blank"
+                            >
+                              <Grid container alignItems="center">
+                                {ethers.utils.getAddress(
+                                  superToken.underlyingAddress
+                                )}
+                                <OpenInNewIcon
+                                  sx={{ ml: 0.5, fontSize: "inherit" }}
+                                />
+                              </Grid>
+                            </AppLink>
+                          </Tooltip>
                         ) : (
                           <SkeletonAddress />
                         )
