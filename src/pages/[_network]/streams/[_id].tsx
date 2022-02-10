@@ -28,6 +28,7 @@ import FlowRate from "../../../components/FlowRate";
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
 import StreamPeriodDataGrid from "../../../components/StreamPeriodDataGrid";
 import SuperTokenAddress from "../../../components/SuperTokenAddress";
+import TimeAgo from "../../../components/TimeAgo";
 import IdContext from "../../../contexts/IdContext";
 import NetworkContext from "../../../contexts/NetworkContext";
 import { Network } from "../../../redux/networks";
@@ -158,6 +159,43 @@ export const StreamPageContent: FC<{ streamId: string; network: Network }> = ({
                   }
                 />
               </ListItem>
+              <Grid container>
+                <Grid item xs={6}>
+                  <ListItem divider>
+                    <ListItemText
+                      secondary="Last Updated At"
+                      primary={
+                        stream ? (
+                          <TimeAgo subgraphTime={stream.updatedAtTimestamp} />
+                        ) : (
+                          <Skeleton sx={{ width: "80px" }} />
+                        )
+                      }
+                    />
+                  </ListItem>
+                </Grid>
+                <Grid item xs={6}>
+                  <ListItem divider>
+                    <ListItemText
+                      secondary="Created At"
+                      primary={
+                        stream ? (
+                          <TimeAgo subgraphTime={stream.createdAtTimestamp} />
+                        ) : (
+                          <Skeleton sx={{ width: "80px" }} />
+                        )
+                      }
+                    />
+                  </ListItem>
+                </Grid>
+              </Grid>
+            </List>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Card elevation={2}>
+            <List>
               <ListItem divider>
                 <ListItemText
                   secondary="Current Flow Rate"
@@ -194,29 +232,6 @@ export const StreamPageContent: FC<{ streamId: string; network: Network }> = ({
                     ) : (
                       <Skeleton sx={{ width: "125px" }} />
                     )
-                  }
-                />
-              </ListItem>
-              <ListItem divider>
-                <ListItemText
-                  secondary="Created At"
-                  primary={
-                    stream ? (
-                      new Date(stream.createdAtTimestamp * 1000).toDateString()
-                    ) : (
-                      <Skeleton sx={{ width: "100px" }} />
-                    )
-                  }
-                />
-              </ListItem>
-              <ListItem divider>
-                <ListItemText
-                  secondary="Subgraph ID"
-                  primary={
-                    <>
-                      {streamId}
-                      <CopyClipboard copyText={streamId} />
-                    </>
                   }
                 />
               </ListItem>

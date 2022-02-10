@@ -34,7 +34,6 @@ import SubscriptionUnitsUpdatedEventDataGrid from "../../../components/Subscript
 import NetworkContext from "../../../contexts/NetworkContext";
 import IdContext from "../../../contexts/IdContext";
 import Error from "next/error";
-import CopyClipboard from "../../../components/CopyClipboard";
 import TimeAgo from "../../../components/TimeAgo";
 import _ from "lodash";
 import { GridColDef } from "@mui/x-data-grid";
@@ -42,6 +41,7 @@ import { AppDataGrid } from "../../../components/AppDataGrid";
 import Decimal from "decimal.js";
 import CopyLink from "../../../components/CopyLink";
 import calculateEtherAmountReceived from "../../../logic/calculateEtherAmountReceived";
+import AppLink from "../../../components/AppLink";
 
 const IndexSubscriptionPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -164,9 +164,26 @@ export const IndexSubscriptionPageContent: FC<{
             </Grid>
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+
+        <Grid item xs={12} lg={6}>
           <Card elevation={2}>
             <List>
+              <ListItem divider>
+                <ListItemText
+                  secondary="Index"
+                  primary={
+                    indexSubscription && index ? (
+                      <AppLink
+                        href={`/${network.slugName}/indexes/${index.id}`}
+                      >{`${index.id.substring(0, 6)}... (${
+                        index.indexId
+                      })`}</AppLink>
+                    ) : (
+                      <Skeleton sx={{ width: "50px" }} />
+                    )
+                  }
+                />
+              </ListItem>
               <ListItem divider>
                 <ListItemText
                   secondary="Token"
@@ -212,6 +229,47 @@ export const IndexSubscriptionPageContent: FC<{
                   }
                 />
               </ListItem>
+              <Grid container>
+                <Grid item xs={6}>
+                  <ListItem divider>
+                    <ListItemText
+                      secondary="Last Updated At"
+                      primary={
+                        indexSubscription ? (
+                          <TimeAgo
+                            subgraphTime={indexSubscription.updatedAtTimestamp}
+                          />
+                        ) : (
+                          <Skeleton sx={{ width: "80px" }} />
+                        )
+                      }
+                    />
+                  </ListItem>
+                </Grid>
+                <Grid item xs={6}>
+                  <ListItem divider>
+                    <ListItemText
+                      secondary="Created At"
+                      primary={
+                        indexSubscription ? (
+                          <TimeAgo
+                            subgraphTime={indexSubscription.createdAtTimestamp}
+                          />
+                        ) : (
+                          <Skeleton sx={{ width: "80px" }} />
+                        )
+                      }
+                    />
+                  </ListItem>
+                </Grid>
+              </Grid>
+            </List>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} lg={6}>
+          <Card elevation={2}>
+            <List>
               <ListItem divider>
                 <ListItemText
                   secondary="Units (Pool %)"
@@ -234,7 +292,11 @@ export const IndexSubscriptionPageContent: FC<{
                   secondary="Approved"
                   primary={
                     indexSubscription ? (
-                      indexSubscription.approved.toString()
+                      indexSubscription.approved ? (
+                        "Yes"
+                      ) : (
+                        "No"
+                      )
                     ) : (
                       <Skeleton sx={{ width: "25px" }} />
                     )
@@ -259,45 +321,6 @@ export const IndexSubscriptionPageContent: FC<{
                     ) : (
                       <Skeleton sx={{ width: "100px" }} />
                     )
-                  }
-                />
-              </ListItem>
-              <ListItem divider>
-                <ListItemText
-                  secondary="Last Updated At"
-                  primary={
-                    indexSubscription ? (
-                      <TimeAgo
-                        subgraphTime={indexSubscription.updatedAtTimestamp}
-                      />
-                    ) : (
-                      <Skeleton sx={{ width: "80px" }} />
-                    )
-                  }
-                />
-              </ListItem>
-              <ListItem divider>
-                <ListItemText
-                  secondary="Created At"
-                  primary={
-                    indexSubscription ? (
-                      <TimeAgo
-                        subgraphTime={indexSubscription.createdAtTimestamp}
-                      />
-                    ) : (
-                      <Skeleton sx={{ width: "80px" }} />
-                    )
-                  }
-                />
-              </ListItem>
-              <ListItem divider>
-                <ListItemText
-                  secondary="Subgraph ID"
-                  primary={
-                    <>
-                      {indexSubscriptionId}
-                      <CopyClipboard copyText={indexSubscriptionId} />
-                    </>
                   }
                 />
               </ListItem>

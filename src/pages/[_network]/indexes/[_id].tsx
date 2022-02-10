@@ -129,7 +129,8 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
             </Grid>
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+
+        <Grid item xs={12} lg={6}>
           <Card elevation={2}>
             <List>
               <ListItem divider>
@@ -170,6 +171,43 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
                   }
                 />
               </ListItem>
+              <Grid container>
+                <Grid item xs={6}>
+                  <ListItem divider>
+                    <ListItemText
+                      secondary="Last Updated At"
+                      primary={
+                        index ? (
+                          <TimeAgo subgraphTime={index.updatedAtTimestamp} />
+                        ) : (
+                          <Skeleton sx={{ width: "80px" }} />
+                        )
+                      }
+                    />
+                  </ListItem>
+                </Grid>
+                <Grid item xs={6}>
+                  <ListItem divider>
+                    <ListItemText
+                      secondary="Created At"
+                      primary={
+                        index ? (
+                          <TimeAgo subgraphTime={index.createdAtTimestamp} />
+                        ) : (
+                          <Skeleton sx={{ width: "80px" }} />
+                        )
+                      }
+                    />
+                  </ListItem>
+                </Grid>
+              </Grid>
+            </List>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} lg={6}>
+          <Card elevation={2}>
+            <List>
               <ListItem divider>
                 <ListItemText
                   secondary="Total Units"
@@ -226,41 +264,6 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
                     ) : (
                       <Skeleton sx={{ width: "75px" }} />
                     )
-                  }
-                />
-              </ListItem>
-              <ListItem divider>
-                <ListItemText
-                  secondary="Last Updated At"
-                  primary={
-                    index ? (
-                      <TimeAgo subgraphTime={index.updatedAtTimestamp} />
-                    ) : (
-                      <Skeleton sx={{ width: "80px" }} />
-                    )
-                  }
-                />
-              </ListItem>
-              <ListItem divider>
-                <ListItemText
-                  secondary="Created At"
-                  primary={
-                    index ? (
-                      <TimeAgo subgraphTime={index.createdAtTimestamp} />
-                    ) : (
-                      <Skeleton sx={{ width: "80px" }} />
-                    )
-                  }
-                />
-              </ListItem>
-              <ListItem divider>
-                <ListItemText
-                  secondary="Subgraph ID"
-                  primary={
-                    <>
-                      {indexId}
-                      <CopyClipboard copyText={indexId} />
-                    </>
                   }
                 />
               </ListItem>
