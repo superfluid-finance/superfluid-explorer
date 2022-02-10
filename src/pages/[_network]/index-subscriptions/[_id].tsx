@@ -42,6 +42,7 @@ import Decimal from "decimal.js";
 import CopyLink from "../../../components/CopyLink";
 import calculateEtherAmountReceived from "../../../logic/calculateEtherAmountReceived";
 import AppLink from "../../../components/AppLink";
+import calculatePoolPercentage from "../../../logic/calculatePoolPercentage";
 
 const IndexSubscriptionPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -110,9 +111,10 @@ export const IndexSubscriptionPageContent: FC<{
   useEffect(() => {
     if (index && indexSubscription) {
       setPoolPercentage(
-        new Decimal(indexSubscription.units)
-          .div(new Decimal(index.totalUnits))
-          .mul(100)
+        calculatePoolPercentage(
+          new Decimal(indexSubscription.indexTotalUnits),
+          new Decimal(indexSubscription.units)
+        )
       );
 
       setTotalEtherAmountReceived(
@@ -441,7 +443,7 @@ export const IndexSubscriptionDistributions: FC<{
         field: "timestamp",
         headerName: "Distribution Date",
         sortable: true,
-        flex: 1,
+        flex: 0.5,
         renderCell: (params) => <TimeAgo subgraphTime={params.value} />,
       },
       {

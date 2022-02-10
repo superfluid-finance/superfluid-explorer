@@ -14,6 +14,7 @@ import { Network } from "../redux/networks";
 import { timeAgo } from "../utils/dateTime";
 import TimeAgo from "./TimeAgo";
 import { ethers } from "ethers";
+import AccountAddress from "./AccountAddress";
 
 interface Props {
   network: Network;
@@ -39,27 +40,31 @@ const PublishedIndexDataGrid: FC<Props> = ({
   const columns: GridColDef[] = useMemo(
     () => [
       { field: "id", hide: true, flex: 1 },
-      // {field: 'publisher', headerName: "Publisher", flex: 1, renderCell: (params) => (<AccountAddress network={network} address={params.value} />)},
       {
-        field: "token",
-        headerName: "Token",
+        field: "createdAtTimestamp",
+        headerName: "Created At",
         sortable: true,
-        flex: 1,
+        flex: 0.5,
+        renderCell: (params) => <TimeAgo subgraphTime={params.value} />,
+      },
+      {
+        field: "publisher",
+        headerName: "Publisher",
+        flex: 1.5,
         renderCell: (params) => (
-          <SuperTokenAddress network={network} address={params.value} />
+          <AccountAddress network={network} address={params.value} />
         ),
       },
       {
-        field: "totalUnits",
-        headerName: "Total Units",
-        sortable: true,
-        flex: 1,
+        field: "indexId",
+        headerName: "Index ID",
+        flex: 0.5,
       },
       {
         field: "totalAmountDistributedUntilUpdatedAt",
-        headerName: "Total Units Distributed",
+        headerName: "Total Amount Distributed",
         sortable: true,
-        flex: 1,
+        flex: 1.5,
         renderCell: (params) => (
           <>
             {ethers.utils.formatEther(params.value)}&nbsp;
@@ -73,16 +78,9 @@ const PublishedIndexDataGrid: FC<Props> = ({
         ),
       },
       {
-        field: "createdAtTimestamp",
-        headerName: "Created At",
-        sortable: true,
-        flex: 1,
-        renderCell: (params) => <TimeAgo subgraphTime={params.value} />,
-      },
-      {
         field: "details",
         headerName: "Details",
-        flex: 1,
+        flex: 0.5,
         sortable: false,
         renderCell: (cellParams) => (
           <IndexPublicationDetailsDialog

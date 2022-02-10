@@ -56,22 +56,10 @@ const IndexUpdatedEventDataGrid: FC<Props> = ({
     () => [
       { field: "id", hide: true, sortable: false, flex: 1 },
       {
-        field: "totalUnitsApproved",
-        headerName: "Total Units Approved",
-        sortable: true,
-        flex: 1,
-      },
-      {
-        field: "totalUnitsPending",
-        headerName: "Total Units Pending",
-        sortable: true,
-        flex: 1,
-      },
-      {
         field: "timestamp",
         headerName: "Distribution Date",
         sortable: true,
-        flex: 1,
+        flex: 0.5,
         renderCell: (params) => <TimeAgo subgraphTime={params.value} />,
       },
       {
@@ -79,7 +67,7 @@ const IndexUpdatedEventDataGrid: FC<Props> = ({
         headerName: "Distribution Amount",
         hide: false,
         sortable: false,
-        flex: 1,
+        flex: 1.5,
         renderCell: (params) => {
           return (
             <>
@@ -97,7 +85,7 @@ const IndexUpdatedEventDataGrid: FC<Props> = ({
         },
       },
     ],
-    []
+    [index]
   );
 
   const rows: Distribution[] =

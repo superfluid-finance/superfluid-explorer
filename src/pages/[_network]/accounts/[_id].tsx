@@ -127,7 +127,7 @@ const AccountPage: NextPage = () => {
         </Grid>
 
         <Grid item xs={12}>
-          {network && accountQuery.data && (
+          {(network && accountQuery.data) ? (
             <Typography variant="h4" component="h1">
               <Grid container alignItems="center">
                 <Grid item>
@@ -152,7 +152,7 @@ const AccountPage: NextPage = () => {
                 </Grid>
               </Grid>
             </Typography>
-          )}
+          ) : <SkeletonAddress />}
         </Grid>
 
         <Grid item xs={12}>

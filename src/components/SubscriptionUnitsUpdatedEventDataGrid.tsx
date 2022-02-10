@@ -33,7 +33,7 @@ const SubscriptionUnitsUpdatedEventDataGrid: FC<Props> = ({
       { field: "id", hide: true, sortable: false, flex: 1 },
       {
         field: "timestamp",
-        headerName: "Distribution Date",
+        headerName: "Update Date",
         sortable: true,
         flex: 1,
         renderCell: (params) => <TimeAgo subgraphTime={params.value} />,
