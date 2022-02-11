@@ -74,6 +74,7 @@ export const AccountIndexSubscriptionsDataGrid: FC<{
       {
         field: "totalAmountReceivedUntilUpdatedAt",
         headerName: "Total Amount Received",
+        sort: false,
         flex: 1.5,
         renderCell: (
           params: GridRenderCellParams<string, IndexSubscription>

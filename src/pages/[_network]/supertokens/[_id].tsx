@@ -204,23 +204,29 @@ const SuperTokenPage: NextPage = () => {
                       secondary="Underlying Token Address"
                       primary={
                         superToken ? (
-                          <Tooltip title="View on blockchain explorer">
-                            <AppLink
-                              href={network.getLinkForAddress(
-                                superToken.underlyingAddress
-                              )}
-                              target="_blank"
-                            >
-                              <Grid container alignItems="center">
-                                {ethers.utils.getAddress(
+                          superToken.underlyingAddress ===
+                            "0x0000000000000000000000000000000000000000" ||
+                          superToken.underlyingAddress === "0x" ? (
+                            <>None</>
+                          ) : (
+                            <Tooltip title="View on blockchain explorer">
+                              <AppLink
+                                href={network.getLinkForAddress(
                                   superToken.underlyingAddress
                                 )}
-                                <OpenInNewIcon
-                                  sx={{ ml: 0.5, fontSize: "inherit" }}
-                                />
-                              </Grid>
-                            </AppLink>
-                          </Tooltip>
+                                target="_blank"
+                              >
+                                <Grid container alignItems="center">
+                                  {ethers.utils.getAddress(
+                                    superToken.underlyingAddress
+                                  )}
+                                  <OpenInNewIcon
+                                    sx={{ ml: 0.5, fontSize: "inherit" }}
+                                  />
+                                </Grid>
+                              </AppLink>
+                            </Tooltip>
+                          )
                         ) : (
                           <SkeletonAddress />
                         )

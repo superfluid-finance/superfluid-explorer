@@ -94,7 +94,10 @@ export const IndexSubscriptionPageContent: FC<{
   const [
     subscriptionUnitsUpdatedEventPagingOrdering,
     setSubscriptionUnitsUpdatedEventOrdering,
-  ] = useState<Ordering<SubscriptionUnitsUpdatedEvent_OrderBy> | undefined>();
+  ] = useState<Ordering<SubscriptionUnitsUpdatedEvent_OrderBy> | undefined>({
+    orderBy: "timestamp",
+    orderDirection: "desc",
+  });
   const subscriptionUnitsUpdatedEventQuery =
     sfSubgraph.useSubscriptionUnitsUpdatedEventsQuery({
       chainId: network.chainId,
@@ -386,7 +389,6 @@ export const IndexSubscriptionDistributions: FC<{
     chainId: network.chainId,
     id: indexSubscriptionId,
   });
-
   const indexSubscription: IndexSubscription | undefined | null =
     indexSubscriptionQuery.data;
 
@@ -431,19 +433,37 @@ export const IndexSubscriptionDistributions: FC<{
       },
     });
 
+  const subscriptionEndTime = useMemo<number | undefined>(
+    () =>
+      (subscriptionUnitsUpdatedEventsQuery.data?.data ?? []).find(
+        (x) => x.units === "0"
+      )?.timestamp,
+    [subscriptionUnitsUpdatedEventsQuery]
+  );
+
+  const subscriptionStartTime = useMemo<number | undefined>(
+    () =>
+      (subscriptionUnitsUpdatedEventsQuery.data?.data ?? [])
+        .slice() // To keep the reversing immutable.
+        .reverse()
+        .find((x) => x.units !== "0")?.timestamp,
+    [subscriptionUnitsUpdatedEventsQuery]
+  );
+
   const subscriptionUnitsUpdatedEvents:
     | SubscriptionUnitsUpdatedEvent[]
     | undefined = subscriptionUnitsUpdatedEventsQuery.data?.data ?? [];
 
   const indexUpdatedEventsQuery = sfSubgraph.useIndexUpdatedEventsQuery(
-    index && subscriptionUnitsUpdatedEvents.length
+    index && subscriptionStartTime
       ? {
           chainId: network.chainId,
           filter: {
             index: index.id,
-            timestamp_gte: _.last(
-              subscriptionUnitsUpdatedEvents
-            )!.timestamp.toString(),
+            timestamp_gte: subscriptionStartTime.toString(),
+            ...(subscriptionEndTime
+              ? { timestamp_lte: subscriptionEndTime.toString() }
+              : {}),
           },
           order: indexUpdatedEventOrdering,
           pagination: indexUpdatedEventPaging,
@@ -475,36 +495,52 @@ export const IndexSubscriptionDistributions: FC<{
             return <Skeleton sx={{ width: "100px" }} />;
           }
 
-          // Crazy logic below...
+          // Very touchy logic below...
 
           const indexUpdatedEvent = params.row as IndexUpdatedEvent;
-          const closestSubscriptionUnitsUpdatedEvent = _.first(
-            subscriptionUnitsUpdatedEvents.filter(
+
+          let closestSubscriptionUnitsUpdatedEvent =
+            subscriptionUnitsUpdatedEvents.find(
               (x) => x.timestamp <= indexUpdatedEvent.timestamp
-            )
-          )!;
+            )!;
 
-          const totalUnits = new Decimal(
-            indexUpdatedEvent.totalUnitsPending
-          ).add(new Decimal(indexUpdatedEvent.totalUnitsApproved));
+          if (
+            indexUpdatedEvent.timestamp ===
+            closestSubscriptionUnitsUpdatedEvent.timestamp
+          ) {
+            // *sigh* the timestamps match so we have to look at log indexes as well to know which came first...
 
-          const subscriptionUnits = new Decimal(
+            const indexUpdatedEventLogIndex = Number(
+              _.last(indexUpdatedEvent.id.split("-"))
+            );
+            const subscriptionUnitsUpdatedEventLogIndex = Number(
+              _.last(closestSubscriptionUnitsUpdatedEvent.id.split("-"))
+            );
+
+            if (
+              subscriptionUnitsUpdatedEventLogIndex > indexUpdatedEventLogIndex
+            ) {
+              closestSubscriptionUnitsUpdatedEvent =
+                subscriptionUnitsUpdatedEvents.find(
+                  (x) => x.timestamp < indexUpdatedEvent.timestamp
+                )!;
+            }
+          }
+
+          if (!closestSubscriptionUnitsUpdatedEvent) {
+            return <>0</>;
+          }
+
+          const subscriptionUnits = BigNumber.from(
             closestSubscriptionUnitsUpdatedEvent.units
           );
 
-          const poolFraction =
-            totalUnits.isZero() || subscriptionUnits.isZero()
-              ? new Decimal(0)
-              : totalUnits.div(subscriptionUnits);
+          const indexDistributionAmount = BigNumber.from(
+            indexUpdatedEvent.newIndexValue // Index is always incrementing bigger.
+          ).sub(BigNumber.from(indexUpdatedEvent.oldIndexValue));
 
-          const indexDistributionAmount = new Decimal(
-            indexUpdatedEvent.newIndexValue
-          ).sub(new Decimal(indexUpdatedEvent.oldIndexValue));
-
-          const subscriptionDistributionAmount = indexDistributionAmount
-            .mul(totalUnits)
-            .mul(poolFraction)
-            .toFixed(0);
+          const subscriptionDistributionAmount =
+            indexDistributionAmount.mul(subscriptionUnits);
 
           return (
             <>
