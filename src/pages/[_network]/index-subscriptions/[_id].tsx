@@ -43,6 +43,8 @@ import CopyLink from "../../../components/CopyLink";
 import calculateEtherAmountReceived from "../../../logic/calculateEtherAmountReceived";
 import AppLink from "../../../components/AppLink";
 import calculatePoolPercentage from "../../../logic/calculatePoolPercentage";
+import SubgraphQueryLink from "../../../components/SubgraphQueryLink";
+import { gql } from "graphql-request";
 
 const IndexSubscriptionPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -164,6 +166,22 @@ export const IndexSubscriptionPageContent: FC<{
                 <CopyLink
                   IconProps={{ fontSize: "large" }}
                   localPath={`/${network.slugName}/index-subscriptions/${indexSubscriptionId}`}
+                />
+              </Grid>
+              <Grid item>
+                <SubgraphQueryLink
+                  network={network}
+                  query={gql`
+                    query ($id: ID!) {
+                      indexSubscription(id: $id) {
+                        indexValueUntilUpdatedAt
+                        approved
+                        totalAmountReceivedUntilUpdatedAt
+                        units
+                      }
+                    }
+                  `}
+                  variables={`{ "id": "${indexSubscriptionId.toLowerCase()}" }`}
                 />
               </Grid>
             </Grid>

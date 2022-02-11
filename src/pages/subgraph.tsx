@@ -1,13 +1,15 @@
 import dynamic from "next/dynamic";
-import {NextPage} from "next";
+import { NextPage } from "next";
+import FullPageLoader from "../components/FullPageLoader";
 
-const DynamicLazyComponent = dynamic(() => import('../components/SubgraphExplorer'), {
+const NoSsr = dynamic(() => import("../components/SubgraphExplorer"), {
   ssr: false,
-})
+  loading: () => <FullPageLoader />,
+});
 
 // NOTE: Don't start loading the Subgraph component on the server.
 const SubgraphPage: NextPage = () => {
-  return (<DynamicLazyComponent />);
-}
+  return <NoSsr />;
+};
 
 export default SubgraphPage;

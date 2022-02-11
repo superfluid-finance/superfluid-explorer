@@ -34,6 +34,8 @@ import CopyClipboard from "../../../components/CopyClipboard";
 import TimeAgo from "../../../components/TimeAgo";
 import { ethers } from "ethers";
 import CopyLink from "../../../components/CopyLink";
+import { gql } from "graphql-request";
+import SubgraphQueryLink from "../../../components/SubgraphQueryLink";
 
 const IndexPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -124,6 +126,25 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
                 <CopyLink
                   IconProps={{ fontSize: "large" }}
                   localPath={`/${network.slugName}/indexes/${indexId}`}
+                />
+              </Grid>
+              <Grid item>
+                <SubgraphQueryLink
+                  network={network}
+                  query={gql`
+                    query ($id: ID!) {
+                      index(id: $id) {
+                        indexId
+                        indexValue
+                        totalAmountDistributedUntilUpdatedAt
+                        totalSubscriptionsWithUnits
+                        totalUnits
+                        totalUnitsApproved
+                        totalUnitsPending
+                      }
+                    }
+                  `}
+                  variables={`{ "id": "${indexId.toLowerCase()}" }`}
                 />
               </Grid>
             </Grid>

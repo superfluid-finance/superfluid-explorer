@@ -32,6 +32,8 @@ import { useRouter } from "next/router";
 import AppLink from "../../../components/AppLink";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { ethers } from "ethers";
+import SubgraphQueryLink from "../../../components/SubgraphQueryLink";
+import { gql } from "graphql-request";
 
 const SuperTokenPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -105,6 +107,26 @@ const SuperTokenPage: NextPage = () => {
                   <CopyLink
                     IconProps={{ fontSize: "large" }}
                     localPath={`/${network.slugName}/supertokens/${address}`}
+                  />
+                </Grid>
+                <Grid item>
+                  <SubgraphQueryLink
+                    network={network}
+                    query={gql`
+                      query ($id: ID!) {
+                        token(id: $id) {
+                          name
+                          symbol
+                          isSuperToken
+                          isListed
+                          underlyingAddress
+                          decimals
+                          createdAtTimestamp
+                          createdAtBlockNumber
+                        }
+                      }
+                    `}
+                    variables={`{ "id": "${address.toLowerCase()}" }`}
                   />
                 </Grid>
               </Grid>

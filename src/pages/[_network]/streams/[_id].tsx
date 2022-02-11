@@ -21,18 +21,19 @@ import { NextPage } from "next";
 import Error from "next/error";
 import { FC, useContext, useState } from "react";
 import AccountAddress from "../../../components/AccountAddress";
-import CopyClipboard from "../../../components/CopyClipboard";
 import CopyLink from "../../../components/CopyLink";
 import FlowingBalance from "../../../components/FlowingBalance";
 import FlowRate from "../../../components/FlowRate";
 import SkeletonAddress from "../../../components/skeletons/SkeletonAddress";
 import StreamPeriodDataGrid from "../../../components/StreamPeriodDataGrid";
+import SubgraphQueryLink from "../../../components/SubgraphQueryLink";
 import SuperTokenAddress from "../../../components/SuperTokenAddress";
 import TimeAgo from "../../../components/TimeAgo";
 import IdContext from "../../../contexts/IdContext";
 import NetworkContext from "../../../contexts/NetworkContext";
 import { Network } from "../../../redux/networks";
 import { sfSubgraph } from "../../../redux/store";
+import { gql } from "graphql-request";
 
 const StreamPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -105,6 +106,29 @@ export const StreamPageContent: FC<{ streamId: string; network: Network }> = ({
                 <CopyLink
                   IconProps={{ fontSize: "large" }}
                   localPath={`/${network.slugName}/streams/${streamId}`}
+                />
+              </Grid>
+              <Grid item>
+                <SubgraphQueryLink
+                  network={network}
+                  query={gql`
+                    query ($id: ID!) {
+                      stream(id: $id) {
+                        currentFlowRate
+                        sender {
+                          id
+                        }
+                        receiver {
+                          id
+                        }
+                        token {
+                          symbol
+                        }
+                        streamedUntilUpdatedAt
+                      }
+                    }
+                  `}
+                  variables={`{ "id": "${streamId.toLowerCase()}" }`}
                 />
               </Grid>
             </Grid>

@@ -66,7 +66,7 @@ function MyApp(props: MyAppProps) {
             <Layout>
               <Component {...pageProps} />
             </Layout>
-            <Footer />
+            <Footer  />
           </Box>
         </Box>
       </ThemeProvider>
