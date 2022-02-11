@@ -53,6 +53,8 @@ import CopyLink from "../../../components/CopyLink";
 import { useRouter } from "next/router";
 import AppLink from "../../../components/AppLink";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import SubgraphQueryLink from "../../../components/SubgraphQueryLink";
+import { gql } from "graphql-request";
 
 const AccountPage: NextPage = () => {
   const network = useContext(NetworkContext);
@@ -127,7 +129,7 @@ const AccountPage: NextPage = () => {
         </Grid>
 
         <Grid item xs={12}>
-          {(network && accountQuery.data) ? (
+          {network && accountQuery.data ? (
             <Typography variant="h4" component="h1">
               <Grid container alignItems="center">
                 <Grid item>
@@ -150,9 +152,28 @@ const AccountPage: NextPage = () => {
                     localPath={`/${network.slugName}/accounts/${address}`}
                   />
                 </Grid>
+                <Grid item>
+                  <SubgraphQueryLink
+                    network={network}
+                    query={gql`
+                      query ($id: ID = "") {
+                        account(id: $id) {
+                          createdAtTimestamp
+                          createdAtBlockNumber
+                          isSuperApp
+                          updatedAtBlockNumber
+                          updatedAtTimestamp
+                        }
+                      }
+                    `}
+                    variables={`{ "id": "${address.toLowerCase()}" }`}
+                  />
+                </Grid>
               </Grid>
             </Typography>
-          ) : <SkeletonAddress />}
+          ) : (
+            <SkeletonAddress />
+          )}
         </Grid>
 
         <Grid item xs={12}>

@@ -1,38 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import GraphiQL from 'graphiql';
-import { buildClientSchema, getIntrospectionQuery } from 'graphql';
-import type {
-  GraphQLField,
-  GraphQLArgument,
-  GraphQLInputField,
-  GraphQLEnumType,
-  GraphQLScalarType,
-} from 'graphql';
-import { request } from 'graphql-request';
-import type { GraphQLSchema } from 'graphql';
+import React, { useEffect, useState } from "react";
+import GraphiQL from "graphiql";
+import {
+  buildClientSchema,
+  getIntrospectionQuery,
+  print,
+  parse,
+} from "graphql";
+import { request } from "graphql-request";
+import type { GraphQLSchema } from "graphql";
 import useSfTheme from "../styles/useSfTheme";
-import 'graphiql/graphiql.min.css';
+import "graphiql/graphiql.min.css";
 // @ts-ignore
-import GraphiQLExplorer from 'graphiql-explorer';
-import { Box, Card, Container } from "@mui/material";
-import FullPageLoader from "./FullPageLoader"
+import GraphiQLExplorer from "graphiql-explorer";
+import { Box } from "@mui/material";
+import FullPageLoader from "./FullPageLoader";
 import _ from "lodash";
-import { networks, networksByChainId } from "../redux/networks";
+import { networks, networksByName } from "../redux/networks";
+import { useRouter } from "next/router";
 
 const DocumentationLinks = [
   {
-    name: 'Subgraph',
-    link: 'https://docs.superfluid.finance/superfluid/docs/subgraph',
+    name: "Subgraph",
+    link: "https://docs.superfluid.finance/superfluid/docs/subgraph",
   },
   {
-    name: 'Protocol',
-    link: 'https://docs.superfluid.finance/superfluid',
+    name: "Protocol",
+    link: "https://docs.superfluid.finance/superfluid",
   },
 ];
 
 const ExampleQueries = [
   {
-    name: 'Supertokens',
+    name: "Supertokens",
     query: `query getSuperfluidTokens {
   tokens(where: {isListed: true, isSuperToken: true}, first: 25) {
     superTokenAddress: id
@@ -44,7 +43,7 @@ const ExampleQueries = [
 `,
   },
   {
-    name: 'Accounts',
+    name: "Accounts",
     query: `query getAccounts {
   accounts(first: 25) {
     id
@@ -58,7 +57,7 @@ const ExampleQueries = [
 `,
   },
   {
-    name: 'Flow events paginated',
+    name: "Flow events paginated",
     query: `query getFlowEvents($timePaginator: BigInt! = "0") {
   flowUpdatedEvents(first: 25, orderBy: timestamp, where: {timestamp_gt: $timePaginator}) {
     id
@@ -85,11 +84,30 @@ const getGraphQLIntrospectionClientSchemaMemoized = _.memoize(
 );
 
 const SubgraphExplorer: React.FC = () => {
-  const [chainId, setChainId] = useState(100);
-  const theme = useSfTheme();
-  const isDarkTheme = theme.palette.mode === 'dark';
+  const router = useRouter();
+  const { _network, _query, _variables } = router.query;
 
-  const network = networksByChainId.get(chainId)!;
+  useEffect(() => {
+    if (router.isReady) {
+      if (_network) {
+        setNetworkName(_network as string);
+      }
+
+      if (_query) {
+        setQuery(print(parse(atob(_query as string)))); // Prettify the crushed query.
+      }
+
+      if (_variables) {
+        setVariables(atob(_variables as string));
+      }
+    }
+  }, [router, _network, _query, _variables]);
+
+  const [networkName, setNetworkName] = useState("matic");
+  const theme = useSfTheme();
+  const isDarkTheme = theme.palette.mode === "dark";
+
+  const network = networksByName.get(networkName)!;
   const subgraphUrl = network.subgraphUrl;
 
   const [schema, setSchema] = useState<GraphQLSchema | null>(null);
@@ -97,14 +115,21 @@ const SubgraphExplorer: React.FC = () => {
   const [isInitializing, setIsInitializing] = useState(true);
   const [isNetworkLoading, setIsNetworkLoading] = useState(false);
   const [fetchedFromUrl, setFetchedFromUrl] = useState<string | null>(null);
-  const [query, setQuery] = useState(
-    `# Hi! Welcome to Superfluid's GraphiQL instance for querying Superfluid's Subgraphs (powered by The Graph).
+  const [query, setQuery] =
+    useState(`# Hi! Welcome to Superfluid's GraphiQL instance for querying Superfluid's Subgraphs (powered by The Graph).
 
 # Try the Explorer on the left to build up queries by just by clicking.
 # Try the Documentation Explorer on the right to browse the schema with comments.
 # Try the Examples button on the toolbar to select pre-made GraphQL queries.
-`
-  );
+
+query MyQuery {
+  __typename # Placeholder value
+}
+`);
+
+  const [variables, setVariables] = useState<string | undefined>(`{
+  "variableName": "value"
+}`);
   const graphiql = React.createRef<GraphiQL>();
 
   useEffect(() => {
@@ -122,7 +147,7 @@ const SubgraphExplorer: React.FC = () => {
       }
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId]);
+  }, [networkName]);
 
   const handlePrettifyQuery = () => {
     if (graphiql) {
@@ -131,7 +156,7 @@ const SubgraphExplorer: React.FC = () => {
   };
 
   const updateQuery = (query: string | undefined) => {
-    setQuery(query ?? '');
+    setQuery(query ?? "");
   };
 
   return (
@@ -139,35 +164,34 @@ const SubgraphExplorer: React.FC = () => {
       {isInitializing ? (
         <FullPageLoader />
       ) : (
-        <Box component="div" className="graphiql-container" sx={{ height: "100%", filter: `invert(${isDarkTheme ? 0.9 : 0})` }}>
+        <Box
+          component="div"
+          className="graphiql-container"
+          sx={{ height: "100%", filter: `invert(${isDarkTheme ? 0.925 : 0})` }}
+        >
           <GraphiQLExplorer
             schema={schema}
             query={query}
             onEdit={updateQuery}
-            makeDefaultArg={() => false}
             explorerIsOpen={isExplorerOpen}
             onToggleExplorer={() => setIsExplorerOpen(!isExplorerOpen)}
-            getDefaultScalarArgValue={(
-              parentField: GraphQLField<any, any>,
-              arg: GraphQLArgument | GraphQLInputField,
-              argType: GraphQLEnumType | GraphQLScalarType
-            ) => GraphiQLExplorer.defaultValue(argType)}
           />
           {schema && (
             <GraphiQL
               ref={graphiql}
               schema={schema}
               query={query}
+              variables={variables}
               onEditQuery={updateQuery}
               fetcher={async (graphQLParams) => {
                 const data = await fetch(subgraphUrl, {
-                  method: 'POST',
+                  method: "POST",
                   headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
                   },
                   body: JSON.stringify(graphQLParams),
-                  credentials: 'same-origin',
+                  credentials: "same-origin",
                 });
                 setFetchedFromUrl(subgraphUrl);
                 return data.json().catch(() => data.text());
@@ -186,7 +210,7 @@ const SubgraphExplorer: React.FC = () => {
                   label="Explorer"
                 />
                 <GraphiQL.Menu
-                  label={isNetworkLoading ? 'Loading...' : network.displayName}
+                  label={isNetworkLoading ? "Loading..." : network.displayName}
                   title="Select Network"
                 >
                   {Object.values(networks).map((network) => (
@@ -194,14 +218,11 @@ const SubgraphExplorer: React.FC = () => {
                       key={network.chainId}
                       label={network.displayName}
                       title={network.subgraphUrl}
-                      onSelect={() => setChainId(Number(network.chainId))}
+                      onSelect={() => setNetworkName(network.slugName)}
                     />
                   ))}
                 </GraphiQL.Menu>
-                <GraphiQL.Menu
-                  label="Examples"
-                  title="Select Example Queries"
-                >
+                <GraphiQL.Menu label="Examples" title="Select Example Queries">
                   {ExampleQueries.map((val) => {
                     return (
                       <GraphiQL.MenuItem
@@ -215,17 +236,14 @@ const SubgraphExplorer: React.FC = () => {
                     );
                   })}
                 </GraphiQL.Menu>
-                <GraphiQL.Menu
-                  label="Superfluid Docs"
-                  title="Superfluid Docs"
-                >
+                <GraphiQL.Menu label="Superfluid Docs" title="Superfluid Docs">
                   {DocumentationLinks.map((val) => {
                     return (
                       <GraphiQL.MenuItem
                         key={val.name}
                         label={val.name}
                         title={val.name}
-                        onSelect={() => window.open(val.link, '_blank')}
+                        onSelect={() => window.open(val.link, "_blank")}
                       >
                         {val.name}
                       </GraphiQL.MenuItem>
@@ -234,9 +252,7 @@ const SubgraphExplorer: React.FC = () => {
                 </GraphiQL.Menu>
               </GraphiQL.Toolbar>
               {fetchedFromUrl ? (
-                <GraphiQL.Footer>
-                  Result from: {fetchedFromUrl}
-                </GraphiQL.Footer>
+                <GraphiQL.Footer>Result from: {fetchedFromUrl}</GraphiQL.Footer>
               ) : (
                 <></>
               )}
@@ -249,4 +265,3 @@ const SubgraphExplorer: React.FC = () => {
 };
 
 export default SubgraphExplorer;
-

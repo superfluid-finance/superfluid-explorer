@@ -12,6 +12,7 @@ import SelectThemeButton from "./SelectThemeButton";
 import Image from "next/image";
 import SearchBar from "./SearchBar";
 import { FC, useState } from "react";
+import SubgraphIcon from "./SubgraphIcon";
 
 export const SfAppBar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -69,6 +70,7 @@ export const SfAppBar = () => {
               size="medium"
               variant="contained"
             >
+              <SubgraphIcon sx={{ mr: 1 }}  />
               Subgraph Explorer
             </Button>
           </AppLink>
