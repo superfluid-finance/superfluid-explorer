@@ -12,7 +12,6 @@ import { IndexUpdatedEvent } from "@superfluid-finance/sdk-core";
 import { BigNumber, ethers } from "ethers";
 import TimeAgo from "./TimeAgo";
 import SuperTokenAddress from "./SuperTokenAddress";
-import { Network } from "../redux/networks";
 import NetworkContext from "../contexts/NetworkContext";
 
 interface Props {
@@ -34,13 +33,14 @@ interface Distribution {
   distributionAmount: BigNumber;
 }
 
-const calculateDistributionAmount = (
-  index: Index,
-  event: IndexUpdatedEvent
-): BigNumber => {
-  return BigNumber.from(event.newIndexValue)
-    .mul(index.totalUnits)
-    .sub(BigNumber.from(event.oldIndexValue).mul(index.totalUnits));
+const calculateDistributionAmount = (event: IndexUpdatedEvent): BigNumber => {
+  const totalUnits = BigNumber.from(event.totalUnitsApproved).add(
+    BigNumber.from(event.totalUnitsPending)
+  );
+  const indexValueDifference = BigNumber.from(event.newIndexValue).sub(
+    BigNumber.from(event.oldIndexValue)
+  );
+  return indexValueDifference.mul(totalUnits);
 };
 
 const IndexUpdatedEventDataGrid: FC<Props> = ({
@@ -92,10 +92,7 @@ const IndexUpdatedEventDataGrid: FC<Props> = ({
     queryResult.data && index
       ? queryResult.data.data.map((indexUpdatedEvent) => ({
           id: indexUpdatedEvent.id,
-          distributionAmount: calculateDistributionAmount(
-            index,
-            indexUpdatedEvent
-          ),
+          distributionAmount: calculateDistributionAmount(indexUpdatedEvent),
           timestamp: indexUpdatedEvent.timestamp,
           totalUnitsApproved: indexUpdatedEvent.totalUnitsApproved,
           totalUnitsPending: indexUpdatedEvent.totalUnitsPending,
