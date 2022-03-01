@@ -11,8 +11,6 @@ export type Network = {
   isTestnet: boolean
 }
 
-const infuraId = ensureEnvironmentVariable(process.env.NEXT_PUBLIC_INFURA_ID, "NEXT_PUBLIC_INFURA_ID");
-
 export const networks: Network[] = [
   {
     displayName: "Ropsten",
