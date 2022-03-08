@@ -18,6 +18,7 @@ const FlowingBalanceWithToken: FC<
       &nbsp;
       {tokenQuery.data ? (
         <AppLink
+          data-cy={"token-link"}
           className="address"
           href={`/${network.slugName}/supertokens/${tokenAddress}`}
         >

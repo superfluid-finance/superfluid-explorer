@@ -12,7 +12,7 @@ const FlowRate: FC<{
   const streamGranularity = useAppSelector(
     (state) => state.appPreferences.streamGranularity
   );
-  
+
   if (flowRate === "0") {
     return <Box component="span">0</Box>;
   }
@@ -23,7 +23,7 @@ const FlowRate: FC<{
     .toString();
 
   return (
-    <Tooltip title={`${flowRate} wei/s`} placement="right" arrow>
+    <Tooltip data-cy={"flowrate"} title={`${flowRate} wei/s`} placement="right" arrow>
       <Box component="span">
         <EtherFormatted wei={flowRateConverted} />/{streamGranularity}
       </Box>

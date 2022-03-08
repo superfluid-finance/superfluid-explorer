@@ -1,0 +1,44 @@
+name: Dev CI/CD
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+
+jobs:
+
+  test-suites:
+    timeout-minutes: 60
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node16.5.0-chrome97-ff96
+      options: --user 1001
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [ chrome , firefox ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup firefox
+        uses: browser-actions/setup-firefox@latest
+        if: ${{ matrix.browser == 'firefox' }}
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+
+      - name: Cypress tests
+        uses: cypress-io/github-action@v2
+        with:
+          browser: ${{ matrix.browser }}
+          headless: true
+          start: yarn dev
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 180
+          record: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_CONSOLE_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.CI_GITHUB_TOKEN }}

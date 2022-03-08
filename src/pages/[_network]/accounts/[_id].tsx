@@ -188,6 +188,7 @@ const AccountPage: NextPage = () => {
                 <List>
                   <ListItem divider>
                     <ListItemText
+                      data-cy={"address"}
                       secondary="Address"
                       primary={
                         accountQuery.data ? (
@@ -207,6 +208,7 @@ const AccountPage: NextPage = () => {
                   </ListItem>
                   <ListItem divider>
                     <ListItemText
+                      data-cy={"account-type"}
                       secondary="Account Type"
                       primary={
                         accountQuery.data ? (
@@ -227,6 +229,7 @@ const AccountPage: NextPage = () => {
                 <List>
                   <ListItem divider>
                     <ListItemText
+                      data-cy={"network-name"}
                       secondary="Network"
                       primary={
                         network ? (
@@ -255,6 +258,7 @@ const AccountPage: NextPage = () => {
                 >
                   <Tab
                     label="Streams"
+                    data-cy={"streams-tab"}
                     value="streams"
                     onMouseEnter={() => {
                       if (network) {
@@ -278,6 +282,7 @@ const AccountPage: NextPage = () => {
                     }}
                   />
                   <Tab
+                    data-cy={"indexes-tab"}
                     label="Indexes"
                     value="indexes"
                     onMouseEnter={() => {
@@ -301,8 +306,8 @@ const AccountPage: NextPage = () => {
                       }
                     }}
                   />
-                  <Tab label="Super Tokens" value="tokens" />
-                  <Tab label="Events" value="events" />
+                  <Tab data-cy={"super-tokens-tab"} label="Super Tokens" value="tokens" />
+                  <Tab data-cy={"events-tab"} label="Events" value="events" />
                 </TabList>
               </Box>
 

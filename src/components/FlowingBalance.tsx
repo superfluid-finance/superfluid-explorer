@@ -77,6 +77,7 @@ const FlowingBalance: FC<FlowingBalanceProps> = ({
 
   return (
     <Box
+      data-cy={"total-streamed"}
       component="span"
       sx={{
         textOverflow: "ellipsis",

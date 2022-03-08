@@ -142,6 +142,7 @@ const SuperTokenPage: NextPage = () => {
                 <List>
                   <ListItem divider>
                     <ListItemText
+                      data-cy={"token-symbol"}
                       secondary="Symbol"
                       primary={
                         superToken ? superToken.symbol : <SkeletonTokenSymbol />
@@ -150,6 +151,7 @@ const SuperTokenPage: NextPage = () => {
                   </ListItem>
                   <ListItem divider>
                     <ListItemText
+                      data-cy={"token-address"}
                       secondary="Address"
                       primary={
                         superToken ? (
@@ -174,6 +176,7 @@ const SuperTokenPage: NextPage = () => {
                   </ListItem>
                   <ListItem divider>
                     <ListItemText
+                      data-cy={"token-listed-status"}
                       secondary="Listed"
                       primary={
                         superToken ? (
@@ -194,12 +197,14 @@ const SuperTokenPage: NextPage = () => {
                 <List>
                   <ListItem divider>
                     <ListItemText
+                      data-cy={"token-fancy-network"}
                       secondary="Network"
                       primary={<NetworkDisplay network={network} />}
                     />
                   </ListItem>
                   <ListItem divider>
                     <ListItemText
+                      data-cy={"underlying-token-address"}
                       secondary="Underlying Token Address"
                       primary={
                         superToken ? (
@@ -248,9 +253,9 @@ const SuperTokenPage: NextPage = () => {
                   onChange={(_event, newValue: string) => setTabValue(newValue)}
                   aria-label="tabs"
                 >
-                  <Tab label="Streams" value="streams" />
-                  <Tab label="Indexes" value="indexes" />
-                  <Tab label="Events" value="events" />
+                  <Tab data-cy={"streams-tab"} label="Streams" value="streams" />
+                  <Tab data-cy={"indexes-tab"} label="Indexes" value="indexes" />
+                  <Tab data-cy={"events-tab"} label="Events" value="events" />
                 </TabList>
               </Box>
               <Box>
