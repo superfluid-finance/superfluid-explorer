@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { red } from "@mui/material/colors";
+import { grey, red } from "@mui/material/colors";
 
 // Create a theme instance.
 export const createSfTheme = (mode: "light" | "dark" = "light") =>
@@ -30,6 +30,66 @@ export const createSfTheme = (mode: "light" | "dark" = "light") =>
         // The properties to apply
         defaultProps: {
           disableRipple: true, // No more ripple, on the whole application!
+        },
+      },
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            borderRadius: "8px",
+          },
+        },
+      },
+      MuiTable: {
+        styleOverrides: {
+          root: {
+            borderRadius: "7px",
+            border: `1px solid ${
+              mode === "light"
+                ? "rgba(224, 224, 224, 1)"
+                : "rgba(81, 81, 81, 1)"
+            }`,
+            borderCollapse: "initial",
+          },
+        },
+      },
+      MuiTableHead: {
+        styleOverrides: {
+          root: {
+            // This makes sortable column headings visible when table header is hovered:
+            "&:hover .MuiTableSortLabel-root:not(.Mui-active):not(:hover) .MuiTableSortLabel-icon":
+              {
+                opacity: 0.5,
+              },
+          },
+        },
+      },
+      MuiTableBody: {
+        styleOverrides: {
+          root: {
+            position: "relative",
+            // This removes border bottom from last row of the table.
+            "tr:last-child td": { border: 0 },
+          },
+        },
+      },
+      MuiTableCell: {
+        styleOverrides: {
+          body: {
+            padding: "0 16px",
+            height: "52px",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+          },
+          footer: {
+            padding: "0 8px",
+            height: "56px",
+            borderTop: `1px solid ${
+              mode === "light"
+                ? "rgba(224, 224, 224, 1)"
+                : "rgba(81, 81, 81, 1)"
+            }`,
+            borderBottom: "initial",
+          },
         },
       },
     },

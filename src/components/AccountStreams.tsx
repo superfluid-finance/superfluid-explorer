@@ -1,10 +1,9 @@
-import { Box, Typography } from "@mui/material";
 import { FC, ReactElement } from "react";
 import { Network } from "../redux/networks";
-import AccountStreamsIncomingDataGrid from "./AccountStreamsIncomingDataGrid";
-import AccountStreamsOutgoingDataGrid from "./AccountStreamsOutgoingDataGrid";
 import AppLink from "./AppLink";
 import HelpAlert from "./HelpAlert";
+import AccountIncomingStreamsTable from "./Tables/Account/AccountIncomingStreamsTable";
+import AccountOutgoingStreamsTable from "./Tables/Account/AccountOutgoingStreamsTable";
 
 const AccountStreams: FC<{ network: Network; accountAddress: string }> = ({
   network,
@@ -27,24 +26,15 @@ const AccountStreams: FC<{ network: Network; accountAddress: string }> = ({
         </AppLink>
       </HelpAlert>
 
-      <Box data-cy={"incoming-box"}>
-        <Typography variant="h6" component="h2" sx={{ mt: 3, ml: 1, mb: 1 }}>
-          Incoming
-        </Typography>
-        <AccountStreamsIncomingDataGrid
-          network={network}
-          accountAddress={accountAddress}
-        />
-      </Box>
-      <Box data-cy={"outgoing-box"}>
-        <Typography variant="h6" component="h2" sx={{ mt: 3, ml: 1, mb: 1 }}>
-          Outgoing
-        </Typography>
-        <AccountStreamsOutgoingDataGrid
-          network={network}
-          accountAddress={accountAddress}
-        />
-      </Box>
+      <AccountIncomingStreamsTable
+        network={network}
+        accountAddress={accountAddress}
+      />
+
+      <AccountOutgoingStreamsTable
+        network={network}
+        accountAddress={accountAddress}
+      />
     </>
   );
 };

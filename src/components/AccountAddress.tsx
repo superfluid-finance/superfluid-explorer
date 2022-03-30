@@ -8,11 +8,14 @@ import {
   addressBookSelectors,
   createEntryId,
 } from "../redux/slices/addressBook.slice";
+import ellipsisAddress from "../utils/ellipsisAddress";
 
 const AccountAddress: FC<{
   network: Network;
   address: string;
-}> = ({ network, address, children }) => {
+  ellipsis?: number;
+  dataCy?: string;
+}> = ({ network, address, ellipsis , dataCy}) => {
   const prefetchAccountQuery = sfSubgraph.usePrefetch("account", {
     ifOlderThan: 45,
   });
@@ -21,9 +24,10 @@ const AccountAddress: FC<{
 
   return (
     <AppLink
-      data-cy={"account-address"}
+      data-cy={dataCy}
       className="address"
       href={`/${network.slugName}/accounts/${address}`}
+      sx={{ fontFamily: "Roboto Mono" }}
       onMouseEnter={() => {
         // It's fine to have duplicate setTimeout's as duplicate _queries_ will not get fired.
         setPrefetchTimeoutId(
@@ -44,7 +48,11 @@ const AccountAddress: FC<{
         }
       }}
     >
-      <AccountAddressFormatted network={network} address={address} />
+      <AccountAddressFormatted
+        network={network}
+        address={address}
+        ellipsis={ellipsis}
+      />
     </AppLink>
   );
 };
@@ -52,18 +60,17 @@ const AccountAddress: FC<{
 export const AccountAddressFormatted: FC<{
   network: Network;
   address: string;
-}> = ({ network, address }) => {
+  ellipsis?: number;
+}> = ({ network, address, ellipsis }) => {
   const addressBookEntry = useAppSelector((state) =>
     addressBookSelectors.selectById(state, createEntryId(network, address))
   );
 
-  return (
-    <>
-      {addressBookEntry?.nameTag
-        ? `${addressBookEntry.nameTag} (${ethers.utils.getAddress(address)})`
-        : ethers.utils.getAddress(address)}
-    </>
-  );
+  const parsedAddress = ellipsis
+    ? ellipsisAddress(ethers.utils.getAddress(address), ellipsis)
+    : ethers.utils.getAddress(address);
+
+  return <>{addressBookEntry?.nameTag || parsedAddress}</>;
 };
 
 export default AccountAddress;

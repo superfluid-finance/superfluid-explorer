@@ -1,40 +1,13 @@
-import {
-  AccountTokenSnapshot_OrderBy,
-  createSkipPaging,
-  Ordering,
-  SkipPaging,
-} from "@superfluid-finance/sdk-core";
-import { FC, ReactElement, useState } from "react";
+import { FC, ReactElement } from "react";
 import { Network } from "../redux/networks";
-import { sfSubgraph } from "../redux/store";
-import AccountTokenSnapshotDataGrid from "./AccountTokenSnapshotDataGrid";
 import AppLink from "./AppLink";
 import HelpAlert from "./HelpAlert";
+import AccountTokenSnapshotTable from "./Tables/Account/AccountTokenSnapshotTable";
 
 const AccountTokens: FC<{
   network: Network;
   accountAddress: string;
 }> = ({ network, accountAddress }): ReactElement => {
-  const [accountTokenSnapshotPaging, setAccountTokenSnapshotPaging] =
-    useState<SkipPaging>(
-      createSkipPaging({
-        take: 10,
-      })
-    );
-  const [accountTokenSnapshotOrdering, setAccountTokenSnapshotOrdering] =
-    useState<Ordering<AccountTokenSnapshot_OrderBy> | undefined>({
-      orderBy: "balanceUntilUpdatedAt",
-      orderDirection: "desc",
-    });
-  const accountTokenSnapshotsQuery = sfSubgraph.useAccountTokenSnapshotsQuery({
-    chainId: network.chainId,
-    pagination: accountTokenSnapshotPaging,
-    filter: {
-      account: accountAddress,
-    },
-    order: accountTokenSnapshotOrdering,
-  });
-
   return (
     <>
       <HelpAlert sx={{ mb: 3 }}>
@@ -48,12 +21,10 @@ const AccountTokens: FC<{
           Read more
         </AppLink>
       </HelpAlert>
-      <AccountTokenSnapshotDataGrid
+
+      <AccountTokenSnapshotTable
         network={network}
-        queryResult={accountTokenSnapshotsQuery}
-        setPaging={setAccountTokenSnapshotPaging}
-        ordering={accountTokenSnapshotOrdering}
-        setOrdering={setAccountTokenSnapshotOrdering}
+        accountAddress={accountAddress}
       />
     </>
   );
