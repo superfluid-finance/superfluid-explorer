@@ -8,6 +8,7 @@ import {
   ListItem,
   ListItemText,
   Skeleton,
+  Stack,
   Typography,
 } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
@@ -33,6 +34,7 @@ import { FC, useContext, useEffect, useMemo, useState } from "react";
 import AccountAddress from "../../../components/AccountAddress";
 import { AppDataGrid } from "../../../components/AppDataGrid";
 import AppLink from "../../../components/AppLink";
+import BalanceWithToken from "../../../components/BalanceWithToken";
 import CopyLink from "../../../components/CopyLink";
 import EtherFormatted from "../../../components/EtherFormatted";
 import InfoTooltipBtn from "../../../components/InfoTooltipBtn";
@@ -145,48 +147,53 @@ export const IndexSubscriptionPageContent: FC<{
   }
 
   return (
-    <Container data-cy={"index-subscription-container"} component={Box} sx={{ my: 2, py: 2 }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Breadcrumbs aria-label="breadcrumb">
-            <Typography color="text.secondary">
-              {network && network.displayName}
-            </Typography>
-            <Typography color="text.secondary">Index Subscriptions</Typography>
-            <Typography color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
-              {indexSubscriptionId.substring(0, 6) + "..."}
-            </Typography>
-          </Breadcrumbs>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="h4" component="h1">
-            <Grid container alignItems="center">
-              <Grid item sx={{ mx: 0.5 }}>
-                Index Subscription
-              </Grid>
-              <CopyLink
-                localPath={`/${network.slugName}/index-subscriptions/${indexSubscriptionId}`}
-              />
-              <SubgraphQueryLink
-                network={network}
-                query={gql`
-                  query ($id: ID!) {
-                    indexSubscription(id: $id) {
-                      indexValueUntilUpdatedAt
-                      approved
-                      totalAmountReceivedUntilUpdatedAt
-                      units
-                    }
-                  }
-                `}
-                variables={`{ "id": "${indexSubscriptionId.toLowerCase()}" }`}
-              />
-            </Grid>
+    <Container
+      data-cy={"index-subscription-container"}
+      component={Box}
+      sx={{ my: 2, py: 2 }}
+    >
+      <Stack direction="row" alignItems="center" gap={1}>
+        <Breadcrumbs aria-label="breadcrumb">
+          <Typography color="text.secondary">
+            {network && network.displayName}
           </Typography>
-        </Grid>
+          <Typography color="text.secondary">Index Subscriptions</Typography>
+          <Typography color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+            {indexSubscriptionId.substring(0, 6) + "..."}
+          </Typography>
+        </Breadcrumbs>
+        <CopyLink
+          localPath={`/${network.slugName}/index-subscriptions/${indexSubscriptionId}`}
+        />
+      </Stack>
 
-        <Grid item xs={12} lg={6}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ mt: 1 }}
+      >
+        <Typography variant="h4" component="h1">
+          Index Subscription
+        </Typography>
+        <SubgraphQueryLink
+          network={network}
+          query={gql`
+            query ($id: ID!) {
+              indexSubscription(id: $id) {
+                indexValueUntilUpdatedAt
+                approved
+                totalAmountReceivedUntilUpdatedAt
+                units
+              }
+            }
+          `}
+          variables={`{ "id": "${indexSubscriptionId.toLowerCase()}" }`}
+        />
+      </Stack>
+
+      <Grid container spacing={3} sx={{ pt: 3 }}>
+        <Grid item xs={12} md={6}>
           <Card elevation={2}>
             <List>
               <ListItem data-cy={"index-subscription-short-hash"} divider>
@@ -273,7 +280,7 @@ export const IndexSubscriptionPageContent: FC<{
               </ListItem>
               <Grid container>
                 <Grid item xs={6}>
-                  <ListItem divider>
+                  <ListItem>
                     <ListItemText
                       secondary="Last Updated At"
                       primary={
@@ -289,7 +296,7 @@ export const IndexSubscriptionPageContent: FC<{
                   </ListItem>
                 </Grid>
                 <Grid item xs={6}>
-                  <ListItem divider>
+                  <ListItem>
                     <ListItemText
                       secondary="Created At"
                       primary={
@@ -355,7 +362,10 @@ export const IndexSubscriptionPageContent: FC<{
                   secondary={
                     <>
                       Approved
-                      <InfoTooltipBtn dataCy={"approval-tooltip"} title="Indicates if account has claimed all past distributions and automatically claims all future distributions." />
+                      <InfoTooltipBtn
+                        dataCy={"approval-tooltip"}
+                        title="Indicates if account has claimed all past distributions and automatically claims all future distributions."
+                      />
                     </>
                   }
                   primary={
@@ -371,19 +381,16 @@ export const IndexSubscriptionPageContent: FC<{
                   }
                 />
               </ListItem>
-              <ListItem data-cy={"subscription-total-amount-received"} divider>
+              <ListItem data-cy={"subscription-total-amount-received"}>
                 <ListItemText
                   secondary="Total Amount Received"
                   primary={
                     indexSubscription && index && totalWeiAmountReceived ? (
                       <>
-                        <EtherFormatted wei={totalWeiAmountReceived} />
-                        &nbsp;
-                        <SuperTokenAddress
+                        <BalanceWithToken
+                          wei={totalWeiAmountReceived}
                           network={network}
-                          address={index.token}
-                          format={(token) => token.symbol}
-                          formatLoading={() => ""}
+                          tokenAddress={index.token}
                         />
                       </>
                     ) : (
@@ -395,52 +402,51 @@ export const IndexSubscriptionPageContent: FC<{
             </List>
           </Card>
         </Grid>
-
-        <Grid data-cy={"distributions-grid"} item xs={12}>
-          <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
-            Distributions
-            <InfoTooltipBtn
-              dataCy={"distributions-tooltip"}
-              title={
-                <>
-                  An event in which super tokens are distributed to the entire
-                  pool of subscribers for a given index using the Superfluid
-                  IDA.{" "}
-                  <AppLink
-                    data-cy={"distributions-tooltip-link"}
-                    href="https://docs.superfluid.finance/superfluid/protocol-developers/interactive-tutorials/instant-distribution"
-                    target="_blank"
-                  >
-                    Read more
-                  </AppLink>
-                </>
-              }
-              size={22}
-            />
-          </Typography>
-
-          <Card elevation={2}>
-            <IndexSubscriptionDistributions
-              network={network}
-              indexSubscriptionId={indexSubscriptionId}
-            />
-          </Card>
-        </Grid>
-
-        <Grid data-cy={"units-updated-grid"} item xs={12}>
-          <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
-            Units Updated (i.e. Pool % Updated)
-          </Typography>
-          <Card elevation={2}>
-            <SubscriptionUnitsUpdatedEventDataGrid
-              queryResult={subscriptionUnitsUpdatedEventQuery}
-              setPaging={setSubscriptionUnitsUpdatedEventPaging}
-              ordering={subscriptionUnitsUpdatedEventPagingOrdering}
-              setOrdering={setSubscriptionUnitsUpdatedEventOrdering}
-            />
-          </Card>
-        </Grid>
       </Grid>
+
+      <Box data-cy={"distributions-grid"} sx={{ mt: 3 }}>
+        <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
+          Distributions
+          <InfoTooltipBtn
+            dataCy={"distributions-tooltip"}
+            title={
+              <>
+                An event in which super tokens are distributed to the entire
+                pool of subscribers for a given index using the Superfluid IDA.{" "}
+                <AppLink
+                  data-cy={"distributions-tooltip-link"}
+                  href="https://docs.superfluid.finance/superfluid/protocol-developers/interactive-tutorials/instant-distribution"
+                  target="_blank"
+                >
+                  Read more
+                </AppLink>
+              </>
+            }
+            size={22}
+          />
+        </Typography>
+
+        <Card elevation={2}>
+          <IndexSubscriptionDistributions
+            network={network}
+            indexSubscriptionId={indexSubscriptionId}
+          />
+        </Card>
+      </Box>
+
+      <Box data-cy={"units-updated-grid"} sx={{ mt: 3 }}>
+        <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
+          Units Updated (i.e. Pool % Updated)
+        </Typography>
+        <Card elevation={2}>
+          <SubscriptionUnitsUpdatedEventDataGrid
+            queryResult={subscriptionUnitsUpdatedEventQuery}
+            setPaging={setSubscriptionUnitsUpdatedEventPaging}
+            ordering={subscriptionUnitsUpdatedEventPagingOrdering}
+            setOrdering={setSubscriptionUnitsUpdatedEventOrdering}
+          />
+        </Card>
+      </Box>
     </Container>
   );
 };
@@ -607,16 +613,11 @@ export const IndexSubscriptionDistributions: FC<{
             indexDistributionAmount.mul(subscriptionUnits);
 
           return (
-            <>
-              <EtherFormatted wei={subscriptionDistributionAmount} />
-              &nbsp;
-              <SuperTokenAddress
-                network={network}
-                address={index.token}
-                format={(token) => token.symbol}
-                formatLoading={() => ""}
-              />
-            </>
+            <BalanceWithToken
+              wei={subscriptionDistributionAmount}
+              network={network}
+              tokenAddress={index.token}
+            />
           );
         },
       },

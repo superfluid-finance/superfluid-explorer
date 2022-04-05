@@ -25,6 +25,7 @@ import Error from "next/error";
 import { FC, useContext, useState } from "react";
 import AccountAddress from "../../../components/AccountAddress";
 import AppLink from "../../../components/AppLink";
+import BalanceWithToken from "../../../components/BalanceWithToken";
 import CopyLink from "../../../components/CopyLink";
 import EtherFormatted from "../../../components/EtherFormatted";
 import IndexSubscriptionDataGrid from "../../../components/IndexSubscriptionDataGrid";
@@ -105,48 +106,52 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
   }
 
   return (
-    <Container data-cy={"index-page-container"} component={Box} sx={{ my: 2, py: 2 }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Breadcrumbs aria-label="breadcrumb">
-            <Typography color="text.secondary">
-              {network.displayName}
-            </Typography>
-            <Typography color="text.secondary">Indexes</Typography>
-            <Typography color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
-              {indexId.substring(0, 6) + "..."}
-            </Typography>
-          </Breadcrumbs>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h4" component="h1">
-            <Grid container alignItems="center">
-              <Grid item sx={{ mx: 0.5 }}>
-                Index
-              </Grid>
-              <CopyLink localPath={`/${network.slugName}/indexes/${indexId}`} />
-              <SubgraphQueryLink
-                network={network}
-                query={gql`
-                  query ($id: ID!) {
-                    index(id: $id) {
-                      indexId
-                      indexValue
-                      totalAmountDistributedUntilUpdatedAt
-                      totalSubscriptionsWithUnits
-                      totalUnits
-                      totalUnitsApproved
-                      totalUnitsPending
-                    }
-                  }
-                `}
-                variables={`{ "id": "${indexId.toLowerCase()}" }`}
-              />
-            </Grid>
+    <Container
+      data-cy={"index-page-container"}
+      component={Box}
+      sx={{ my: 2, py: 2 }}
+    >
+      <Stack direction="row" alignItems="center" gap={1}>
+        <Breadcrumbs aria-label="breadcrumb">
+          <Typography color="text.secondary">{network.displayName}</Typography>
+          <Typography color="text.secondary">Indexes</Typography>
+          <Typography color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+            {indexId.substring(0, 6) + "..."}
           </Typography>
-        </Grid>
+        </Breadcrumbs>
+        <CopyLink localPath={`/${network.slugName}/indexes/${indexId}`} />
+      </Stack>
 
-        <Grid item xs={12} lg={6}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ mt: 1 }}
+      >
+        <Typography variant="h4" component="h1">
+          Index
+        </Typography>
+        <SubgraphQueryLink
+          network={network}
+          query={gql`
+            query ($id: ID!) {
+              index(id: $id) {
+                indexId
+                indexValue
+                totalAmountDistributedUntilUpdatedAt
+                totalSubscriptionsWithUnits
+                totalUnits
+                totalUnitsApproved
+                totalUnitsPending
+              }
+            }
+          `}
+          variables={`{ "id": "${indexId.toLowerCase()}" }`}
+        />
+      </Stack>
+
+      <Grid container spacing={3} sx={{ pt: 3 }}>
+        <Grid item md={6} sm={12}>
           <Card elevation={2}>
             <List data-cy={"index-general-info"}>
               <ListItem divider>
@@ -230,7 +235,7 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
               </ListItem>
               <Grid container>
                 <Grid item xs={6}>
-                  <ListItem divider>
+                  <ListItem>
                     <ListItemText
                       secondary="Last Updated At"
                       primary={
@@ -244,7 +249,7 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
                   </ListItem>
                 </Grid>
                 <Grid item xs={6}>
-                  <ListItem divider>
+                  <ListItem>
                     <ListItemText
                       secondary="Created At"
                       primary={
@@ -261,8 +266,7 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
             </List>
           </Card>
         </Grid>
-
-        <Grid item xs={12} lg={6}>
+        <Grid item md={6} sm={12}>
           <Card elevation={2}>
             <List>
               <ListItem data-cy={"total-units"} divider>
@@ -270,7 +274,10 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
                   secondary={
                     <>
                       Total Units
-                      <InfoTooltipBtn dataCy={"total-units-tooltip"} title="The sum of total pending and approved units issued to subscribers." />
+                      <InfoTooltipBtn
+                        dataCy={"total-units-tooltip"}
+                        title="The sum of total pending and approved units issued to subscribers."
+                      />
                     </>
                   }
                   primary={
@@ -287,7 +294,10 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
                   secondary={
                     <>
                       Total Units Approved
-                      <InfoTooltipBtn dataCy={"total-units-approved-tooltip"} title="Units that have claimed all past distributions and will automatically claim all future distributions." />
+                      <InfoTooltipBtn
+                        dataCy={"total-units-approved-tooltip"}
+                        title="Units that have claimed all past distributions and will automatically claim all future distributions."
+                      />
                     </>
                   }
                   primary={
@@ -304,7 +314,10 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
                   secondary={
                     <>
                       Total Units Pending
-                      < InfoTooltipBtn dataCy={"total-units-pending-tooltip"} title="Units that have not claimed their distribution yet." />
+                      <InfoTooltipBtn
+                        dataCy={"total-units-pending-tooltip"}
+                        title="Units that have not claimed their distribution yet."
+                      />
                     </>
                   }
                   primary={
@@ -316,23 +329,16 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
                   }
                 />
               </ListItem>
-              <ListItem data-cy={"total-amount-distributed"} divider>
+              <ListItem data-cy={"total-amount-distributed"}>
                 <ListItemText
                   secondary="Total Amount Distributed"
                   primary={
                     index ? (
-                      <>
-                        <EtherFormatted
-                          wei={index.totalAmountDistributedUntilUpdatedAt}
-                        />
-                        &nbsp;
-                        <SuperTokenAddress
-                          network={network}
-                          address={index.token}
-                          format={(token) => token.symbol}
-                          formatLoading={() => ""}
-                        />
-                      </>
+                      <BalanceWithToken
+                        wei={index.totalAmountDistributedUntilUpdatedAt}
+                        network={network}
+                        tokenAddress={index.token}
+                      />
                     ) : (
                       <Skeleton sx={{ width: "75px" }} />
                     )
@@ -342,74 +348,73 @@ export const IndexPageContent: FC<{ indexId: string; network: Network }> = ({
             </List>
           </Card>
         </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
-            Distributions
-            <InfoTooltipBtn
-              dataCy={"distributions-tooltip"}
-              size={22}
-              title={
-                <>
-                  An event in which super tokens are distributed to the entire
-                  pool of subscribers for a given index using the Superfluid
-                  IDA.{" "}
-                  <AppLink
-                    data-cy={"distributions-tooltip-link"}
-                    href="https://docs.superfluid.finance/superfluid/protocol-developers/interactive-tutorials/instant-distribution"
-                    target="_blank"
-                  >
-                    Read more
-                  </AppLink>
-                </>
-              }
-            />
-          </Typography>
-
-          <Card elevation={2}>
-            <IndexUpdatedEventDataGrid
-              index={index}
-              queryResult={indexUpdatedEventQuery}
-              setPaging={setIndexUpdatedEventPaging}
-              ordering={indexUpdatedEventPagingOrdering}
-              setOrdering={setIndexUpdatedEventOrdering}
-            />
-          </Card>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
-            Subscriptions
-            <InfoTooltipBtn
-              dataCy={"subscriptions-tooltip"}
-              size={22}
-              title={
-                <>
-                  Accounts that have received units within the Index.
-                  Subscribers will receive distributed funds based on the
-                  portion of units they own in and index.{" "}
-                  <AppLink
-                    data-cy={"subscriptions-tooltip-link"}
-                    href="https://docs.superfluid.finance/superfluid/protocol-developers/interactive-tutorials/instant-distribution"
-                    target="_blank"
-                  >
-                    Read more
-                  </AppLink>
-                </>
-              }
-            />
-          </Typography>
-          <Card elevation={2}>
-            <IndexSubscriptionDataGrid
-              network={network}
-              queryResult={indexSubscriptionEventQuery}
-              setPaging={setIndexSubscriptionPaging}
-              ordering={indexSubscriptionPagingOrdering}
-              setOrdering={setIndexSubscriptionOrdering}
-            />
-          </Card>
-        </Grid>
       </Grid>
+
+      <Box sx={{ mt: 3 }}>
+        <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
+          Distributions
+          <InfoTooltipBtn
+            dataCy={"distributions-tooltip"}
+            size={22}
+            title={
+              <>
+                An event in which super tokens are distributed to the entire
+                pool of subscribers for a given index using the Superfluid IDA.{" "}
+                <AppLink
+                  data-cy={"distributions-tooltip-link"}
+                  href="https://docs.superfluid.finance/superfluid/protocol-developers/interactive-tutorials/instant-distribution"
+                  target="_blank"
+                >
+                  Read more
+                </AppLink>
+              </>
+            }
+          />
+        </Typography>
+
+        <Card elevation={2}>
+          <IndexUpdatedEventDataGrid
+            index={index}
+            queryResult={indexUpdatedEventQuery}
+            setPaging={setIndexUpdatedEventPaging}
+            ordering={indexUpdatedEventPagingOrdering}
+            setOrdering={setIndexUpdatedEventOrdering}
+          />
+        </Card>
+      </Box>
+
+      <Box sx={{ mt: 3 }}>
+        <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
+          Subscriptions
+          <InfoTooltipBtn
+            dataCy={"subscriptions-tooltip"}
+            size={22}
+            title={
+              <>
+                Accounts that have received units within the Index. Subscribers
+                will receive distributed funds based on the portion of units
+                they own in and index.{" "}
+                <AppLink
+                  data-cy={"subscriptions-tooltip-link"}
+                  href="https://docs.superfluid.finance/superfluid/protocol-developers/interactive-tutorials/instant-distribution"
+                  target="_blank"
+                >
+                  Read more
+                </AppLink>
+              </>
+            }
+          />
+        </Typography>
+        <Card elevation={2}>
+          <IndexSubscriptionDataGrid
+            network={network}
+            queryResult={indexSubscriptionEventQuery}
+            setPaging={setIndexSubscriptionPaging}
+            ordering={indexSubscriptionPagingOrdering}
+            setOrdering={setIndexSubscriptionOrdering}
+          />
+        </Card>
+      </Box>
     </Container>
   );
 };
