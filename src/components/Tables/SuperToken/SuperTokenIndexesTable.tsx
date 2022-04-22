@@ -1,4 +1,3 @@
-import CloseIcon from "@mui/icons-material/Close";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import {
   Box,
@@ -19,13 +18,13 @@ import {
   ToggleButtonGroup,
   Toolbar,
   Tooltip,
-  Typography,
+  Typography
 } from "@mui/material";
 import {
   createSkipPaging,
   Index_Filter,
   Index_OrderBy,
-  Ordering,
+  Ordering
 } from "@superfluid-finance/sdk-core";
 import { IndexesQuery } from "@superfluid-finance/sdk-redux";
 import omit from "lodash/fp/omit";
@@ -38,6 +37,7 @@ import { sfSubgraph } from "../../../redux/store";
 import AccountAddress from "../../AccountAddress";
 import AppLink from "../../AppLink";
 import BalanceWithToken from "../../BalanceWithToken";
+import ClearInputAdornment from "../../ClearInputAdornment";
 import DetailsButton from "../../DetailsButton";
 import { IndexPublicationDetailsDialog } from "../../IndexPublicationDetails";
 import InfinitePagination from "../../InfinitePagination";
@@ -290,14 +290,9 @@ const SuperTokenIndexesTable: FC<SuperTokenIndexesTableProps> = ({
                 onChange={onStringFilterChange("indexId")}
                 endAdornment={
                   filter.indexId && (
-                    <IconButton
-                      size="small"
-                      sx={{ fontSize: "16px", p: 0.5 }}
-                      tabIndex={-1}
+                    <ClearInputAdornment
                       onClick={clearFilterField("indexId")}
-                    >
-                      <CloseIcon fontSize="inherit" />
-                    </IconButton>
+                    />
                   )
                 }
               />
@@ -314,15 +309,10 @@ const SuperTokenIndexesTable: FC<SuperTokenIndexesTableProps> = ({
                 value={filter.publisher_contains || ""}
                 onChange={onStringFilterChange("publisher_contains")}
                 endAdornment={
-                  filter.indexId && (
-                    <IconButton
-                      size="small"
-                      sx={{ fontSize: "16px", p: 0.5 }}
-                      tabIndex={-1}
-                      onClick={clearFilterField("indexId")}
-                    >
-                      <CloseIcon fontSize="inherit" />
-                    </IconButton>
+                  filter.publisher_contains && (
+                    <ClearInputAdornment
+                      onClick={clearFilterField("publisher_contains")}
+                    />
                   )
                 }
               />

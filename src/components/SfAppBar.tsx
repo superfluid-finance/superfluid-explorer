@@ -7,6 +7,7 @@ import {
   Stack,
   Tooltip,
   IconButton,
+  Typography,
 } from "@mui/material";
 import AppLink from "./AppLink";
 import SearchDialog from "./SearchDialog";
@@ -65,19 +66,53 @@ export const SfAppBar = () => {
             direction="row"
             justifyContent="center"
             alignItems="center"
-            spacing={2}
+            spacing={6}
           >
-            <AppLink href="/subgraph">
-              <Button
-                sx={{ ml: 1, whiteSpace: "nowrap" }}
-                id="search-button"
-                size="medium"
-                variant="contained"
+            <Stack direction="row" alignItems="center" spacing={4}>
+              <AppLink href="/super-tokens" sx={{ textDecoration: "none" }}>
+                <Typography
+                  variant="button"
+                  sx={{
+                    fontWeight: 500,
+                    fontSize: "16px",
+                    color: "white",
+                    textTransform: "none",
+                  }}
+                >
+                  Tokens
+                </Typography>
+              </AppLink>
+              <AppLink href="/protocol" sx={{ textDecoration: "none" }}>
+                <Typography
+                  variant="button"
+                  sx={{
+                    fontWeight: 500,
+                    fontSize: "16px",
+                    color: "white",
+                    textTransform: "none",
+                  }}
+                >
+                  Protocol
+                </Typography>
+              </AppLink>
+              <AppLink
+                id="subgraph-button"
+                href="/subgraph"
+                sx={{ textDecoration: "none" }}
               >
-                <SubgraphIcon sx={{ mr: 1 }} />
-                Subgraph Explorer
-              </Button>
-            </AppLink>
+                <Typography
+                  variant="button"
+                  sx={{
+                    fontWeight: 500,
+                    fontSize: "16px",
+                    color: "white",
+                    textTransform: "none",
+                  }}
+                >
+                  Subgraph
+                </Typography>
+              </AppLink>
+            </Stack>
             <Tooltip title="Settings" enterDelay={100}>
               <IconButton
                 sx={{ ml: 1 }}
