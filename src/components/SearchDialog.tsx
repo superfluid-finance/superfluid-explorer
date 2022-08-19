@@ -12,6 +12,7 @@ import {
   Card,
   Divider,
   ListItemText,
+  Grid,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import SearchIcon from "@mui/icons-material/Search";
@@ -45,7 +46,6 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
   };
 
   const router = useRouter();
-
   const [searchTermVisible, setSearchTermVisible] = useState("");
   const [searchTermDebounced, _setSearchTermDebounced] =
     useState(searchTermVisible);
@@ -67,9 +67,7 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
     const handleRouteChange = () => {
       handleClose();
     };
-
     router.events.on("routeChangeStart", handleRouteChange);
-
     // If the component is unmounted, unsubscribe
     // from the event with the `off` method:
     return () => {
@@ -139,11 +137,36 @@ const SearchDialog: FC<{ open: boolean; close: () => void }> = ({
                         href={`/${x.network.slugName}/accounts/${account.id}`}
                         passHref
                       >
-                        <ListItemButton component="a">
-                          <AccountAddressFormatted
-                            network={x.network}
-                            address={account.id}
-                          />
+                        <ListItemButton
+                          component="a"
+                          sx={{
+                            display: "flex",
+                            alignItems: "flex-start",
+                            flexDirection: "column",
+                            justifyContent: "flex-start",
+                          }}
+                        >
+                          {account.ENS ? (
+                            <Grid container>
+                              <Grid item xs={12}>
+                                {account.ENS}
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Typography variant="caption" component="span">
+                                  <AccountAddressFormatted
+                                    network={x.network}
+                                    address={account.id}
+                                    format={"addressPlusName"}
+                                  />
+                                </Typography>
+                              </Grid>
+                            </Grid>
+                          ) : (
+                            <AccountAddressFormatted
+                              network={x.network}
+                              address={account.id}
+                            />
+                          )}
                         </ListItemButton>
                       </NextLink>
                     </ListItem>
