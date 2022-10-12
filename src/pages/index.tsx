@@ -13,6 +13,7 @@ import {
   defaultStreamQueryPaging,
   NetworkStreams,
 } from "../components/NetworkStreams";
+import { track } from "../hooks/useMatomo";
 import { useAppSelector } from "../redux/hooks";
 import { networks } from "../redux/networks";
 import { sfSubgraph } from "../redux/store";
@@ -90,7 +91,10 @@ const Home: NextPage = () => {
                   variant="scrollable"
                   scrollButtons="auto"
                   data-cy={"landing-page-networks"}
-                  onChange={(_event, newValue: string) => setValue(newValue)}
+                  onChange={track(
+                  "network-tab-change",
+                  (_event, newValue: string) => setValue(newValue)
+                 )}
                 >
                   {networks
                     .filter(
