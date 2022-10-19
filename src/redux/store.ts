@@ -1,24 +1,20 @@
+import { providers } from "@0xsequence/multicall";
 import { configureStore } from "@reduxjs/toolkit";
+import { Framework } from "@superfluid-finance/sdk-core";
 import {
   allSubgraphEndpoints,
   createApiWithReactHooks,
-  setFrameworkForSdkRedux,
+  initializeRpcApiSlice,
   initializeSubgraphApiSlice,
-  initializeRpcApiSlice
+  setFrameworkForSdkRedux,
 } from "@superfluid-finance/sdk-redux";
-import { Framework } from "@superfluid-finance/sdk-core";
 import { ethers } from "ethers";
-import { createWrapper } from "next-redux-wrapper";
 import {
   nextReduxCookieMiddleware,
   SERVE_COOKIES,
   wrapMakeStore,
 } from "next-redux-cookie-wrapper";
-import { themePreferenceSlice } from "./slices/appPreferences.slice";
-import { addressBookSlice } from "./slices/addressBook.slice";
-import { networks } from "./networks";
-import storageLocal from "redux-persist/lib/storage";
-import { ensApi } from "./slices/ensResolver.slice";
+import { createWrapper } from "next-redux-wrapper";
 import {
   FLUSH,
   PAUSE,
@@ -29,11 +25,18 @@ import {
   REGISTER,
   REHYDRATE,
 } from "redux-persist";
-import { isServer } from "../utils/isServer";
+import storageLocal from "redux-persist/lib/storage";
 import { addDays } from "../utils/dateTime";
-import { newRpcApiEndpoints } from "./newRpcApiEndpoints";
+import { isServer } from "../utils/isServer";
+import { networks } from "./networks";
+import { balanceRpcApiEndpoints } from "./balanceRpcApiEndpoints";
+import { addressBookSlice } from "./slices/addressBook.slice";
+import { themePreferenceSlice } from "./slices/appPreferences.slice";
+import { ensApi } from "./slices/ensResolver.slice";
 
-export const rpcApi = initializeRpcApiSlice(createApiWithReactHooks).injectEndpoints(newRpcApiEndpoints);
+export const rpcApi = initializeRpcApiSlice(
+  createApiWithReactHooks
+).injectEndpoints(balanceRpcApiEndpoints);
 export const sfSubgraph = initializeSubgraphApiSlice(
   createApiWithReactHooks
 ).injectEndpoints(allSubgraphEndpoints);
@@ -43,7 +46,9 @@ const infuraProviders = networks.map((network) => ({
   frameworkGetter: () =>
     Framework.create({
       chainId: network.chainId,
-      provider: new ethers.providers.JsonRpcProvider(network.rpcUrl),
+      provider: new providers.MulticallProvider(
+        new ethers.providers.StaticJsonRpcProvider(network.rpcUrl)
+      ),
     }),
 }));
 
@@ -83,7 +88,7 @@ export const makeStore = wrapMakeStore(() => {
           nextReduxCookieMiddleware({
             compress: true,
             subtrees: ["appPreferences"],
-            expires: addDays(new Date(), 14)
+            expires: addDays(new Date(), 14),
           })
         )
         .concat(rpcApi.middleware)
