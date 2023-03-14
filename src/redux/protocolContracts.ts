@@ -100,7 +100,7 @@ const protocolContracts: NetworkContracts = {
     superfluidLoaderv1: "0x3C26e5bEbc68EaAf4efcd88F8E5A6Aeb77b65579",
     TOGA: "0xFCD84210f5d51Cd40a30443d44d6A5500d5D10dF",
   },
-  "celo-mainnet": {
+  "celo": {
     resolver: "0x05eE721BD4D803d6d477Aa7607395452B65373FF",
     host: "0xA4Ff07cF81C02CFD356184879D953970cA957585",
     CFAv1: "0x9d369e78e1a682cE0F8d9aD849BeA4FE1c3bD3Ad",
