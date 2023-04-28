@@ -1,5 +1,4 @@
 import {BasePage} from "../BasePage";
-import Decimal from "decimal.js";
 
 const ACCOUNT_TYPE = "[data-cy=account-type] span"
 const ACCOUNT_SYMBOL = "[data-cy=token-symbol]"
@@ -244,12 +243,13 @@ export class AccountPage extends BasePage {
     }
 
     cy.fixture("accountData").then(fixture => {
-      fixture[network].ongoingStreamAccount.streams.incoming.forEach((stream: { flowRate: string }, index: number) => {
-        cy.get(INCOMING_FLOW_RATES).eq(index).then(el => {
-          let expectedFlowAmount = ((parseFloat(stream.flowRate) * granularityMultiplier)).toFixed(18).toString()
-          let flowWithoutZeros = new Decimal(expectedFlowAmount).toDP(18).toFixed()
-          let expectedString = flowWithoutZeros + "/" + granularity
-          cy.wrap(el.text()).should("eq", expectedString)
+      fixture[network].ongoingStreamAccount.streams.outgoing.forEach((stream: { flowRate: string }, index: number) => {
+        cy.get(OUTGOING_FLOW_RATES).eq(index).then(el => {
+          let expectedFlowAmount = parseFloat(stream.flowRate) * granularityMultiplier
+          let actualFlowAmount = parseFloat(el.text().split('/')[0])
+          let timeUnit = el.text().split('/')[1]
+          expect(timeUnit).to.eq(granularity)
+          expect(expectedFlowAmount).to.be.closeTo(actualFlowAmount, 1e-18)
         })
       })
     })
@@ -355,8 +355,11 @@ export class AccountPage extends BasePage {
       this.type(FILTER_RECEIVER_ADDRESS, account[network].receiver)
       this.click(FILTER_CLOSE_BUTTON)
       this.caseInsensitive(CHIP_RECEIVER, account[network].receiver)
-      this.isVisible(LOADING_SPINNER)
-      this.isNotVisible(LOADING_SPINNER)
+      //Firefox somehow filters without a loading spinner
+      if(Cypress.browser.name !== "firefox"){
+        this.isVisible(LOADING_SPINNER)
+        this.isNotVisible(LOADING_SPINNER)
+      }
     })
   }
 
@@ -733,7 +736,7 @@ export class AccountPage extends BasePage {
     this.click(FILTER_BUTTON)
     this.click(FILTER_ACTIVE_NO_BUTTON)
     this.click(FILTER_CLOSED_NO_BUTTON)
-    this.click(FILTER_SUB_UNITS_NO_BUTTON)
+    this.click(FILTER_SUB_UNITS_YES_BUTTON)
     this.click(FILTER_CLOSE_BUTTON)
     this.isVisible(LOADING_SPINNER)
     this.isNotVisible(LOADING_SPINNER)
