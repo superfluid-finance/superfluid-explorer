@@ -21,7 +21,7 @@ export const SfAppBar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const router = useRouter();
-  const { _network = "matic" } = router.query;
+  const { _network = "polygon-mainnet" } = router.query;
 
   return (
     <>
