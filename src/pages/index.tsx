@@ -11,7 +11,7 @@ import NetworkTabs from "../components/NetworkTabs";
 import { networks } from "../redux/networks";
 
 const Home: NextPage = () => {
-  const [activeTab, setActiveTab] = React.useState("polygon-mainnet");
+  const [activeTab, setActiveTab] = React.useState("matic");
 
   return (
     <>

@@ -36,22 +36,22 @@ const networkMetadataToChainId = metadata.networks.reduce((acc, config) => {
 }, {} as { [key: string]: ContractAddresses });
 
 const protocolContracts: NetworkContracts = {
-  "eth-mainnet": networkMetadataToChainId[1],
-  "polygon-mainnet": networkMetadataToChainId[137],
-  "xdai-mainnet": networkMetadataToChainId[100],
+  ethereum: networkMetadataToChainId[1],
+  matic: networkMetadataToChainId[137],
+  xdai: networkMetadataToChainId[100],
   "optimism-mainnet": networkMetadataToChainId[10],
   "arbitrum-one": networkMetadataToChainId[42161],
-  "eth-goerli": networkMetadataToChainId[5],
-  "polygon-mumbai": networkMetadataToChainId[80001],
+  goerli: networkMetadataToChainId[5],
+  mumbai: networkMetadataToChainId[80001],
   "avalanche-fuji": networkMetadataToChainId[43113],
   "avalanche-c": networkMetadataToChainId[43114],
-  "bsc-mainnet": networkMetadataToChainId[56],
-  "celo-mainnet": networkMetadataToChainId[42220],
+  "bnb-smart-chain": networkMetadataToChainId[56],
+  celo: networkMetadataToChainId[42220],
   "arbitrum-goerli": networkMetadataToChainId[421613],
   "optimism-goerli": networkMetadataToChainId[420],
   "eth-sepolia": networkMetadataToChainId[11155111],
-  "polygon-zkevm-testnet": networkMetadataToChainId[1442],
-  "base-goerli": networkMetadataToChainId[84531],
+  "pzkevmtest": networkMetadataToChainId[1442],
+  bgoerli: networkMetadataToChainId[84531],
 };
 
 export default protocolContracts;
