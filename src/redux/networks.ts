@@ -15,7 +15,7 @@ export const networks: Network[] = [
   // mainnets
   {
     displayName: "Ethereum",
-    slugName: "ethereum",
+    slugName: "eth-mainnet",
     chainId: 1,
     isTestnet: false,
     rpcUrl: "https://rpc-endpoints.superfluid.dev/eth-mainnet",
@@ -28,7 +28,7 @@ export const networks: Network[] = [
   },
   {
     displayName: "Gnosis Chain",
-    slugName: "xdai",
+    slugName: "xdai-mainnet",
     chainId: 100,
     isTestnet: false,
     rpcUrl: "https://rpc-endpoints.superfluid.dev/xdai-mainnet",
@@ -41,7 +41,7 @@ export const networks: Network[] = [
   },
   {
     displayName: "Polygon",
-    slugName: "matic",
+    slugName: "polygon-mainnet",
     chainId: 137,
     isTestnet: false,
     rpcUrl: `https://rpc-endpoints.superfluid.dev/polygon-mainnet`,
@@ -93,7 +93,7 @@ export const networks: Network[] = [
   },
   {
     displayName: "BNB Smart Chain",
-    slugName: "bnb-smart-chain",
+    slugName: "bsc-mainnet",
     chainId: 56,
     isTestnet: false,
     rpcUrl: `https://bsc-dataseed1.binance.org`,
@@ -106,7 +106,7 @@ export const networks: Network[] = [
   },
   {
     displayName: "Celo",
-    slugName: "celo",
+    slugName: "celo-mainnet",
     chainId: 42220,
     isTestnet: false,
     rpcUrl: "https://rpc-endpoints.superfluid.dev/celo-mainnet",
@@ -121,7 +121,7 @@ export const networks: Network[] = [
   // testnets
   {
     displayName: "Goerli",
-    slugName: "goerli",
+    slugName: "eth-goerli",
     chainId: 5,
     isTestnet: true,
     rpcUrl: `https://rpc-endpoints.superfluid.dev/eth-goerli`,
@@ -134,7 +134,7 @@ export const networks: Network[] = [
   },
   {
     displayName: "Mumbai",
-    slugName: "mumbai",
+    slugName: "polygon-mumbai",
     chainId: 80001,
     isTestnet: true,
     rpcUrl: `https://rpc-endpoints.superfluid.dev/polygon-mumbai`,
@@ -199,7 +199,7 @@ export const networks: Network[] = [
   {
     isTestnet: true,
     chainId: 1442,
-    slugName: "pzkevmtest",
+    slugName: "polygon-zkevm-testnet",
     displayName: "Polygon zkEVM Testnet",
     rpcUrl: "https://rpc-endpoints.superfluid.dev/polygon-zkevm-testnet",
     subgraphUrl: "https://polygon-zkevm-testnet.subgraph.x.superfluid.dev",
@@ -211,7 +211,7 @@ export const networks: Network[] = [
   {
     isTestnet: true,
     chainId: 84531,
-    slugName: "bgoerli",
+    slugName: "base-goerli",
     displayName: "Base Goerli",
     rpcUrl: "https://rpc-endpoints.superfluid.dev/base-goerli",
     subgraphUrl: "https://base-goerli.subgraph.x.superfluid.dev/",
