@@ -5,7 +5,7 @@ import { useEffect } from "react";
 // redirects the legacy url /super-tokens to the default network specific page
 const SuperTokensLegacyRedirect: NextPage = () => {
     const router = useRouter();
-    useEffect(() => void router.replace("/matic/supertokens") ,[]);
+    useEffect(() => void router.replace("/polygon-mainnet/supertokens") ,[]);
 
     return null;
 };
