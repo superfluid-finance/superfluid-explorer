@@ -2,7 +2,7 @@ import sortBy from "lodash/fp/sortBy";
 
 export type Network = {
   displayName: string;
-  slugName: string;
+  slugName: string; // The displayed slug by default. To find network by slug, use `tryFindNetwork` which looks from more sources.
   chainId: number;
   rpcUrl: string;
   subgraphUrl: string;
@@ -15,7 +15,7 @@ export const networks: Network[] = [
   // mainnets
   {
     displayName: "Ethereum",
-    slugName: "eth-mainnet",
+    slugName: "ethereum",
     chainId: 1,
     isTestnet: false,
     rpcUrl: "https://rpc-endpoints.superfluid.dev/eth-mainnet",
@@ -28,7 +28,7 @@ export const networks: Network[] = [
   },
   {
     displayName: "Gnosis Chain",
-    slugName: "xdai-mainnet",
+    slugName: "xdai",
     chainId: 100,
     isTestnet: false,
     rpcUrl: "https://rpc-endpoints.superfluid.dev/xdai-mainnet",
@@ -41,7 +41,7 @@ export const networks: Network[] = [
   },
   {
     displayName: "Polygon",
-    slugName: "polygon-mainnet",
+    slugName: "matic",
     chainId: 137,
     isTestnet: false,
     rpcUrl: `https://rpc-endpoints.superfluid.dev/polygon-mainnet`,
@@ -93,7 +93,7 @@ export const networks: Network[] = [
   },
   {
     displayName: "BNB Smart Chain",
-    slugName: "bsc-mainnet",
+    slugName: "bnb-smart-chain",
     chainId: 56,
     isTestnet: false,
     rpcUrl: `https://bsc-dataseed1.binance.org`,
@@ -106,7 +106,7 @@ export const networks: Network[] = [
   },
   {
     displayName: "Celo",
-    slugName: "celo-mainnet",
+    slugName: "celo",
     chainId: 42220,
     isTestnet: false,
     rpcUrl: "https://rpc-endpoints.superfluid.dev/celo-mainnet",
@@ -121,7 +121,7 @@ export const networks: Network[] = [
   // testnets
   {
     displayName: "Goerli",
-    slugName: "eth-goerli",
+    slugName: "goerli",
     chainId: 5,
     isTestnet: true,
     rpcUrl: `https://rpc-endpoints.superfluid.dev/eth-goerli`,
@@ -134,7 +134,7 @@ export const networks: Network[] = [
   },
   {
     displayName: "Mumbai",
-    slugName: "polygon-mumbai",
+    slugName: "mumbai",
     chainId: 80001,
     isTestnet: true,
     rpcUrl: `https://rpc-endpoints.superfluid.dev/polygon-mumbai`,
@@ -190,7 +190,8 @@ export const networks: Network[] = [
     slugName: "eth-sepolia",
     displayName: "Sepolia",
     rpcUrl: "https://rpc-endpoints.superfluid.dev/eth-sepolia",
-    subgraphUrl: "https://subgraph.satsuma-prod.com/c5br3jaVlJI6/superfluid/eth-sepolia/api",
+    subgraphUrl:
+      "https://subgraph.satsuma-prod.com/c5br3jaVlJI6/superfluid/eth-sepolia/api",
     getLinkForTransaction: (txHash: string): string =>
       `https://sepolia.etherscan.io/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -228,24 +229,12 @@ export const networksByName = new Map(
 
 export const networksByChainId = new Map(networks.map((x) => [x.chainId, x]));
 
+export const polygon = networksByChainId.get(137)!;
+
 export const networksByTestAndName = sortBy(
   [(x) => x.isTestnet, (x) => x.slugName],
   networks
 );
-
-export const tryGetNetwork = (x: unknown): Network | undefined => {
-  let network: Network | undefined = undefined;
-
-  if (typeof x === "string") {
-    network = networksByName.get(x.toLowerCase());
-  }
-
-  if (typeof x === "number") {
-    network = networksByChainId.get(x);
-  }
-
-  return network;
-};
 
 export const tryGetString = (x: unknown): string | undefined => {
   if (typeof x === "string") {
