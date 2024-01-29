@@ -1,12 +1,13 @@
 import { BigNumber, BigNumberish } from 'ethers'
 import { FC, PropsWithChildren, useMemo } from 'react'
 
-type PoolMemberInput = {
+export type PoolMemberInput = {
   units: BigNumberish
   poolTotalAmountDistributedUntilUpdatedAt: BigNumberish
+  totalAmountReceivedUntilUpdatedAt: BigNumberish
 }
 
-type PoolInput = {
+export type PoolInput = {
   flowRate: BigNumberish
   totalAmountDistributedUntilUpdatedAt: BigNumberish
   totalUnits: BigNumberish
@@ -17,7 +18,7 @@ export const PoolMemberTotalAmountReceived: FC<{
   member: PoolMemberInput
   pool: PoolInput
   children: (
-    output: ReturnType<typeof getTotalAmountReceivedFromPoolMember>
+    output: ReturnType<typeof getTotalAmountReceivedForPoolMember>
   ) => PropsWithChildren['children']
 }> = ({ member, pool, children }) => {
   const output = useTotalAmountRecivedFromPoolMember(member, pool)
@@ -35,11 +36,11 @@ export const useTotalAmountRecivedFromPoolMember = (
     if (!member || !pool) {
       return undefined
     }
-    return getTotalAmountReceivedFromPoolMember(member, pool)
+    return getTotalAmountReceivedForPoolMember(member, pool)
   }, [member, pool])
 }
 
-export const getTotalAmountReceivedFromPoolMember = (
+export const getTotalAmountReceivedForPoolMember = (
   member: PoolMemberInput,
   pool: PoolInput
 ): {
@@ -51,9 +52,9 @@ export const getTotalAmountReceivedFromPoolMember = (
   const memberUnits = BigNumber.from(member.units)
   const poolUnits = BigNumber.from(pool.totalUnits)
 
-  if (poolUnits.isZero()) {
+  if (memberUnits.isZero()) {
     return {
-      memberCurrentTotalAmountReceived: BigNumber.from(0),
+      memberCurrentTotalAmountReceived: BigNumber.from(member.totalAmountReceivedUntilUpdatedAt),
       memberFlowRate: BigNumber.from(0),
       timestamp: currentTimestamp
     }
@@ -68,13 +69,13 @@ export const getTotalAmountReceivedFromPoolMember = (
   ).add(poolCurrentTotalAmountDistributedDelta)
 
   const memberCurrentTotalAmountReceivedDelta =
-    poolCurrentTotalAmountDistributed
-      .sub(member.poolTotalAmountDistributedUntilUpdatedAt)
+    (poolCurrentTotalAmountDistributed
+      .sub(member.poolTotalAmountDistributedUntilUpdatedAt))
       .mul(memberUnits)
       .div(poolUnits)
 
   const memberCurrentTotalAmountReceived = BigNumber.from(
-    member.poolTotalAmountDistributedUntilUpdatedAt
+    member.totalAmountReceivedUntilUpdatedAt
   ).add(memberCurrentTotalAmountReceivedDelta)
 
   const memberFlowRate = BigNumber.from(pool.flowRate)
