@@ -1,3 +1,5 @@
+import sfMeta from '@superfluid-finance/metadata'
+import { memoize } from 'lodash'
 import sortBy from 'lodash/fp/sortBy'
 
 export type Network = {
@@ -12,7 +14,25 @@ export type Network = {
   supportsGDA: boolean
 }
 
-export const networks: Network[] = [
+const getMetadata = memoize((chainId: number) => {
+  const metadata = sfMeta.getNetworkByChainId(chainId)
+  if (!metadata) {
+    throw new Error(`No metadata for chainId ${chainId}`)
+  }
+  return metadata
+})
+
+const getRpcUrl = (chainId: number) => {
+  const metadata = getMetadata(chainId)
+  return `https://rpc-endpoints.superfluid.dev/${metadata.name}`
+}
+
+const getSubgraphUrl = (chainId: number) => {
+  const metadata = getMetadata(chainId)
+  return `https://${metadata.name}.subgraph.x.superfluid.dev/`
+}
+
+export const networks = [
   // mainnets
   {
     displayName: 'Ethereum',
@@ -20,9 +40,8 @@ export const networks: Network[] = [
     chainId: 1,
     isTestnet: false,
     supportsGDA: false,
-    rpcUrl: 'https://rpc-endpoints.superfluid.dev/eth-mainnet',
-    subgraphUrl:
-      'https://subgraph.satsuma-prod.com/c5br3jaVlJI6/superfluid/eth-mainnet/api',
+    rpcUrl: getRpcUrl(1),
+    subgraphUrl: getSubgraphUrl(1),
     getLinkForTransaction: (txHash: string): string =>
       `https://etherscan.io/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -34,9 +53,8 @@ export const networks: Network[] = [
     chainId: 100,
     isTestnet: false,
     supportsGDA: false,
-    rpcUrl: 'https://rpc-endpoints.superfluid.dev/xdai-mainnet',
-    subgraphUrl:
-      'https://subgraph.satsuma-prod.com/c5br3jaVlJI6/superfluid/xdai/api',
+    rpcUrl: getRpcUrl(100),
+    subgraphUrl: getSubgraphUrl(100),
     getLinkForTransaction: (txHash: string): string =>
       `https://gnosisscan.io/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -48,9 +66,8 @@ export const networks: Network[] = [
     chainId: 137,
     isTestnet: false,
     supportsGDA: false,
-    rpcUrl: `https://rpc-endpoints.superfluid.dev/polygon-mainnet`,
-    subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-matic',
+    rpcUrl: getRpcUrl(137),
+    subgraphUrl: getSubgraphUrl(137),
     getLinkForTransaction: (txHash: string): string =>
       `https://polygonscan.com/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -62,9 +79,8 @@ export const networks: Network[] = [
     chainId: 10,
     isTestnet: false,
     supportsGDA: false,
-    rpcUrl: `https://rpc-endpoints.superfluid.dev/optimism-mainnet`,
-    subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet',
+    rpcUrl: getRpcUrl(10),
+    subgraphUrl: getSubgraphUrl(10),
     getLinkForTransaction: (txHash: string): string =>
       `https://optimistic.etherscan.io/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -76,9 +92,8 @@ export const networks: Network[] = [
     chainId: 42161,
     isTestnet: false,
     supportsGDA: false,
-    rpcUrl: 'https://rpc-endpoints.superfluid.dev/arbitrum-one',
-    subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-arbitrum-one',
+    rpcUrl: getRpcUrl(42161),
+    subgraphUrl: getSubgraphUrl(42161),
     getLinkForTransaction: (txHash: string): string =>
       `https://arbiscan.io/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -90,9 +105,8 @@ export const networks: Network[] = [
     chainId: 43114,
     isTestnet: false,
     supportsGDA: false,
-    rpcUrl: 'https://rpc-endpoints.superfluid.dev/avalanche-c',
-    subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-avalanche-c',
+    rpcUrl: getRpcUrl(43114),
+    subgraphUrl: getSubgraphUrl(43114),
     getLinkForTransaction: (txHash: string): string =>
       `https://snowtrace.io/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -104,9 +118,8 @@ export const networks: Network[] = [
     chainId: 56,
     isTestnet: false,
     supportsGDA: false,
-    rpcUrl: `https://bsc-dataseed1.binance.org`,
-    subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-bsc-mainnet',
+    rpcUrl: getRpcUrl(56),
+    subgraphUrl: getSubgraphUrl(56),
     getLinkForTransaction: (txHash: string): string =>
       `https://bscscan.com/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -118,9 +131,8 @@ export const networks: Network[] = [
     chainId: 42220,
     isTestnet: false,
     supportsGDA: false,
-    rpcUrl: 'https://rpc-endpoints.superfluid.dev/celo-mainnet',
-    subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-celo-mainnet',
+    rpcUrl: getRpcUrl(42220),
+    subgraphUrl: getSubgraphUrl(42220),
     getLinkForTransaction: (txHash: string): string =>
       `https://celoscan.io/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -132,12 +144,25 @@ export const networks: Network[] = [
     chainId: 8453,
     slugName: 'base-mainnet',
     displayName: 'Base Mainnet',
-    rpcUrl: 'https://rpc-endpoints.superfluid.dev/base-mainnet',
-    subgraphUrl: 'https://base-mainnet.subgraph.x.superfluid.dev/',
+    rpcUrl: getRpcUrl(8453),
+    subgraphUrl: getSubgraphUrl(8453),
     getLinkForTransaction: (txHash: string): string =>
       `https://basescan.org/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
       `https://basescan.org/address/${address}`
+  },
+  {
+    displayName: 'Scroll',
+    isTestnet: false,
+    supportsGDA: false,
+    chainId: 534352,
+    slugName: 'scroll-mainnet',
+    rpcUrl: getRpcUrl(534352),
+    subgraphUrl: getSubgraphUrl(534352),
+    getLinkForTransaction: (txHash: string): string =>
+      `https://scrollscan.com/tx/${txHash}`,
+    getLinkForAddress: (address: string): string =>
+      `https://scrollscan.com/address/${address}`
   },
   // testnets
   {
@@ -146,9 +171,8 @@ export const networks: Network[] = [
     chainId: 5,
     isTestnet: true,
     supportsGDA: true,
-    rpcUrl: `https://rpc-endpoints.superfluid.dev/eth-goerli`,
-    subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-goerli',
+    rpcUrl: getRpcUrl(5),
+    subgraphUrl: getSubgraphUrl(5),
     getLinkForTransaction: (txHash: string): string =>
       `https://goerli.etherscan.io/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -160,9 +184,8 @@ export const networks: Network[] = [
     chainId: 80001,
     isTestnet: true,
     supportsGDA: true,
-    rpcUrl: `https://rpc-endpoints.superfluid.dev/polygon-mumbai`,
-    subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-mumbai',
+    rpcUrl: getRpcUrl(80001),
+    subgraphUrl: getSubgraphUrl(80001),
     getLinkForTransaction: (txHash: string): string =>
       `https://mumbai.polygonscan.com/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -174,9 +197,8 @@ export const networks: Network[] = [
     chainId: 43113,
     isTestnet: true,
     supportsGDA: true,
-    rpcUrl: 'https://rpc-endpoints.superfluid.dev/avalanche-fuji',
-    subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-avalanche-fuji',
+    rpcUrl: getRpcUrl(43113),
+    subgraphUrl: getSubgraphUrl(43113),
     getLinkForTransaction: (txHash: string): string =>
       `https://testnet.snowtrace.io/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -188,9 +210,8 @@ export const networks: Network[] = [
     chainId: 420,
     isTestnet: true,
     supportsGDA: true,
-    rpcUrl: 'https://rpc-endpoints.superfluid.dev/optimism-goerli',
-    subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-goerli',
+    rpcUrl: getRpcUrl(420),
+    subgraphUrl: getSubgraphUrl(420),
     getLinkForTransaction: (txHash: string): string =>
       `https://goerli-optimism.etherscan.io/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -202,9 +223,8 @@ export const networks: Network[] = [
     chainId: 421613,
     isTestnet: true,
     supportsGDA: true,
-    rpcUrl: 'https://rpc-endpoints.superfluid.dev/arbitrum-goerli',
-    subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-arbitrum-goerli',
+    rpcUrl: getRpcUrl(421613),
+    subgraphUrl: getSubgraphUrl(421613),
     getLinkForTransaction: (txHash: string): string =>
       `https://goerli.arbiscan.io/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -216,9 +236,8 @@ export const networks: Network[] = [
     chainId: 11155111,
     slugName: 'eth-sepolia',
     displayName: 'Sepolia',
-    rpcUrl: 'https://rpc-endpoints.superfluid.dev/eth-sepolia',
-    subgraphUrl:
-      'https://subgraph.satsuma-prod.com/c5br3jaVlJI6/superfluid/eth-sepolia/api',
+    rpcUrl: getRpcUrl(11155111),
+    subgraphUrl: getSubgraphUrl(11155111),
     getLinkForTransaction: (txHash: string): string =>
       `https://sepolia.etherscan.io/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -230,8 +249,8 @@ export const networks: Network[] = [
     chainId: 1442,
     slugName: 'polygon-zkevm-testnet',
     displayName: 'Polygon zkEVM Testnet',
-    rpcUrl: 'https://rpc-endpoints.superfluid.dev/polygon-zkevm-testnet',
-    subgraphUrl: 'https://polygon-zkevm-testnet.subgraph.x.superfluid.dev',
+    rpcUrl: getRpcUrl(1442),
+    subgraphUrl: getSubgraphUrl(1442),
     getLinkForTransaction: (txHash: string): string =>
       `https://testnet-zkevm.polygonscan.com/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
@@ -243,23 +262,52 @@ export const networks: Network[] = [
     chainId: 84531,
     slugName: 'base-goerli',
     displayName: 'Base Goerli',
-    rpcUrl: 'https://rpc-endpoints.superfluid.dev/base-goerli',
-    subgraphUrl: 'https://base-goerli.subgraph.x.superfluid.dev/',
+    rpcUrl: getRpcUrl(84531),
+    subgraphUrl: getSubgraphUrl(84531),
     getLinkForTransaction: (txHash: string): string =>
       `https://goerli.basescan.org/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
       `https://goerli.basescan.org/address/${address}`
+  },
+  {
+    isTestnet: true,
+    supportsGDA: false,
+    chainId: 11155420,
+    slugName: 'optimism-sepolia',
+    displayName: 'Optimism Sepolia',
+    rpcUrl: getRpcUrl(11155420),
+    subgraphUrl: getSubgraphUrl(11155420),
+    getLinkForTransaction: (txHash: string): string =>
+      `https://sepolia-optimism.etherscan.io/tx/${txHash}`,
+    getLinkForAddress: (address: string): string =>
+      `https://sepolia-optimism.etherscan.io/address/${address}`
   }
-]
+  // {
+  //   isTestnet: true,
+  //   supportsGDA: false,
+  //   chainId: 534351,
+  //   slugName: 'scroll-sepolia',
+  //   displayName: 'Scroll Sepolia',
+  //   rpcUrl: getRpcUrl(534351),
+  //   subgraphUrl: getSubgraphUrl(534351),
+  //   getLinkForTransaction: (txHash: string): string =>
+  //     `https://sepolia.scrollscan.com/tx/${txHash}`,
+  //   getLinkForAddress: (address: string): string =>
+  //     `https://sepolia.scrollscan.com/address/${address}`
+  // }
+] as const
 
-export const networksByName = new Map(
+export type ChainId = (typeof networks)[number]['chainId']
+export type SlugName = (typeof networks)[number]['slugName']
+
+export const networksByName = new Map<string, Network>(
   networks.map((x) => [x.slugName.toLowerCase(), x])
 )
 
-export const networksByChainId = new Map(networks.map((x) => [x.chainId, x]))
-
+export const networksByChainId = new Map<number, Network>(
+  networks.map((x) => [x.chainId, x])
+)
 export const polygon = networksByChainId.get(137)!
-
 export const networksByTestAndName = sortBy(
   [(x) => x.isTestnet, (x) => x.slugName],
   networks
