@@ -42,9 +42,9 @@ Then(`The account events are shown correctly for {string}`, (network) => {
 })
 
 Then(
-  `The super app publications are shown correctly for {string}`,
+  `The ida account publications are shown correctly for {string}`,
   (network) => {
-    AccountPage.validateSuperAppPublicationEntries(network)
+    AccountPage.validateIdaAccountPublicationEntries(network)
   }
 )
 Given(`User opens the publication details`, () => {
@@ -291,7 +291,7 @@ Then(`User clicks on the close button on the filter`, () => {
   CommonElements.clickFilterCloseButton()
 })
 Given(`User can see the pools they are admin to in the table`, () => {
-  AccountPage.validateAdminAccountPoolsTableEntries('goerli')
+  AccountPage.validateAdminAccountPoolsTableEntries('mumbai')
 })
 Given(`Pools and Members tables show no results`, () => {
   AccountPage.validateNoResultsForPoolsTable()
@@ -316,7 +316,7 @@ Then(`The pool table filter is not visible`, () => {
   AccountPage.validatePoolTableFilterNotVisible()
 })
 Then(`User can see the pools they are a member of in the table`, () => {
-  AccountPage.validateMemberAccountMembersTableEntries('goerli')
+  AccountPage.validateMemberAccountMembersTableEntries('mumbai')
 })
 Then(`User sees only the pools they are connected to`, () => {
   AccountPage.validateOnlyConnectedPoolsAreVisible()

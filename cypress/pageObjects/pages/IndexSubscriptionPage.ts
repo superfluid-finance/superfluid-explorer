@@ -4,7 +4,7 @@ const INDEX_SHORT_HASH = '[data-cy=index-subscription-short-hash] a'
 const SUBSCRIPTION_TOKEN = '[data-cy=index-subscription-token] a'
 const INDEX_PUBLISHER = '[data-cy=subscription-publisher] a'
 const INDEX_SUBSCRIBER = '[data-cy=subscription-subscriber] a'
-const POOL_UNITS = '[data-cy=subscription-units] span'
+const POOL_UNITS = '[data-cy=subscription-units]'
 const APPROVAL = '[data-cy=subscription-approval] span'
 const TOTAL_AMOUNT_RECEIVED =
   '[data-cy=subscription-total-amount-received] span'
@@ -15,7 +15,7 @@ export class IndexSubscriptionPage extends BasePage {
   static validateSubscriptionGeneralInfo(network: string) {
     cy.fixture('accountData').then((fixture) => {
       cy.wrap(
-        fixture[network].superApp.indexes.publications[0].details
+        fixture[network].idaAccount.indexes.publications[0].details
           .subscriptions[0].details
       ).then((subscription: any) => {
         this.hasText(INDEX_SHORT_HASH, subscription.shortIndex)
@@ -29,10 +29,10 @@ export class IndexSubscriptionPage extends BasePage {
   static validateSubscriptionUnitsInfo(network: string) {
     cy.fixture('accountData').then((fixture) => {
       cy.wrap(
-        fixture[network].superApp.indexes.publications[0].details
+        fixture[network].idaAccount.indexes.publications[0].details
           .subscriptions[0].details
       ).then((subscription: any) => {
-        this.hasText(POOL_UNITS, subscription.units)
+        this.containsText(POOL_UNITS, subscription.units)
         this.hasText(APPROVAL, subscription.approved)
         this.containsText(
           TOTAL_AMOUNT_RECEIVED,
@@ -46,7 +46,7 @@ export class IndexSubscriptionPage extends BasePage {
     cy.fixture('accountData').then((fixture) => {
       fixture[
         network
-      ].superApp.indexes.publications[0].details.subscriptions[0].details.distributions.forEach(
+      ].idaAccount.indexes.publications[0].details.subscriptions[0].details.distributions.forEach(
         (distribution: any, index: number) => {
           cy.get(DISTRIBUTIONS_AMOUNT_RECEIVED)
             .eq(index)
@@ -61,7 +61,7 @@ export class IndexSubscriptionPage extends BasePage {
     cy.fixture('accountData').then((fixture) => {
       fixture[
         network
-      ].superApp.indexes.publications[0].details.subscriptions[0].details.unitsUpdated.forEach(
+      ].idaAccount.indexes.publications[0].details.subscriptions[0].details.unitsUpdated.forEach(
         (unitsUpdate: any, index: number) => {
           cy.get(UNITS_UPDATED)
             .eq(index)
