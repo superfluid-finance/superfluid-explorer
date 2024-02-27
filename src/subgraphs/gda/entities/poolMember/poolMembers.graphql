@@ -1,8 +1,8 @@
 query poolMembers(
   $first: Int = 10
+  $skip: Int = 0
   $orderBy: PoolMember_orderBy = id
   $orderDirection: OrderDirection = asc
-  $skip: Int = 0
   $where: PoolMember_filter = {}
   $block: Block_height
 ) {
@@ -22,17 +22,9 @@ query poolMembers(
     units
     pool {
       id
-      totalUnits
-      flowRate
-      totalAmountDistributedUntilUpdatedAt
       token {
         id
-        symbol
       }
-      admin {
-        id
-      }
-      updatedAtTimestamp
     }
     account {
       id

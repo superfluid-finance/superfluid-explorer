@@ -11,8 +11,8 @@ import {
 import {
   createGeneralTags,
   getSubgraphClient,
-  provideSpecificCacheTagsFromRelevantAddresses
-} from '@superfluid-finance/sdk-redux'
+  provideSpecificCacheTagsFromRelevantAddresses,
+  SubgraphEndpointBuilder} from '@superfluid-finance/sdk-redux'
 
 import { CacheTime } from '../cacheTime'
 import {
@@ -23,7 +23,6 @@ import {
 import { FlowDistributionUpdatedEventQueryHandler } from '../events/flowDistributionUpdatedEvents'
 import { InstantDistributionUpdatedEventQueryHandler } from '../events/instantDistributionUpdatedEvents'
 import { PoolMemberUnitsUpdatedEventQueryHandler } from '../events/poolMemberUnitsUpdatedEvents'
-import { GdaSubgraphEndpointBuilder } from '../gdaSubgraphEndpointBuilder'
 import {
   FlowDistributionUpdatedEventQuery,
   FlowDistributionUpdatedEventsQuery,
@@ -33,18 +32,16 @@ import {
   PoolMemberUnitsUpdatedEventsQuery
 } from './entityArgs'
 
-export const createEventQueryEndpoints = (
-  builder: GdaSubgraphEndpointBuilder
-) => {
+export const createEventQueryEndpoints = (builder: SubgraphEndpointBuilder) => {
   // NOTE: Ignoring prettier because longer lines are more readable here.
   // prettier-ignore
   return {
-    instantDistributionUpdatedEvent: get<InstantDistributionUpdatedEvent, InstantDistributionUpdatedEventQuery>(builder, new InstantDistributionUpdatedEventQueryHandler()),
-    instantDistributionUpdatedEvents: list<InstantDistributionUpdatedEvent, InstantDistributionUpdatedEventsQuery>(builder, new InstantDistributionUpdatedEventQueryHandler()),
-        flowDistributionUpdatedEvent: get<FlowDistributionUpdatedEvent, FlowDistributionUpdatedEventQuery>(builder, new FlowDistributionUpdatedEventQueryHandler()),
-        flowDistributionUpdatedEvents: list<FlowDistributionUpdatedEvent, FlowDistributionUpdatedEventsQuery>(builder, new FlowDistributionUpdatedEventQueryHandler()),
-        poolMemberUnitsUpdatedEvent: get<PoolMemberUnitsUpdatedEvent, PoolMemberUnitsUpdatedEventQuery>(builder, new PoolMemberUnitsUpdatedEventQueryHandler()),
-        poolMemberUnitsUpdatedEvents: list<PoolMemberUnitsUpdatedEvent, PoolMemberUnitsUpdatedEventsQuery>(builder, new PoolMemberUnitsUpdatedEventQueryHandler()),
+      instantDistributionUpdatedEvent: get<InstantDistributionUpdatedEvent, InstantDistributionUpdatedEventQuery>(builder, new InstantDistributionUpdatedEventQueryHandler()),
+      instantDistributionUpdatedEvents: list<InstantDistributionUpdatedEvent, InstantDistributionUpdatedEventsQuery>(builder, new InstantDistributionUpdatedEventQueryHandler()),
+      flowDistributionUpdatedEvent: get<FlowDistributionUpdatedEvent, FlowDistributionUpdatedEventQuery>(builder, new FlowDistributionUpdatedEventQueryHandler()),
+      flowDistributionUpdatedEvents: list<FlowDistributionUpdatedEvent, FlowDistributionUpdatedEventsQuery>(builder, new FlowDistributionUpdatedEventQueryHandler()),
+      poolMemberUnitsUpdatedEvent: get<PoolMemberUnitsUpdatedEvent, PoolMemberUnitsUpdatedEventQuery>(builder, new PoolMemberUnitsUpdatedEventQueryHandler()),
+      poolMemberUnitsUpdatedEvents: list<PoolMemberUnitsUpdatedEvent, PoolMemberUnitsUpdatedEventsQuery>(builder, new PoolMemberUnitsUpdatedEventQueryHandler()),
     };
 }
 
@@ -55,7 +52,7 @@ function get<
   TReturn extends ILightEntity,
   TQuery extends { chainId: number } & SubgraphGetQuery
 >(
-  builder: GdaSubgraphEndpointBuilder,
+  builder: SubgraphEndpointBuilder,
   queryHandler: SubgraphGetQueryHandler<TReturn> &
     RelevantAddressProviderFromResult<TReturn>
 ) {
@@ -79,7 +76,7 @@ function list<
   TFilter extends { [key: string]: unknown } = NonNullable<TQuery['filter']>,
   TOrderBy extends string = NonNullable<TQuery['order']>['orderBy']
 >(
-  builder: GdaSubgraphEndpointBuilder,
+  builder: SubgraphEndpointBuilder,
   queryHandler: SubgraphListQueryHandler<TReturn, TQuery, TFilter> &
     RelevantAddressProviderFromFilter<TFilter>
 ) {

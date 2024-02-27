@@ -4,6 +4,7 @@ import AppLink from '../../../components/AppLink/AppLink'
 import HelpAlert from '../../../components/Info/HelpAlert'
 import { Network } from '../../../redux/networks'
 import AccountPoolAdminsTable from './AccountPoolAdminsTable'
+import { AccountPoolDistributorsDataGrid } from './AccountPoolDistributorsDataGrid'
 import AccountPoolMembersTable from './AccountPoolMembersTable'
 
 const AccountPools: FC<{
@@ -18,19 +19,24 @@ const AccountPools: FC<{
         recurring funds to a limitless set of recipients in web3. (GDA).{' '}
         <AppLink
           data-cy="gda-read-more-link"
-          href="https://docs.superfluid.finance/superfluid/protocol-overview/in-depth-overview/super-agreements/streaming-distributions-coming-soon"
+          href="https://docs.superfluid.finance/docs/category/distributions"
           target="_blank"
         >
           Read more
         </AppLink>
       </HelpAlert>
 
-      <AccountPoolAdminsTable
+      <AccountPoolMembersTable
         network={network}
         accountAddress={accountAddress}
       />
 
-      <AccountPoolMembersTable
+      <AccountPoolDistributorsDataGrid
+        network={network}
+        accountAddress={accountAddress}
+      />
+
+      <AccountPoolAdminsTable
         network={network}
         accountAddress={accountAddress}
       />

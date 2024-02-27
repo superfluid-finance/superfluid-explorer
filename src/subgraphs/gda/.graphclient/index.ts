@@ -276,20 +276,11 @@ export type AccountTokenSnapshot = {
    */
   activeGDAOutgoingStreamCount: Scalars['Int']
   /**
-   * The count of active incoming streams to this account for all agreements.
+   * The count of active incoming streams to this account for the CFA.
+   * GDA incoming streams are *NOT* counted here.
    *
    */
   activeIncomingStreamCount: Scalars['Int']
-  /**
-   * The count of active incoming streams to this account for the CFA.
-   *
-   */
-  activeCFAIncomingStreamCount: Scalars['Int']
-  /**
-   * The count of active incoming streams to this account for the GDA.
-   *
-   */
-  activeGDAIncomingStreamCount: Scalars['Int']
   /**
    * The count of closed streams by `account`, both incoming and outgoing for all agreements.
    *
@@ -321,20 +312,11 @@ export type AccountTokenSnapshot = {
    */
   inactiveGDAOutgoingStreamCount: Scalars['Int']
   /**
-   * The count of closed incoming streams by `account` for all agreements.
+   * The count of closed incoming streams by `account` for the CFA.
+   * Close incoming GDA streams are *NOT* counted here.
    *
    */
   inactiveIncomingStreamCount: Scalars['Int']
-  /**
-   * The count of closed incoming streams by `account` for the CFA.
-   *
-   */
-  inactiveCFAIncomingStreamCount: Scalars['Int']
-  /**
-   * The count of closed incoming streams by `account` for the GDA.
-   *
-   */
-  inactiveGDAIncomingStreamCount: Scalars['Int']
   /**
    * The current (as of updatedAt) number of subscriptions with units allocated to them tied to this `account`.
    *
@@ -378,6 +360,7 @@ export type AccountTokenSnapshot = {
   /**
    * The total net flow rate of the `account` as of `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
    * This can be obtained by: `totalInflowRate - totalOutflowRate`.
+   * NOTE: this property will NOT be 100% accurate all the time for receivers of GDA flows.
    *
    */
   totalNetFlowRate: Scalars['BigInt']
@@ -387,25 +370,11 @@ export type AccountTokenSnapshot = {
    */
   totalCFANetFlowRate: Scalars['BigInt']
   /**
-   * The total net flow rate of the `account` as of `updatedAtTimestamp`/`updatedAtBlock` for the GDA.
-   *
-   */
-  totalGDANetFlowRate: Scalars['BigInt']
-  /**
-   * The total inflow rate (receive flowRate per second) of the `account` for all flow agreements.
+   * The total inflow rate (receive flowRate per second) of the `account` for the CFA.
+   * GDA inflow rate is *NOT* included here.
    *
    */
   totalInflowRate: Scalars['BigInt']
-  /**
-   * The total inflow rate (receive flowRate per second) of the `account` for the CFA.
-   *
-   */
-  totalCFAInflowRate: Scalars['BigInt']
-  /**
-   * The total inflow rate (receive flowRate per second) of the `account` for the GDA.
-   *
-   */
-  totalGDAInflowRate: Scalars['BigInt']
   /**
    * The total outflow rate (send flowrate per second) of the `account` for all flow agreements.
    *
@@ -422,20 +391,10 @@ export type AccountTokenSnapshot = {
    */
   totalGDAOutflowRate: Scalars['BigInt']
   /**
-   * The total amount of `token` streamed into this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
-   *
-   */
-  totalAmountStreamedInUntilUpdatedAt: Scalars['BigInt']
-  /**
    * The total amount of `token` streamed into this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA.
    *
    */
-  totalCFAAmountStreamedInUntilUpdatedAt: Scalars['BigInt']
-  /**
-   * The total amount of `token` streamed into this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the GDA.
-   *
-   */
-  totalGDAAmountStreamedInUntilUpdatedAt: Scalars['BigInt']
+  totalAmountStreamedInUntilUpdatedAt: Scalars['BigInt']
   /**
    * The total amount of `token` streamed from this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
    *
@@ -447,11 +406,6 @@ export type AccountTokenSnapshot = {
    */
   totalCFAAmountStreamedOutUntilUpdatedAt: Scalars['BigInt']
   /**
-   * The total amount of `token` streamed from this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the GDA.
-   *
-   */
-  totalGDAAmountStreamedOutUntilUpdatedAt: Scalars['BigInt']
-  /**
    * The total amount of `token` streamed through this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
    *
    */
@@ -461,11 +415,6 @@ export type AccountTokenSnapshot = {
    *
    */
   totalCFAAmountStreamedUntilUpdatedAt: Scalars['BigInt']
-  /**
-   * The total amount of `token` streamed through this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the GDA.
-   *
-   */
-  totalGDAAmountStreamedUntilUpdatedAt: Scalars['BigInt']
   /**
    * The total amount of `token` this `account` has transferred.
    *
@@ -554,16 +503,6 @@ export type AccountTokenSnapshotLog = {
    */
   activeIncomingStreamCount: Scalars['Int']
   /**
-   * The count of active incoming streams to this account for the CFA.
-   *
-   */
-  activeCFAIncomingStreamCount: Scalars['Int']
-  /**
-   * The count of active incoming streams to this account for the GDA.
-   *
-   */
-  activeGDAIncomingStreamCount: Scalars['Int']
-  /**
    * The current (as of timestamp) count of closed streams for all agreements.
    *
    */
@@ -594,20 +533,11 @@ export type AccountTokenSnapshotLog = {
    */
   inactiveGDAOutgoingStreamCount: Scalars['Int']
   /**
-   * The count of closed incoming streams by `account` for all agreements.
+   * The count of closed incoming streams by `account` for the CFA.
+   * Close incoming GDA streams are *NOT* counted here.
    *
    */
   inactiveIncomingStreamCount: Scalars['Int']
-  /**
-   * The count of closed incoming streams by `account` for the CFA.
-   *
-   */
-  inactiveCFAIncomingStreamCount: Scalars['Int']
-  /**
-   * The count of closed incoming streams by `account` for the GDA.
-   *
-   */
-  inactiveGDAIncomingStreamCount: Scalars['Int']
   /**
    * The current (as of timestamp) number of subscriptions with units allocated to them tied to this `account`.
    *
@@ -656,31 +586,14 @@ export type AccountTokenSnapshotLog = {
   totalNetFlowRate: Scalars['BigInt']
   /**
    * The total (as of timestamp) net flow rate of the `account` as of `timestamp`/`block` for the CFA.
-   * This can be obtained by: `totalCFAInflowRate - totalCFAOutflowRate`
    *
    */
   totalCFANetFlowRate: Scalars['BigInt']
-  /**
-   * The total (as of timestamp) net flow rate of the `account` as of `timestamp`/`block` for the GDA.
-   * This can be obtained by: `totalGDAInflowRate - totalGDAOutflowRate`
-   *
-   */
-  totalGDANetFlowRate: Scalars['BigInt']
   /**
    * The total (as of timestamp) inflow rate (receive flowRate per second) of the `account`.
    *
    */
   totalInflowRate: Scalars['BigInt']
-  /**
-   * The total (as of timestamp) inflow rate (receive flowRate per second) of the `account` for the CFA.
-   *
-   */
-  totalCFAInflowRate: Scalars['BigInt']
-  /**
-   * The total (as of timestamp) inflow rate (receive flowRate per second) of the `account` for the GDA.
-   *
-   */
-  totalGDAInflowRate: Scalars['BigInt']
   /**
    * The total (as of timestamp) outflow rate (send flowrate per second) of the `account`.
    *
@@ -702,16 +615,6 @@ export type AccountTokenSnapshotLog = {
    */
   totalAmountStreamedIn: Scalars['BigInt']
   /**
-   * The total (as of timestamp) amount of `token` streamed into this `account` until the `timestamp`/`block` for the CFA.
-   *
-   */
-  totalCFAAmountStreamedIn: Scalars['BigInt']
-  /**
-   * The total (as of timestamp) amount of `token` streamed into this `account` until the `timestamp`/`block` for the GDA.
-   *
-   */
-  totalGDAAmountStreamedIn: Scalars['BigInt']
-  /**
    * The total (as of timestamp) amount of `token` streamed from this `account` until the `timestamp`/`block`.
    *
    */
@@ -722,11 +625,6 @@ export type AccountTokenSnapshotLog = {
    */
   totalCFAAmountStreamedOut: Scalars['BigInt']
   /**
-   * The total (as of timestamp) amount of `token` streamed from this `account` until the `timestamp`/`block` for the GDA.
-   *
-   */
-  totalGDAAmountStreamedOut: Scalars['BigInt']
-  /**
    * The total (as of timestamp) net amount of `token` streamed through this `account` until the `timestamp`/`block`.
    *
    */
@@ -736,11 +634,6 @@ export type AccountTokenSnapshotLog = {
    *
    */
   totalCFAAmountStreamed: Scalars['BigInt']
-  /**
-   * The total (as of timestamp) net amount of `token` streamed through this `account` until the `timestamp`/`block` for the GDA.
-   *
-   */
-  totalGDAAmountStreamed: Scalars['BigInt']
   /**
    * The total (as of timestamp) amount of `token` this `account` has transferred out until the `timestamp`/`block`.
    *
@@ -886,22 +779,6 @@ export type AccountTokenSnapshotLog_Filter = {
   activeIncomingStreamCount_lte?: InputMaybe<Scalars['Int']>
   activeIncomingStreamCount_in?: InputMaybe<Array<Scalars['Int']>>
   activeIncomingStreamCount_not_in?: InputMaybe<Array<Scalars['Int']>>
-  activeCFAIncomingStreamCount?: InputMaybe<Scalars['Int']>
-  activeCFAIncomingStreamCount_not?: InputMaybe<Scalars['Int']>
-  activeCFAIncomingStreamCount_gt?: InputMaybe<Scalars['Int']>
-  activeCFAIncomingStreamCount_lt?: InputMaybe<Scalars['Int']>
-  activeCFAIncomingStreamCount_gte?: InputMaybe<Scalars['Int']>
-  activeCFAIncomingStreamCount_lte?: InputMaybe<Scalars['Int']>
-  activeCFAIncomingStreamCount_in?: InputMaybe<Array<Scalars['Int']>>
-  activeCFAIncomingStreamCount_not_in?: InputMaybe<Array<Scalars['Int']>>
-  activeGDAIncomingStreamCount?: InputMaybe<Scalars['Int']>
-  activeGDAIncomingStreamCount_not?: InputMaybe<Scalars['Int']>
-  activeGDAIncomingStreamCount_gt?: InputMaybe<Scalars['Int']>
-  activeGDAIncomingStreamCount_lt?: InputMaybe<Scalars['Int']>
-  activeGDAIncomingStreamCount_gte?: InputMaybe<Scalars['Int']>
-  activeGDAIncomingStreamCount_lte?: InputMaybe<Scalars['Int']>
-  activeGDAIncomingStreamCount_in?: InputMaybe<Array<Scalars['Int']>>
-  activeGDAIncomingStreamCount_not_in?: InputMaybe<Array<Scalars['Int']>>
   totalNumberOfClosedStreams?: InputMaybe<Scalars['Int']>
   totalNumberOfClosedStreams_not?: InputMaybe<Scalars['Int']>
   totalNumberOfClosedStreams_gt?: InputMaybe<Scalars['Int']>
@@ -958,22 +835,6 @@ export type AccountTokenSnapshotLog_Filter = {
   inactiveIncomingStreamCount_lte?: InputMaybe<Scalars['Int']>
   inactiveIncomingStreamCount_in?: InputMaybe<Array<Scalars['Int']>>
   inactiveIncomingStreamCount_not_in?: InputMaybe<Array<Scalars['Int']>>
-  inactiveCFAIncomingStreamCount?: InputMaybe<Scalars['Int']>
-  inactiveCFAIncomingStreamCount_not?: InputMaybe<Scalars['Int']>
-  inactiveCFAIncomingStreamCount_gt?: InputMaybe<Scalars['Int']>
-  inactiveCFAIncomingStreamCount_lt?: InputMaybe<Scalars['Int']>
-  inactiveCFAIncomingStreamCount_gte?: InputMaybe<Scalars['Int']>
-  inactiveCFAIncomingStreamCount_lte?: InputMaybe<Scalars['Int']>
-  inactiveCFAIncomingStreamCount_in?: InputMaybe<Array<Scalars['Int']>>
-  inactiveCFAIncomingStreamCount_not_in?: InputMaybe<Array<Scalars['Int']>>
-  inactiveGDAIncomingStreamCount?: InputMaybe<Scalars['Int']>
-  inactiveGDAIncomingStreamCount_not?: InputMaybe<Scalars['Int']>
-  inactiveGDAIncomingStreamCount_gt?: InputMaybe<Scalars['Int']>
-  inactiveGDAIncomingStreamCount_lt?: InputMaybe<Scalars['Int']>
-  inactiveGDAIncomingStreamCount_gte?: InputMaybe<Scalars['Int']>
-  inactiveGDAIncomingStreamCount_lte?: InputMaybe<Scalars['Int']>
-  inactiveGDAIncomingStreamCount_in?: InputMaybe<Array<Scalars['Int']>>
-  inactiveGDAIncomingStreamCount_not_in?: InputMaybe<Array<Scalars['Int']>>
   totalSubscriptionsWithUnits?: InputMaybe<Scalars['Int']>
   totalSubscriptionsWithUnits_not?: InputMaybe<Scalars['Int']>
   totalSubscriptionsWithUnits_gt?: InputMaybe<Scalars['Int']>
@@ -1054,14 +915,6 @@ export type AccountTokenSnapshotLog_Filter = {
   totalCFANetFlowRate_lte?: InputMaybe<Scalars['BigInt']>
   totalCFANetFlowRate_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalCFANetFlowRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDANetFlowRate?: InputMaybe<Scalars['BigInt']>
-  totalGDANetFlowRate_not?: InputMaybe<Scalars['BigInt']>
-  totalGDANetFlowRate_gt?: InputMaybe<Scalars['BigInt']>
-  totalGDANetFlowRate_lt?: InputMaybe<Scalars['BigInt']>
-  totalGDANetFlowRate_gte?: InputMaybe<Scalars['BigInt']>
-  totalGDANetFlowRate_lte?: InputMaybe<Scalars['BigInt']>
-  totalGDANetFlowRate_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDANetFlowRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalInflowRate?: InputMaybe<Scalars['BigInt']>
   totalInflowRate_not?: InputMaybe<Scalars['BigInt']>
   totalInflowRate_gt?: InputMaybe<Scalars['BigInt']>
@@ -1070,22 +923,6 @@ export type AccountTokenSnapshotLog_Filter = {
   totalInflowRate_lte?: InputMaybe<Scalars['BigInt']>
   totalInflowRate_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalInflowRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalCFAInflowRate?: InputMaybe<Scalars['BigInt']>
-  totalCFAInflowRate_not?: InputMaybe<Scalars['BigInt']>
-  totalCFAInflowRate_gt?: InputMaybe<Scalars['BigInt']>
-  totalCFAInflowRate_lt?: InputMaybe<Scalars['BigInt']>
-  totalCFAInflowRate_gte?: InputMaybe<Scalars['BigInt']>
-  totalCFAInflowRate_lte?: InputMaybe<Scalars['BigInt']>
-  totalCFAInflowRate_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalCFAInflowRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAInflowRate?: InputMaybe<Scalars['BigInt']>
-  totalGDAInflowRate_not?: InputMaybe<Scalars['BigInt']>
-  totalGDAInflowRate_gt?: InputMaybe<Scalars['BigInt']>
-  totalGDAInflowRate_lt?: InputMaybe<Scalars['BigInt']>
-  totalGDAInflowRate_gte?: InputMaybe<Scalars['BigInt']>
-  totalGDAInflowRate_lte?: InputMaybe<Scalars['BigInt']>
-  totalGDAInflowRate_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAInflowRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalOutflowRate?: InputMaybe<Scalars['BigInt']>
   totalOutflowRate_not?: InputMaybe<Scalars['BigInt']>
   totalOutflowRate_gt?: InputMaybe<Scalars['BigInt']>
@@ -1118,22 +955,6 @@ export type AccountTokenSnapshotLog_Filter = {
   totalAmountStreamedIn_lte?: InputMaybe<Scalars['BigInt']>
   totalAmountStreamedIn_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalAmountStreamedIn_not_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalCFAAmountStreamedIn?: InputMaybe<Scalars['BigInt']>
-  totalCFAAmountStreamedIn_not?: InputMaybe<Scalars['BigInt']>
-  totalCFAAmountStreamedIn_gt?: InputMaybe<Scalars['BigInt']>
-  totalCFAAmountStreamedIn_lt?: InputMaybe<Scalars['BigInt']>
-  totalCFAAmountStreamedIn_gte?: InputMaybe<Scalars['BigInt']>
-  totalCFAAmountStreamedIn_lte?: InputMaybe<Scalars['BigInt']>
-  totalCFAAmountStreamedIn_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalCFAAmountStreamedIn_not_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAAmountStreamedIn?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedIn_not?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedIn_gt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedIn_lt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedIn_gte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedIn_lte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedIn_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAAmountStreamedIn_not_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalAmountStreamedOut?: InputMaybe<Scalars['BigInt']>
   totalAmountStreamedOut_not?: InputMaybe<Scalars['BigInt']>
   totalAmountStreamedOut_gt?: InputMaybe<Scalars['BigInt']>
@@ -1150,14 +971,6 @@ export type AccountTokenSnapshotLog_Filter = {
   totalCFAAmountStreamedOut_lte?: InputMaybe<Scalars['BigInt']>
   totalCFAAmountStreamedOut_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalCFAAmountStreamedOut_not_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAAmountStreamedOut?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedOut_not?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedOut_gt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedOut_lt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedOut_gte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedOut_lte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedOut_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAAmountStreamedOut_not_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalAmountStreamed?: InputMaybe<Scalars['BigInt']>
   totalAmountStreamed_not?: InputMaybe<Scalars['BigInt']>
   totalAmountStreamed_gt?: InputMaybe<Scalars['BigInt']>
@@ -1174,14 +987,6 @@ export type AccountTokenSnapshotLog_Filter = {
   totalCFAAmountStreamed_lte?: InputMaybe<Scalars['BigInt']>
   totalCFAAmountStreamed_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalCFAAmountStreamed_not_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAAmountStreamed?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamed_not?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamed_gt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamed_lt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamed_gte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamed_lte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamed_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAAmountStreamed_not_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalAmountTransferred?: InputMaybe<Scalars['BigInt']>
   totalAmountTransferred_not?: InputMaybe<Scalars['BigInt']>
   totalAmountTransferred_gt?: InputMaybe<Scalars['BigInt']>
@@ -1275,8 +1080,6 @@ export type AccountTokenSnapshotLog_OrderBy =
   | 'activeCFAOutgoingStreamCount'
   | 'activeGDAOutgoingStreamCount'
   | 'activeIncomingStreamCount'
-  | 'activeCFAIncomingStreamCount'
-  | 'activeGDAIncomingStreamCount'
   | 'totalNumberOfClosedStreams'
   | 'totalCFANumberOfClosedStreams'
   | 'totalGDANumberOfClosedStreams'
@@ -1284,8 +1087,6 @@ export type AccountTokenSnapshotLog_OrderBy =
   | 'inactiveCFAOutgoingStreamCount'
   | 'inactiveGDAOutgoingStreamCount'
   | 'inactiveIncomingStreamCount'
-  | 'inactiveCFAIncomingStreamCount'
-  | 'inactiveGDAIncomingStreamCount'
   | 'totalSubscriptionsWithUnits'
   | 'totalApprovedSubscriptions'
   | 'totalMembershipsWithUnits'
@@ -1296,22 +1097,15 @@ export type AccountTokenSnapshotLog_OrderBy =
   | 'totalGDADeposit'
   | 'totalNetFlowRate'
   | 'totalCFANetFlowRate'
-  | 'totalGDANetFlowRate'
   | 'totalInflowRate'
-  | 'totalCFAInflowRate'
-  | 'totalGDAInflowRate'
   | 'totalOutflowRate'
   | 'totalCFAOutflowRate'
   | 'totalGDAOutflowRate'
   | 'totalAmountStreamedIn'
-  | 'totalCFAAmountStreamedIn'
-  | 'totalGDAAmountStreamedIn'
   | 'totalAmountStreamedOut'
   | 'totalCFAAmountStreamedOut'
-  | 'totalGDAAmountStreamedOut'
   | 'totalAmountStreamed'
   | 'totalCFAAmountStreamed'
-  | 'totalGDAAmountStreamed'
   | 'totalAmountTransferred'
   | 'account'
   | 'account__id'
@@ -1344,8 +1138,6 @@ export type AccountTokenSnapshotLog_OrderBy =
   | 'accountTokenSnapshot__activeCFAOutgoingStreamCount'
   | 'accountTokenSnapshot__activeGDAOutgoingStreamCount'
   | 'accountTokenSnapshot__activeIncomingStreamCount'
-  | 'accountTokenSnapshot__activeCFAIncomingStreamCount'
-  | 'accountTokenSnapshot__activeGDAIncomingStreamCount'
   | 'accountTokenSnapshot__totalNumberOfClosedStreams'
   | 'accountTokenSnapshot__totalCFANumberOfClosedStreams'
   | 'accountTokenSnapshot__totalGDANumberOfClosedStreams'
@@ -1353,8 +1145,6 @@ export type AccountTokenSnapshotLog_OrderBy =
   | 'accountTokenSnapshot__inactiveCFAOutgoingStreamCount'
   | 'accountTokenSnapshot__inactiveGDAOutgoingStreamCount'
   | 'accountTokenSnapshot__inactiveIncomingStreamCount'
-  | 'accountTokenSnapshot__inactiveCFAIncomingStreamCount'
-  | 'accountTokenSnapshot__inactiveGDAIncomingStreamCount'
   | 'accountTokenSnapshot__totalSubscriptionsWithUnits'
   | 'accountTokenSnapshot__totalApprovedSubscriptions'
   | 'accountTokenSnapshot__totalMembershipsWithUnits'
@@ -1365,22 +1155,15 @@ export type AccountTokenSnapshotLog_OrderBy =
   | 'accountTokenSnapshot__totalGDADeposit'
   | 'accountTokenSnapshot__totalNetFlowRate'
   | 'accountTokenSnapshot__totalCFANetFlowRate'
-  | 'accountTokenSnapshot__totalGDANetFlowRate'
   | 'accountTokenSnapshot__totalInflowRate'
-  | 'accountTokenSnapshot__totalCFAInflowRate'
-  | 'accountTokenSnapshot__totalGDAInflowRate'
   | 'accountTokenSnapshot__totalOutflowRate'
   | 'accountTokenSnapshot__totalCFAOutflowRate'
   | 'accountTokenSnapshot__totalGDAOutflowRate'
   | 'accountTokenSnapshot__totalAmountStreamedInUntilUpdatedAt'
-  | 'accountTokenSnapshot__totalCFAAmountStreamedInUntilUpdatedAt'
-  | 'accountTokenSnapshot__totalGDAAmountStreamedInUntilUpdatedAt'
   | 'accountTokenSnapshot__totalAmountStreamedOutUntilUpdatedAt'
   | 'accountTokenSnapshot__totalCFAAmountStreamedOutUntilUpdatedAt'
-  | 'accountTokenSnapshot__totalGDAAmountStreamedOutUntilUpdatedAt'
   | 'accountTokenSnapshot__totalAmountStreamedUntilUpdatedAt'
   | 'accountTokenSnapshot__totalCFAAmountStreamedUntilUpdatedAt'
-  | 'accountTokenSnapshot__totalGDAAmountStreamedUntilUpdatedAt'
   | 'accountTokenSnapshot__totalAmountTransferredUntilUpdatedAt'
 
 export type AccountTokenSnapshot_Filter = {
@@ -1476,22 +1259,6 @@ export type AccountTokenSnapshot_Filter = {
   activeIncomingStreamCount_lte?: InputMaybe<Scalars['Int']>
   activeIncomingStreamCount_in?: InputMaybe<Array<Scalars['Int']>>
   activeIncomingStreamCount_not_in?: InputMaybe<Array<Scalars['Int']>>
-  activeCFAIncomingStreamCount?: InputMaybe<Scalars['Int']>
-  activeCFAIncomingStreamCount_not?: InputMaybe<Scalars['Int']>
-  activeCFAIncomingStreamCount_gt?: InputMaybe<Scalars['Int']>
-  activeCFAIncomingStreamCount_lt?: InputMaybe<Scalars['Int']>
-  activeCFAIncomingStreamCount_gte?: InputMaybe<Scalars['Int']>
-  activeCFAIncomingStreamCount_lte?: InputMaybe<Scalars['Int']>
-  activeCFAIncomingStreamCount_in?: InputMaybe<Array<Scalars['Int']>>
-  activeCFAIncomingStreamCount_not_in?: InputMaybe<Array<Scalars['Int']>>
-  activeGDAIncomingStreamCount?: InputMaybe<Scalars['Int']>
-  activeGDAIncomingStreamCount_not?: InputMaybe<Scalars['Int']>
-  activeGDAIncomingStreamCount_gt?: InputMaybe<Scalars['Int']>
-  activeGDAIncomingStreamCount_lt?: InputMaybe<Scalars['Int']>
-  activeGDAIncomingStreamCount_gte?: InputMaybe<Scalars['Int']>
-  activeGDAIncomingStreamCount_lte?: InputMaybe<Scalars['Int']>
-  activeGDAIncomingStreamCount_in?: InputMaybe<Array<Scalars['Int']>>
-  activeGDAIncomingStreamCount_not_in?: InputMaybe<Array<Scalars['Int']>>
   totalNumberOfClosedStreams?: InputMaybe<Scalars['Int']>
   totalNumberOfClosedStreams_not?: InputMaybe<Scalars['Int']>
   totalNumberOfClosedStreams_gt?: InputMaybe<Scalars['Int']>
@@ -1548,22 +1315,6 @@ export type AccountTokenSnapshot_Filter = {
   inactiveIncomingStreamCount_lte?: InputMaybe<Scalars['Int']>
   inactiveIncomingStreamCount_in?: InputMaybe<Array<Scalars['Int']>>
   inactiveIncomingStreamCount_not_in?: InputMaybe<Array<Scalars['Int']>>
-  inactiveCFAIncomingStreamCount?: InputMaybe<Scalars['Int']>
-  inactiveCFAIncomingStreamCount_not?: InputMaybe<Scalars['Int']>
-  inactiveCFAIncomingStreamCount_gt?: InputMaybe<Scalars['Int']>
-  inactiveCFAIncomingStreamCount_lt?: InputMaybe<Scalars['Int']>
-  inactiveCFAIncomingStreamCount_gte?: InputMaybe<Scalars['Int']>
-  inactiveCFAIncomingStreamCount_lte?: InputMaybe<Scalars['Int']>
-  inactiveCFAIncomingStreamCount_in?: InputMaybe<Array<Scalars['Int']>>
-  inactiveCFAIncomingStreamCount_not_in?: InputMaybe<Array<Scalars['Int']>>
-  inactiveGDAIncomingStreamCount?: InputMaybe<Scalars['Int']>
-  inactiveGDAIncomingStreamCount_not?: InputMaybe<Scalars['Int']>
-  inactiveGDAIncomingStreamCount_gt?: InputMaybe<Scalars['Int']>
-  inactiveGDAIncomingStreamCount_lt?: InputMaybe<Scalars['Int']>
-  inactiveGDAIncomingStreamCount_gte?: InputMaybe<Scalars['Int']>
-  inactiveGDAIncomingStreamCount_lte?: InputMaybe<Scalars['Int']>
-  inactiveGDAIncomingStreamCount_in?: InputMaybe<Array<Scalars['Int']>>
-  inactiveGDAIncomingStreamCount_not_in?: InputMaybe<Array<Scalars['Int']>>
   totalSubscriptionsWithUnits?: InputMaybe<Scalars['Int']>
   totalSubscriptionsWithUnits_not?: InputMaybe<Scalars['Int']>
   totalSubscriptionsWithUnits_gt?: InputMaybe<Scalars['Int']>
@@ -1644,14 +1395,6 @@ export type AccountTokenSnapshot_Filter = {
   totalCFANetFlowRate_lte?: InputMaybe<Scalars['BigInt']>
   totalCFANetFlowRate_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalCFANetFlowRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDANetFlowRate?: InputMaybe<Scalars['BigInt']>
-  totalGDANetFlowRate_not?: InputMaybe<Scalars['BigInt']>
-  totalGDANetFlowRate_gt?: InputMaybe<Scalars['BigInt']>
-  totalGDANetFlowRate_lt?: InputMaybe<Scalars['BigInt']>
-  totalGDANetFlowRate_gte?: InputMaybe<Scalars['BigInt']>
-  totalGDANetFlowRate_lte?: InputMaybe<Scalars['BigInt']>
-  totalGDANetFlowRate_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDANetFlowRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalInflowRate?: InputMaybe<Scalars['BigInt']>
   totalInflowRate_not?: InputMaybe<Scalars['BigInt']>
   totalInflowRate_gt?: InputMaybe<Scalars['BigInt']>
@@ -1660,22 +1403,6 @@ export type AccountTokenSnapshot_Filter = {
   totalInflowRate_lte?: InputMaybe<Scalars['BigInt']>
   totalInflowRate_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalInflowRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalCFAInflowRate?: InputMaybe<Scalars['BigInt']>
-  totalCFAInflowRate_not?: InputMaybe<Scalars['BigInt']>
-  totalCFAInflowRate_gt?: InputMaybe<Scalars['BigInt']>
-  totalCFAInflowRate_lt?: InputMaybe<Scalars['BigInt']>
-  totalCFAInflowRate_gte?: InputMaybe<Scalars['BigInt']>
-  totalCFAInflowRate_lte?: InputMaybe<Scalars['BigInt']>
-  totalCFAInflowRate_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalCFAInflowRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAInflowRate?: InputMaybe<Scalars['BigInt']>
-  totalGDAInflowRate_not?: InputMaybe<Scalars['BigInt']>
-  totalGDAInflowRate_gt?: InputMaybe<Scalars['BigInt']>
-  totalGDAInflowRate_lt?: InputMaybe<Scalars['BigInt']>
-  totalGDAInflowRate_gte?: InputMaybe<Scalars['BigInt']>
-  totalGDAInflowRate_lte?: InputMaybe<Scalars['BigInt']>
-  totalGDAInflowRate_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAInflowRate_not_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalOutflowRate?: InputMaybe<Scalars['BigInt']>
   totalOutflowRate_not?: InputMaybe<Scalars['BigInt']>
   totalOutflowRate_gt?: InputMaybe<Scalars['BigInt']>
@@ -1710,30 +1437,6 @@ export type AccountTokenSnapshot_Filter = {
   totalAmountStreamedInUntilUpdatedAt_not_in?: InputMaybe<
     Array<Scalars['BigInt']>
   >
-  totalCFAAmountStreamedInUntilUpdatedAt?: InputMaybe<Scalars['BigInt']>
-  totalCFAAmountStreamedInUntilUpdatedAt_not?: InputMaybe<Scalars['BigInt']>
-  totalCFAAmountStreamedInUntilUpdatedAt_gt?: InputMaybe<Scalars['BigInt']>
-  totalCFAAmountStreamedInUntilUpdatedAt_lt?: InputMaybe<Scalars['BigInt']>
-  totalCFAAmountStreamedInUntilUpdatedAt_gte?: InputMaybe<Scalars['BigInt']>
-  totalCFAAmountStreamedInUntilUpdatedAt_lte?: InputMaybe<Scalars['BigInt']>
-  totalCFAAmountStreamedInUntilUpdatedAt_in?: InputMaybe<
-    Array<Scalars['BigInt']>
-  >
-  totalCFAAmountStreamedInUntilUpdatedAt_not_in?: InputMaybe<
-    Array<Scalars['BigInt']>
-  >
-  totalGDAAmountStreamedInUntilUpdatedAt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedInUntilUpdatedAt_not?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedInUntilUpdatedAt_gt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedInUntilUpdatedAt_lt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedInUntilUpdatedAt_gte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedInUntilUpdatedAt_lte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedInUntilUpdatedAt_in?: InputMaybe<
-    Array<Scalars['BigInt']>
-  >
-  totalGDAAmountStreamedInUntilUpdatedAt_not_in?: InputMaybe<
-    Array<Scalars['BigInt']>
-  >
   totalAmountStreamedOutUntilUpdatedAt?: InputMaybe<Scalars['BigInt']>
   totalAmountStreamedOutUntilUpdatedAt_not?: InputMaybe<Scalars['BigInt']>
   totalAmountStreamedOutUntilUpdatedAt_gt?: InputMaybe<Scalars['BigInt']>
@@ -1756,18 +1459,6 @@ export type AccountTokenSnapshot_Filter = {
   totalCFAAmountStreamedOutUntilUpdatedAt_not_in?: InputMaybe<
     Array<Scalars['BigInt']>
   >
-  totalGDAAmountStreamedOutUntilUpdatedAt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedOutUntilUpdatedAt_not?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedOutUntilUpdatedAt_gt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedOutUntilUpdatedAt_lt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedOutUntilUpdatedAt_gte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedOutUntilUpdatedAt_lte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedOutUntilUpdatedAt_in?: InputMaybe<
-    Array<Scalars['BigInt']>
-  >
-  totalGDAAmountStreamedOutUntilUpdatedAt_not_in?: InputMaybe<
-    Array<Scalars['BigInt']>
-  >
   totalAmountStreamedUntilUpdatedAt?: InputMaybe<Scalars['BigInt']>
   totalAmountStreamedUntilUpdatedAt_not?: InputMaybe<Scalars['BigInt']>
   totalAmountStreamedUntilUpdatedAt_gt?: InputMaybe<Scalars['BigInt']>
@@ -1786,16 +1477,6 @@ export type AccountTokenSnapshot_Filter = {
   totalCFAAmountStreamedUntilUpdatedAt_lte?: InputMaybe<Scalars['BigInt']>
   totalCFAAmountStreamedUntilUpdatedAt_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalCFAAmountStreamedUntilUpdatedAt_not_in?: InputMaybe<
-    Array<Scalars['BigInt']>
-  >
-  totalGDAAmountStreamedUntilUpdatedAt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedUntilUpdatedAt_not?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedUntilUpdatedAt_gt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedUntilUpdatedAt_lt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedUntilUpdatedAt_gte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedUntilUpdatedAt_lte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedUntilUpdatedAt_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAAmountStreamedUntilUpdatedAt_not_in?: InputMaybe<
     Array<Scalars['BigInt']>
   >
   totalAmountTransferredUntilUpdatedAt?: InputMaybe<Scalars['BigInt']>
@@ -1871,8 +1552,6 @@ export type AccountTokenSnapshot_OrderBy =
   | 'activeCFAOutgoingStreamCount'
   | 'activeGDAOutgoingStreamCount'
   | 'activeIncomingStreamCount'
-  | 'activeCFAIncomingStreamCount'
-  | 'activeGDAIncomingStreamCount'
   | 'totalNumberOfClosedStreams'
   | 'totalCFANumberOfClosedStreams'
   | 'totalGDANumberOfClosedStreams'
@@ -1880,8 +1559,6 @@ export type AccountTokenSnapshot_OrderBy =
   | 'inactiveCFAOutgoingStreamCount'
   | 'inactiveGDAOutgoingStreamCount'
   | 'inactiveIncomingStreamCount'
-  | 'inactiveCFAIncomingStreamCount'
-  | 'inactiveGDAIncomingStreamCount'
   | 'totalSubscriptionsWithUnits'
   | 'totalApprovedSubscriptions'
   | 'totalMembershipsWithUnits'
@@ -1892,22 +1569,15 @@ export type AccountTokenSnapshot_OrderBy =
   | 'totalGDADeposit'
   | 'totalNetFlowRate'
   | 'totalCFANetFlowRate'
-  | 'totalGDANetFlowRate'
   | 'totalInflowRate'
-  | 'totalCFAInflowRate'
-  | 'totalGDAInflowRate'
   | 'totalOutflowRate'
   | 'totalCFAOutflowRate'
   | 'totalGDAOutflowRate'
   | 'totalAmountStreamedInUntilUpdatedAt'
-  | 'totalCFAAmountStreamedInUntilUpdatedAt'
-  | 'totalGDAAmountStreamedInUntilUpdatedAt'
   | 'totalAmountStreamedOutUntilUpdatedAt'
   | 'totalCFAAmountStreamedOutUntilUpdatedAt'
-  | 'totalGDAAmountStreamedOutUntilUpdatedAt'
   | 'totalAmountStreamedUntilUpdatedAt'
   | 'totalCFAAmountStreamedUntilUpdatedAt'
-  | 'totalGDAAmountStreamedUntilUpdatedAt'
   | 'totalAmountTransferredUntilUpdatedAt'
   | 'account'
   | 'account__id'
@@ -2010,6 +1680,8 @@ export type Account_OrderBy =
   | 'tokenUpgradedEvents'
   | 'tokenDowngradedEvents'
   | 'accountTokenSnapshots'
+
+export type Aggregation_Interval = 'hour' | 'day'
 
 export type AgreementClassRegisteredEvent = Event & {
   id: Scalars['ID']
@@ -5885,8 +5557,6 @@ export type FlowOperator_OrderBy =
   | 'accountTokenSnapshot__activeCFAOutgoingStreamCount'
   | 'accountTokenSnapshot__activeGDAOutgoingStreamCount'
   | 'accountTokenSnapshot__activeIncomingStreamCount'
-  | 'accountTokenSnapshot__activeCFAIncomingStreamCount'
-  | 'accountTokenSnapshot__activeGDAIncomingStreamCount'
   | 'accountTokenSnapshot__totalNumberOfClosedStreams'
   | 'accountTokenSnapshot__totalCFANumberOfClosedStreams'
   | 'accountTokenSnapshot__totalGDANumberOfClosedStreams'
@@ -5894,8 +5564,6 @@ export type FlowOperator_OrderBy =
   | 'accountTokenSnapshot__inactiveCFAOutgoingStreamCount'
   | 'accountTokenSnapshot__inactiveGDAOutgoingStreamCount'
   | 'accountTokenSnapshot__inactiveIncomingStreamCount'
-  | 'accountTokenSnapshot__inactiveCFAIncomingStreamCount'
-  | 'accountTokenSnapshot__inactiveGDAIncomingStreamCount'
   | 'accountTokenSnapshot__totalSubscriptionsWithUnits'
   | 'accountTokenSnapshot__totalApprovedSubscriptions'
   | 'accountTokenSnapshot__totalMembershipsWithUnits'
@@ -5906,22 +5574,15 @@ export type FlowOperator_OrderBy =
   | 'accountTokenSnapshot__totalGDADeposit'
   | 'accountTokenSnapshot__totalNetFlowRate'
   | 'accountTokenSnapshot__totalCFANetFlowRate'
-  | 'accountTokenSnapshot__totalGDANetFlowRate'
   | 'accountTokenSnapshot__totalInflowRate'
-  | 'accountTokenSnapshot__totalCFAInflowRate'
-  | 'accountTokenSnapshot__totalGDAInflowRate'
   | 'accountTokenSnapshot__totalOutflowRate'
   | 'accountTokenSnapshot__totalCFAOutflowRate'
   | 'accountTokenSnapshot__totalGDAOutflowRate'
   | 'accountTokenSnapshot__totalAmountStreamedInUntilUpdatedAt'
-  | 'accountTokenSnapshot__totalCFAAmountStreamedInUntilUpdatedAt'
-  | 'accountTokenSnapshot__totalGDAAmountStreamedInUntilUpdatedAt'
   | 'accountTokenSnapshot__totalAmountStreamedOutUntilUpdatedAt'
   | 'accountTokenSnapshot__totalCFAAmountStreamedOutUntilUpdatedAt'
-  | 'accountTokenSnapshot__totalGDAAmountStreamedOutUntilUpdatedAt'
   | 'accountTokenSnapshot__totalAmountStreamedUntilUpdatedAt'
   | 'accountTokenSnapshot__totalCFAAmountStreamedUntilUpdatedAt'
-  | 'accountTokenSnapshot__totalGDAAmountStreamedUntilUpdatedAt'
   | 'accountTokenSnapshot__totalAmountTransferredUntilUpdatedAt'
   | 'flowOperatorUpdatedEvents'
 
@@ -13283,6 +12944,11 @@ export type SfMeta = {
    *
    */
   branch: Scalars['String']
+  /**
+   * The subgraph package.json semver version of the current deployment.
+   *
+   */
+  packageVersion: Scalars['String']
 }
 
 export type SfMeta_Filter = {
@@ -13350,6 +13016,26 @@ export type SfMeta_Filter = {
   branch_ends_with_nocase?: InputMaybe<Scalars['String']>
   branch_not_ends_with?: InputMaybe<Scalars['String']>
   branch_not_ends_with_nocase?: InputMaybe<Scalars['String']>
+  packageVersion?: InputMaybe<Scalars['String']>
+  packageVersion_not?: InputMaybe<Scalars['String']>
+  packageVersion_gt?: InputMaybe<Scalars['String']>
+  packageVersion_lt?: InputMaybe<Scalars['String']>
+  packageVersion_gte?: InputMaybe<Scalars['String']>
+  packageVersion_lte?: InputMaybe<Scalars['String']>
+  packageVersion_in?: InputMaybe<Array<Scalars['String']>>
+  packageVersion_not_in?: InputMaybe<Array<Scalars['String']>>
+  packageVersion_contains?: InputMaybe<Scalars['String']>
+  packageVersion_contains_nocase?: InputMaybe<Scalars['String']>
+  packageVersion_not_contains?: InputMaybe<Scalars['String']>
+  packageVersion_not_contains_nocase?: InputMaybe<Scalars['String']>
+  packageVersion_starts_with?: InputMaybe<Scalars['String']>
+  packageVersion_starts_with_nocase?: InputMaybe<Scalars['String']>
+  packageVersion_not_starts_with?: InputMaybe<Scalars['String']>
+  packageVersion_not_starts_with_nocase?: InputMaybe<Scalars['String']>
+  packageVersion_ends_with?: InputMaybe<Scalars['String']>
+  packageVersion_ends_with_nocase?: InputMaybe<Scalars['String']>
+  packageVersion_not_ends_with?: InputMaybe<Scalars['String']>
+  packageVersion_not_ends_with_nocase?: InputMaybe<Scalars['String']>
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>
   and?: InputMaybe<Array<InputMaybe<SfMeta_Filter>>>
@@ -13362,6 +13048,7 @@ export type SfMeta_OrderBy =
   | 'blockNumber'
   | 'configuration'
   | 'branch'
+  | 'packageVersion'
 
 export type SentEvent = Event & {
   id: Scalars['ID']
@@ -17962,11 +17649,6 @@ export type TokenStatistic = {
    */
   totalCFAAmountStreamedUntilUpdatedAt: Scalars['BigInt']
   /**
-   * The all-time total amount streamed (outflows) until the `updatedAtTimestamp`/`updatedAtBlock` for the GDA.
-   *
-   */
-  totalGDAAmountStreamedUntilUpdatedAt: Scalars['BigInt']
-  /**
    * The all-time total amount transferred until the `updatedAtTimestamp`/`updatedAtBlock`.
    *
    */
@@ -18129,11 +17811,6 @@ export type TokenStatisticLog = {
    *
    */
   totalCFAAmountStreamed: Scalars['BigInt']
-  /**
-   * The all-time total amount of `token` streamed (outflows) until the `timestamp`/`block` for the GDA.
-   *
-   */
-  totalGDAAmountStreamed: Scalars['BigInt']
   /**
    * The all-time total amount of `token` transferred until the `timestamp`/`block`.
    *
@@ -18410,14 +18087,6 @@ export type TokenStatisticLog_Filter = {
   totalCFAAmountStreamed_lte?: InputMaybe<Scalars['BigInt']>
   totalCFAAmountStreamed_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalCFAAmountStreamed_not_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAAmountStreamed?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamed_not?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamed_gt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamed_lt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamed_gte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamed_lte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamed_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAAmountStreamed_not_in?: InputMaybe<Array<Scalars['BigInt']>>
   totalAmountTransferred?: InputMaybe<Scalars['BigInt']>
   totalAmountTransferred_not?: InputMaybe<Scalars['BigInt']>
   totalAmountTransferred_gt?: InputMaybe<Scalars['BigInt']>
@@ -18536,7 +18205,6 @@ export type TokenStatisticLog_OrderBy =
   | 'totalGDAOutflowRate'
   | 'totalAmountStreamed'
   | 'totalCFAAmountStreamed'
-  | 'totalGDAAmountStreamed'
   | 'totalAmountTransferred'
   | 'totalAmountDistributed'
   | 'totalSupply'
@@ -18579,7 +18247,6 @@ export type TokenStatisticLog_OrderBy =
   | 'tokenStatistic__totalGDAOutflowRate'
   | 'tokenStatistic__totalAmountStreamedUntilUpdatedAt'
   | 'tokenStatistic__totalCFAAmountStreamedUntilUpdatedAt'
-  | 'tokenStatistic__totalGDAAmountStreamedUntilUpdatedAt'
   | 'tokenStatistic__totalAmountTransferredUntilUpdatedAt'
   | 'tokenStatistic__totalAmountDistributedUntilUpdatedAt'
   | 'tokenStatistic__totalSupply'
@@ -18791,16 +18458,6 @@ export type TokenStatistic_Filter = {
   totalCFAAmountStreamedUntilUpdatedAt_not_in?: InputMaybe<
     Array<Scalars['BigInt']>
   >
-  totalGDAAmountStreamedUntilUpdatedAt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedUntilUpdatedAt_not?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedUntilUpdatedAt_gt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedUntilUpdatedAt_lt?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedUntilUpdatedAt_gte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedUntilUpdatedAt_lte?: InputMaybe<Scalars['BigInt']>
-  totalGDAAmountStreamedUntilUpdatedAt_in?: InputMaybe<Array<Scalars['BigInt']>>
-  totalGDAAmountStreamedUntilUpdatedAt_not_in?: InputMaybe<
-    Array<Scalars['BigInt']>
-  >
   totalAmountTransferredUntilUpdatedAt?: InputMaybe<Scalars['BigInt']>
   totalAmountTransferredUntilUpdatedAt_not?: InputMaybe<Scalars['BigInt']>
   totalAmountTransferredUntilUpdatedAt_gt?: InputMaybe<Scalars['BigInt']>
@@ -18899,7 +18556,6 @@ export type TokenStatistic_OrderBy =
   | 'totalGDAOutflowRate'
   | 'totalAmountStreamedUntilUpdatedAt'
   | 'totalCFAAmountStreamedUntilUpdatedAt'
-  | 'totalGDAAmountStreamedUntilUpdatedAt'
   | 'totalAmountTransferredUntilUpdatedAt'
   | 'totalAmountDistributedUntilUpdatedAt'
   | 'totalSupply'
@@ -19857,6 +19513,7 @@ export type ResolversTypes = ResolversObject<{
   AccountTokenSnapshot_orderBy: AccountTokenSnapshot_OrderBy
   Account_filter: Account_Filter
   Account_orderBy: Account_OrderBy
+  Aggregation_interval: Aggregation_Interval
   AgreementClassRegisteredEvent: ResolverTypeWrapper<AgreementClassRegisteredEvent>
   AgreementClassRegisteredEvent_filter: AgreementClassRegisteredEvent_Filter
   AgreementClassRegisteredEvent_orderBy: AgreementClassRegisteredEvent_OrderBy
@@ -20540,16 +20197,6 @@ export type AccountTokenSnapshotResolvers<
     ParentType,
     ContextType
   >
-  activeCFAIncomingStreamCount?: Resolver<
-    ResolversTypes['Int'],
-    ParentType,
-    ContextType
-  >
-  activeGDAIncomingStreamCount?: Resolver<
-    ResolversTypes['Int'],
-    ParentType,
-    ContextType
-  >
   totalNumberOfClosedStreams?: Resolver<
     ResolversTypes['Int'],
     ParentType,
@@ -20581,16 +20228,6 @@ export type AccountTokenSnapshotResolvers<
     ContextType
   >
   inactiveIncomingStreamCount?: Resolver<
-    ResolversTypes['Int'],
-    ParentType,
-    ContextType
-  >
-  inactiveCFAIncomingStreamCount?: Resolver<
-    ResolversTypes['Int'],
-    ParentType,
-    ContextType
-  >
-  inactiveGDAIncomingStreamCount?: Resolver<
     ResolversTypes['Int'],
     ParentType,
     ContextType
@@ -20629,22 +20266,7 @@ export type AccountTokenSnapshotResolvers<
     ParentType,
     ContextType
   >
-  totalGDANetFlowRate?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
   totalInflowRate?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
-  totalCFAInflowRate?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
-  totalGDAInflowRate?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
   totalOutflowRate?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   totalCFAOutflowRate?: Resolver<
     ResolversTypes['BigInt'],
@@ -20661,16 +20283,6 @@ export type AccountTokenSnapshotResolvers<
     ParentType,
     ContextType
   >
-  totalCFAAmountStreamedInUntilUpdatedAt?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
-  totalGDAAmountStreamedInUntilUpdatedAt?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
   totalAmountStreamedOutUntilUpdatedAt?: Resolver<
     ResolversTypes['BigInt'],
     ParentType,
@@ -20681,22 +20293,12 @@ export type AccountTokenSnapshotResolvers<
     ParentType,
     ContextType
   >
-  totalGDAAmountStreamedOutUntilUpdatedAt?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
   totalAmountStreamedUntilUpdatedAt?: Resolver<
     ResolversTypes['BigInt'],
     ParentType,
     ContextType
   >
   totalCFAAmountStreamedUntilUpdatedAt?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
-  totalGDAAmountStreamedUntilUpdatedAt?: Resolver<
     ResolversTypes['BigInt'],
     ParentType,
     ContextType
@@ -20782,16 +20384,6 @@ export type AccountTokenSnapshotLogResolvers<
     ParentType,
     ContextType
   >
-  activeCFAIncomingStreamCount?: Resolver<
-    ResolversTypes['Int'],
-    ParentType,
-    ContextType
-  >
-  activeGDAIncomingStreamCount?: Resolver<
-    ResolversTypes['Int'],
-    ParentType,
-    ContextType
-  >
   totalNumberOfClosedStreams?: Resolver<
     ResolversTypes['Int'],
     ParentType,
@@ -20827,16 +20419,6 @@ export type AccountTokenSnapshotLogResolvers<
     ParentType,
     ContextType
   >
-  inactiveCFAIncomingStreamCount?: Resolver<
-    ResolversTypes['Int'],
-    ParentType,
-    ContextType
-  >
-  inactiveGDAIncomingStreamCount?: Resolver<
-    ResolversTypes['Int'],
-    ParentType,
-    ContextType
-  >
   totalSubscriptionsWithUnits?: Resolver<
     ResolversTypes['Int'],
     ParentType,
@@ -20867,22 +20449,7 @@ export type AccountTokenSnapshotLogResolvers<
     ParentType,
     ContextType
   >
-  totalGDANetFlowRate?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
   totalInflowRate?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
-  totalCFAInflowRate?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
-  totalGDAInflowRate?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
   totalOutflowRate?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   totalCFAOutflowRate?: Resolver<
     ResolversTypes['BigInt'],
@@ -20899,16 +20466,6 @@ export type AccountTokenSnapshotLogResolvers<
     ParentType,
     ContextType
   >
-  totalCFAAmountStreamedIn?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
-  totalGDAAmountStreamedIn?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
   totalAmountStreamedOut?: Resolver<
     ResolversTypes['BigInt'],
     ParentType,
@@ -20919,22 +20476,12 @@ export type AccountTokenSnapshotLogResolvers<
     ParentType,
     ContextType
   >
-  totalGDAAmountStreamedOut?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
   totalAmountStreamed?: Resolver<
     ResolversTypes['BigInt'],
     ParentType,
     ContextType
   >
   totalCFAAmountStreamed?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
-  totalGDAAmountStreamed?: Resolver<
     ResolversTypes['BigInt'],
     ParentType,
     ContextType
@@ -23603,6 +23150,7 @@ export type SfMetaResolvers<
   blockNumber?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   configuration?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   branch?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  packageVersion?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }>
 
@@ -25503,11 +25051,6 @@ export type TokenStatisticResolvers<
     ParentType,
     ContextType
   >
-  totalGDAAmountStreamedUntilUpdatedAt?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
   totalAmountTransferredUntilUpdatedAt?: Resolver<
     ResolversTypes['BigInt'],
     ParentType,
@@ -25641,11 +25184,6 @@ export type TokenStatisticLogResolvers<
     ContextType
   >
   totalCFAAmountStreamed?: Resolver<
-    ResolversTypes['BigInt'],
-    ParentType,
-    ContextType
-  >
-  totalGDAAmountStreamed?: Resolver<
     ResolversTypes['BigInt'],
     ParentType,
     ContextType
@@ -25976,6 +25514,13 @@ export async function getMeshOptions(): Promise<GetMeshOptions> {
           location: 'PoolsDocument.graphql'
         },
         {
+          document: PoolDistributorsDocument,
+          get rawSDL() {
+            return printWithCache(PoolDistributorsDocument)
+          },
+          location: 'PoolDistributorsDocument.graphql'
+        },
+        {
           document: PoolMembersDocument,
           get rawSDL() {
             return printWithCache(PoolMembersDocument)
@@ -26076,11 +25621,7 @@ export type GetPoolQuery = {
       | 'totalConnectedUnits'
       | 'totalDisconnectedMembers'
       | 'totalDisconnectedUnits'
-    > & {
-      admin: Pick<Account, 'id'>
-      token: Pick<Token, 'id' | 'symbol'>
-      poolCreatedEvent: Pick<PoolCreatedEvent, 'id'>
-    }
+    > & { admin: Pick<Account, 'id'>; token: Pick<Token, 'id'> }
   >
 }
 
@@ -26114,11 +25655,7 @@ export type PoolsQuery = {
       | 'totalConnectedUnits'
       | 'totalDisconnectedMembers'
       | 'totalDisconnectedUnits'
-    > & {
-      admin: Pick<Account, 'id'>
-      token: Pick<Token, 'id' | 'symbol'>
-      poolCreatedEvent: Pick<PoolCreatedEvent, 'id'>
-    }
+    > & { admin: Pick<Account, 'id'>; token: Pick<Token, 'id'> }
   >
 }
 
@@ -26141,17 +25678,43 @@ export type PoolPartFragment = Pick<
   | 'totalConnectedUnits'
   | 'totalDisconnectedMembers'
   | 'totalDisconnectedUnits'
-> & {
-  admin: Pick<Account, 'id'>
-  token: Pick<Token, 'id' | 'symbol'>
-  poolCreatedEvent: Pick<PoolCreatedEvent, 'id'>
+> & { admin: Pick<Account, 'id'>; token: Pick<Token, 'id'> }
+
+export type PoolDistributorsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']>
+  skip?: InputMaybe<Scalars['Int']>
+  orderBy?: InputMaybe<PoolDistributor_OrderBy>
+  orderDirection?: InputMaybe<OrderDirection>
+  where?: InputMaybe<PoolDistributor_Filter>
+  block?: InputMaybe<Block_Height>
+}>
+
+export type PoolDistributorsQuery = {
+  poolDistributors: Array<
+    Pick<
+      PoolDistributor,
+      | 'createdAtTimestamp'
+      | 'createdAtBlockNumber'
+      | 'updatedAtTimestamp'
+      | 'updatedAtBlockNumber'
+      | 'totalBuffer'
+      | 'totalAmountInstantlyDistributedUntilUpdatedAt'
+      | 'totalAmountFlowedDistributedUntilUpdatedAt'
+      | 'totalAmountDistributedUntilUpdatedAt'
+      | 'id'
+      | 'flowRate'
+    > & {
+      account: Pick<Account, 'id'>
+      pool: Pick<Pool, 'id'> & { token: Pick<Token, 'id'> }
+    }
+  >
 }
 
 export type PoolMembersQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>
+  skip?: InputMaybe<Scalars['Int']>
   orderBy?: InputMaybe<PoolMember_OrderBy>
   orderDirection?: InputMaybe<OrderDirection>
-  skip?: InputMaybe<Scalars['Int']>
   where?: InputMaybe<PoolMember_Filter>
   block?: InputMaybe<Block_Height>
 }>
@@ -26171,14 +25734,7 @@ export type PoolMembersQuery = {
       | 'totalAmountReceivedUntilUpdatedAt'
       | 'poolTotalAmountDistributedUntilUpdatedAt'
     > & {
-      pool: Pick<
-        Pool,
-        | 'id'
-        | 'totalUnits'
-        | 'flowRate'
-        | 'totalAmountDistributedUntilUpdatedAt'
-        | 'updatedAtTimestamp'
-      > & { token: Pick<Token, 'id' | 'symbol'>; admin: Pick<Account, 'id'> }
+      pool: Pick<Pool, 'id'> & { token: Pick<Token, 'id'> }
       account: Pick<Account, 'id'>
     }
   >
@@ -27094,10 +26650,6 @@ export const PoolPartFragmentDoc = gql`
     }
     token {
       id
-      symbol
-    }
-    poolCreatedEvent {
-      id
     }
   }
 ` as unknown as DocumentNode<PoolPartFragment, unknown>
@@ -27203,12 +26755,54 @@ export const PoolsDocument = gql`
   }
   ${PoolPartFragmentDoc}
 ` as unknown as DocumentNode<PoolsQuery, PoolsQueryVariables>
+export const PoolDistributorsDocument = gql`
+  query poolDistributors(
+    $first: Int = 10
+    $skip: Int = 0
+    $orderBy: PoolDistributor_orderBy = id
+    $orderDirection: OrderDirection = asc
+    $where: PoolDistributor_filter = {}
+    $block: Block_height
+  ) {
+    poolDistributors(
+      first: $first
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      skip: $skip
+      where: $where
+      block: $block
+    ) {
+      createdAtTimestamp
+      createdAtBlockNumber
+      updatedAtTimestamp
+      updatedAtBlockNumber
+      totalBuffer
+      totalAmountInstantlyDistributedUntilUpdatedAt
+      totalAmountFlowedDistributedUntilUpdatedAt
+      totalAmountDistributedUntilUpdatedAt
+      id
+      flowRate
+      account {
+        id
+      }
+      pool {
+        id
+        token {
+          id
+        }
+      }
+    }
+  }
+` as unknown as DocumentNode<
+  PoolDistributorsQuery,
+  PoolDistributorsQueryVariables
+>
 export const PoolMembersDocument = gql`
   query poolMembers(
     $first: Int = 10
+    $skip: Int = 0
     $orderBy: PoolMember_orderBy = id
     $orderDirection: OrderDirection = asc
-    $skip: Int = 0
     $where: PoolMember_filter = {}
     $block: Block_height
   ) {
@@ -27228,17 +26822,9 @@ export const PoolMembersDocument = gql`
       units
       pool {
         id
-        totalUnits
-        flowRate
-        totalAmountDistributedUntilUpdatedAt
         token {
           id
-          symbol
         }
-        admin {
-          id
-        }
-        updatedAtTimestamp
       }
       account {
         id
@@ -27349,6 +26935,16 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
         variables,
         options
       ) as Promise<PoolsQuery>
+    },
+    poolDistributors(
+      variables?: PoolDistributorsQueryVariables,
+      options?: C
+    ): Promise<PoolDistributorsQuery> {
+      return requester<PoolDistributorsQuery, PoolDistributorsQueryVariables>(
+        PoolDistributorsDocument,
+        variables,
+        options
+      ) as Promise<PoolDistributorsQuery>
     },
     poolMembers(
       variables?: PoolMembersQueryVariables,

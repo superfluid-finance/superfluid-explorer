@@ -11,24 +11,29 @@ import {
 import {
   createGeneralTags,
   getSubgraphClient,
-  provideSpecificCacheTagsFromRelevantAddresses
-} from '@superfluid-finance/sdk-redux'
+  provideSpecificCacheTagsFromRelevantAddresses,
+  SubgraphEndpointBuilder} from '@superfluid-finance/sdk-redux'
 
 import { CacheTime } from '../cacheTime'
 import { Pool, PoolQueryHandler } from '../entities/pool/pool'
 import {
+  PoolDistributor,
+  PoolDistributorQueryHandler
+} from '../entities/poolDistributor/poolDistributor'
+import {
   PoolMember,
   PoolMemberQueryHandler
 } from '../entities/poolMember/poolMember'
-import { GdaSubgraphEndpointBuilder } from '../gdaSubgraphEndpointBuilder'
 import {
+  PoolDistributorQuery,
+  PoolDistributorsQuery,
   PoolMemberQuery,
   PoolMembersQuery,
   PoolQuery,
   PoolsQuery
 } from './entityArgs'
 
-export const createEntityEndpoints = (builder: GdaSubgraphEndpointBuilder) => {
+export const createEntityEndpoints = (builder: SubgraphEndpointBuilder) => {
   // NOTE: Ignoring prettier because longer lines are more readable here.
   // prettier-ignore
   return {
@@ -36,6 +41,8 @@ export const createEntityEndpoints = (builder: GdaSubgraphEndpointBuilder) => {
         pools: list<Pool, PoolsQuery>(builder, new PoolQueryHandler()),
         poolMember: get<PoolMember, PoolMemberQuery>(builder, new PoolMemberQueryHandler()),
         poolMembers: list<PoolMember, PoolMembersQuery>(builder, new PoolMemberQueryHandler()),
+        poolDistributor: get<PoolDistributor, PoolDistributorQuery>(builder, new PoolDistributorQueryHandler()),
+        poolDistributors: list<PoolDistributor, PoolDistributorsQuery>(builder, new PoolDistributorQueryHandler()),
     };
 }
 
@@ -46,7 +53,7 @@ function get<
   TReturn extends ILightEntity,
   TQuery extends { chainId: number } & SubgraphGetQuery
 >(
-  builder: GdaSubgraphEndpointBuilder,
+  builder: SubgraphEndpointBuilder,
   queryHandler: SubgraphGetQueryHandler<TReturn> &
     RelevantAddressProviderFromResult<TReturn>,
   cacheTime?: CacheTime
@@ -78,7 +85,7 @@ function list<
   TFilter extends { [key: string]: unknown } = NonNullable<TQuery['filter']>,
   TOrderBy extends string = NonNullable<TQuery['order']>['orderBy']
 >(
-  builder: GdaSubgraphEndpointBuilder,
+  builder: SubgraphEndpointBuilder,
   queryHandler: SubgraphListQueryHandler<TReturn, TQuery, TFilter> &
     RelevantAddressProviderFromFilter<TFilter>,
   cacheTime?: CacheTime

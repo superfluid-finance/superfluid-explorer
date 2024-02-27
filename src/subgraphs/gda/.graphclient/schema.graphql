@@ -148,17 +148,10 @@ type AccountTokenSnapshot {
   """
   activeGDAOutgoingStreamCount: Int!
   """
-  The count of active incoming streams to this account for all agreements.
+  The count of active incoming streams to this account for the CFA.
+  GDA incoming streams are *NOT* counted here.
   """
   activeIncomingStreamCount: Int!
-  """
-  The count of active incoming streams to this account for the CFA.
-  """
-  activeCFAIncomingStreamCount: Int!
-  """
-  The count of active incoming streams to this account for the GDA.
-  """
-  activeGDAIncomingStreamCount: Int!
   """
   The count of closed streams by `account`, both incoming and outgoing for all agreements.
   """
@@ -184,17 +177,10 @@ type AccountTokenSnapshot {
   """
   inactiveGDAOutgoingStreamCount: Int!
   """
-  The count of closed incoming streams by `account` for all agreements.
+  The count of closed incoming streams by `account` for the CFA.
+  Close incoming GDA streams are *NOT* counted here.
   """
   inactiveIncomingStreamCount: Int!
-  """
-  The count of closed incoming streams by `account` for the CFA.
-  """
-  inactiveCFAIncomingStreamCount: Int!
-  """
-  The count of closed incoming streams by `account` for the GDA.
-  """
-  inactiveGDAIncomingStreamCount: Int!
   """
   The current (as of updatedAt) number of subscriptions with units allocated to them tied to this `account`.
   """
@@ -230,6 +216,7 @@ type AccountTokenSnapshot {
   """
   The total net flow rate of the `account` as of `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
   This can be obtained by: `totalInflowRate - totalOutflowRate`.
+  NOTE: this property will NOT be 100% accurate all the time for receivers of GDA flows.
   """
   totalNetFlowRate: BigInt!
   """
@@ -237,21 +224,10 @@ type AccountTokenSnapshot {
   """
   totalCFANetFlowRate: BigInt!
   """
-  The total net flow rate of the `account` as of `updatedAtTimestamp`/`updatedAtBlock` for the GDA.
-  """
-  totalGDANetFlowRate: BigInt!
-  """
-  The total inflow rate (receive flowRate per second) of the `account` for all flow agreements.
+  The total inflow rate (receive flowRate per second) of the `account` for the CFA.
+  GDA inflow rate is *NOT* included here.
   """
   totalInflowRate: BigInt!
-  """
-  The total inflow rate (receive flowRate per second) of the `account` for the CFA.
-  """
-  totalCFAInflowRate: BigInt!
-  """
-  The total inflow rate (receive flowRate per second) of the `account` for the GDA.
-  """
-  totalGDAInflowRate: BigInt!
   """
   The total outflow rate (send flowrate per second) of the `account` for all flow agreements.
   """
@@ -265,17 +241,9 @@ type AccountTokenSnapshot {
   """
   totalGDAOutflowRate: BigInt!
   """
-  The total amount of `token` streamed into this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
-  """
-  totalAmountStreamedInUntilUpdatedAt: BigInt!
-  """
   The total amount of `token` streamed into this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA.
   """
-  totalCFAAmountStreamedInUntilUpdatedAt: BigInt!
-  """
-  The total amount of `token` streamed into this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the GDA.
-  """
-  totalGDAAmountStreamedInUntilUpdatedAt: BigInt!
+  totalAmountStreamedInUntilUpdatedAt: BigInt!
   """
   The total amount of `token` streamed from this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
   """
@@ -285,10 +253,6 @@ type AccountTokenSnapshot {
   """
   totalCFAAmountStreamedOutUntilUpdatedAt: BigInt!
   """
-  The total amount of `token` streamed from this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the GDA.
-  """
-  totalGDAAmountStreamedOutUntilUpdatedAt: BigInt!
-  """
   The total amount of `token` streamed through this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
   """
   totalAmountStreamedUntilUpdatedAt: BigInt!
@@ -296,10 +260,6 @@ type AccountTokenSnapshot {
   The total amount of `token` streamed through this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA.
   """
   totalCFAAmountStreamedUntilUpdatedAt: BigInt!
-  """
-  The total amount of `token` streamed through this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the GDA.
-  """
-  totalGDAAmountStreamedUntilUpdatedAt: BigInt!
   """
   The total amount of `token` this `account` has transferred.
   """
@@ -366,14 +326,6 @@ type AccountTokenSnapshotLog {
   """
   activeIncomingStreamCount: Int!
   """
-  The count of active incoming streams to this account for the CFA.
-  """
-  activeCFAIncomingStreamCount: Int!
-  """
-  The count of active incoming streams to this account for the GDA.
-  """
-  activeGDAIncomingStreamCount: Int!
-  """
   The current (as of timestamp) count of closed streams for all agreements.
   """
   totalNumberOfClosedStreams: Int!
@@ -398,17 +350,10 @@ type AccountTokenSnapshotLog {
   """
   inactiveGDAOutgoingStreamCount: Int!
   """
-  The count of closed incoming streams by `account` for all agreements.
+  The count of closed incoming streams by `account` for the CFA.
+  Close incoming GDA streams are *NOT* counted here.
   """
   inactiveIncomingStreamCount: Int!
-  """
-  The count of closed incoming streams by `account` for the CFA.
-  """
-  inactiveCFAIncomingStreamCount: Int!
-  """
-  The count of closed incoming streams by `account` for the GDA.
-  """
-  inactiveGDAIncomingStreamCount: Int!
   """
   The current (as of timestamp) number of subscriptions with units allocated to them tied to this `account`.
   """
@@ -448,26 +393,12 @@ type AccountTokenSnapshotLog {
   totalNetFlowRate: BigInt!
   """
   The total (as of timestamp) net flow rate of the `account` as of `timestamp`/`block` for the CFA.
-  This can be obtained by: `totalCFAInflowRate - totalCFAOutflowRate`
   """
   totalCFANetFlowRate: BigInt!
-  """
-  The total (as of timestamp) net flow rate of the `account` as of `timestamp`/`block` for the GDA.
-  This can be obtained by: `totalGDAInflowRate - totalGDAOutflowRate`
-  """
-  totalGDANetFlowRate: BigInt!
   """
   The total (as of timestamp) inflow rate (receive flowRate per second) of the `account`.
   """
   totalInflowRate: BigInt!
-  """
-  The total (as of timestamp) inflow rate (receive flowRate per second) of the `account` for the CFA.
-  """
-  totalCFAInflowRate: BigInt!
-  """
-  The total (as of timestamp) inflow rate (receive flowRate per second) of the `account` for the GDA.
-  """
-  totalGDAInflowRate: BigInt!
   """
   The total (as of timestamp) outflow rate (send flowrate per second) of the `account`.
   """
@@ -485,14 +416,6 @@ type AccountTokenSnapshotLog {
   """
   totalAmountStreamedIn: BigInt!
   """
-  The total (as of timestamp) amount of `token` streamed into this `account` until the `timestamp`/`block` for the CFA.
-  """
-  totalCFAAmountStreamedIn: BigInt!
-  """
-  The total (as of timestamp) amount of `token` streamed into this `account` until the `timestamp`/`block` for the GDA.
-  """
-  totalGDAAmountStreamedIn: BigInt!
-  """
   The total (as of timestamp) amount of `token` streamed from this `account` until the `timestamp`/`block`.
   """
   totalAmountStreamedOut: BigInt!
@@ -501,10 +424,6 @@ type AccountTokenSnapshotLog {
   """
   totalCFAAmountStreamedOut: BigInt!
   """
-  The total (as of timestamp) amount of `token` streamed from this `account` until the `timestamp`/`block` for the GDA.
-  """
-  totalGDAAmountStreamedOut: BigInt!
-  """
   The total (as of timestamp) net amount of `token` streamed through this `account` until the `timestamp`/`block`.
   """
   totalAmountStreamed: BigInt!
@@ -512,10 +431,6 @@ type AccountTokenSnapshotLog {
   The total (as of timestamp) net amount of `token` streamed through this `account` until the `timestamp`/`block` for the CFA.
   """
   totalCFAAmountStreamed: BigInt!
-  """
-  The total (as of timestamp) net amount of `token` streamed through this `account` until the `timestamp`/`block` for the GDA.
-  """
-  totalGDAAmountStreamed: BigInt!
   """
   The total (as of timestamp) amount of `token` this `account` has transferred out until the `timestamp`/`block`.
   """
@@ -660,22 +575,6 @@ input AccountTokenSnapshotLog_filter {
   activeIncomingStreamCount_lte: Int
   activeIncomingStreamCount_in: [Int!]
   activeIncomingStreamCount_not_in: [Int!]
-  activeCFAIncomingStreamCount: Int
-  activeCFAIncomingStreamCount_not: Int
-  activeCFAIncomingStreamCount_gt: Int
-  activeCFAIncomingStreamCount_lt: Int
-  activeCFAIncomingStreamCount_gte: Int
-  activeCFAIncomingStreamCount_lte: Int
-  activeCFAIncomingStreamCount_in: [Int!]
-  activeCFAIncomingStreamCount_not_in: [Int!]
-  activeGDAIncomingStreamCount: Int
-  activeGDAIncomingStreamCount_not: Int
-  activeGDAIncomingStreamCount_gt: Int
-  activeGDAIncomingStreamCount_lt: Int
-  activeGDAIncomingStreamCount_gte: Int
-  activeGDAIncomingStreamCount_lte: Int
-  activeGDAIncomingStreamCount_in: [Int!]
-  activeGDAIncomingStreamCount_not_in: [Int!]
   totalNumberOfClosedStreams: Int
   totalNumberOfClosedStreams_not: Int
   totalNumberOfClosedStreams_gt: Int
@@ -732,22 +631,6 @@ input AccountTokenSnapshotLog_filter {
   inactiveIncomingStreamCount_lte: Int
   inactiveIncomingStreamCount_in: [Int!]
   inactiveIncomingStreamCount_not_in: [Int!]
-  inactiveCFAIncomingStreamCount: Int
-  inactiveCFAIncomingStreamCount_not: Int
-  inactiveCFAIncomingStreamCount_gt: Int
-  inactiveCFAIncomingStreamCount_lt: Int
-  inactiveCFAIncomingStreamCount_gte: Int
-  inactiveCFAIncomingStreamCount_lte: Int
-  inactiveCFAIncomingStreamCount_in: [Int!]
-  inactiveCFAIncomingStreamCount_not_in: [Int!]
-  inactiveGDAIncomingStreamCount: Int
-  inactiveGDAIncomingStreamCount_not: Int
-  inactiveGDAIncomingStreamCount_gt: Int
-  inactiveGDAIncomingStreamCount_lt: Int
-  inactiveGDAIncomingStreamCount_gte: Int
-  inactiveGDAIncomingStreamCount_lte: Int
-  inactiveGDAIncomingStreamCount_in: [Int!]
-  inactiveGDAIncomingStreamCount_not_in: [Int!]
   totalSubscriptionsWithUnits: Int
   totalSubscriptionsWithUnits_not: Int
   totalSubscriptionsWithUnits_gt: Int
@@ -828,14 +711,6 @@ input AccountTokenSnapshotLog_filter {
   totalCFANetFlowRate_lte: BigInt
   totalCFANetFlowRate_in: [BigInt!]
   totalCFANetFlowRate_not_in: [BigInt!]
-  totalGDANetFlowRate: BigInt
-  totalGDANetFlowRate_not: BigInt
-  totalGDANetFlowRate_gt: BigInt
-  totalGDANetFlowRate_lt: BigInt
-  totalGDANetFlowRate_gte: BigInt
-  totalGDANetFlowRate_lte: BigInt
-  totalGDANetFlowRate_in: [BigInt!]
-  totalGDANetFlowRate_not_in: [BigInt!]
   totalInflowRate: BigInt
   totalInflowRate_not: BigInt
   totalInflowRate_gt: BigInt
@@ -844,22 +719,6 @@ input AccountTokenSnapshotLog_filter {
   totalInflowRate_lte: BigInt
   totalInflowRate_in: [BigInt!]
   totalInflowRate_not_in: [BigInt!]
-  totalCFAInflowRate: BigInt
-  totalCFAInflowRate_not: BigInt
-  totalCFAInflowRate_gt: BigInt
-  totalCFAInflowRate_lt: BigInt
-  totalCFAInflowRate_gte: BigInt
-  totalCFAInflowRate_lte: BigInt
-  totalCFAInflowRate_in: [BigInt!]
-  totalCFAInflowRate_not_in: [BigInt!]
-  totalGDAInflowRate: BigInt
-  totalGDAInflowRate_not: BigInt
-  totalGDAInflowRate_gt: BigInt
-  totalGDAInflowRate_lt: BigInt
-  totalGDAInflowRate_gte: BigInt
-  totalGDAInflowRate_lte: BigInt
-  totalGDAInflowRate_in: [BigInt!]
-  totalGDAInflowRate_not_in: [BigInt!]
   totalOutflowRate: BigInt
   totalOutflowRate_not: BigInt
   totalOutflowRate_gt: BigInt
@@ -892,22 +751,6 @@ input AccountTokenSnapshotLog_filter {
   totalAmountStreamedIn_lte: BigInt
   totalAmountStreamedIn_in: [BigInt!]
   totalAmountStreamedIn_not_in: [BigInt!]
-  totalCFAAmountStreamedIn: BigInt
-  totalCFAAmountStreamedIn_not: BigInt
-  totalCFAAmountStreamedIn_gt: BigInt
-  totalCFAAmountStreamedIn_lt: BigInt
-  totalCFAAmountStreamedIn_gte: BigInt
-  totalCFAAmountStreamedIn_lte: BigInt
-  totalCFAAmountStreamedIn_in: [BigInt!]
-  totalCFAAmountStreamedIn_not_in: [BigInt!]
-  totalGDAAmountStreamedIn: BigInt
-  totalGDAAmountStreamedIn_not: BigInt
-  totalGDAAmountStreamedIn_gt: BigInt
-  totalGDAAmountStreamedIn_lt: BigInt
-  totalGDAAmountStreamedIn_gte: BigInt
-  totalGDAAmountStreamedIn_lte: BigInt
-  totalGDAAmountStreamedIn_in: [BigInt!]
-  totalGDAAmountStreamedIn_not_in: [BigInt!]
   totalAmountStreamedOut: BigInt
   totalAmountStreamedOut_not: BigInt
   totalAmountStreamedOut_gt: BigInt
@@ -924,14 +767,6 @@ input AccountTokenSnapshotLog_filter {
   totalCFAAmountStreamedOut_lte: BigInt
   totalCFAAmountStreamedOut_in: [BigInt!]
   totalCFAAmountStreamedOut_not_in: [BigInt!]
-  totalGDAAmountStreamedOut: BigInt
-  totalGDAAmountStreamedOut_not: BigInt
-  totalGDAAmountStreamedOut_gt: BigInt
-  totalGDAAmountStreamedOut_lt: BigInt
-  totalGDAAmountStreamedOut_gte: BigInt
-  totalGDAAmountStreamedOut_lte: BigInt
-  totalGDAAmountStreamedOut_in: [BigInt!]
-  totalGDAAmountStreamedOut_not_in: [BigInt!]
   totalAmountStreamed: BigInt
   totalAmountStreamed_not: BigInt
   totalAmountStreamed_gt: BigInt
@@ -948,14 +783,6 @@ input AccountTokenSnapshotLog_filter {
   totalCFAAmountStreamed_lte: BigInt
   totalCFAAmountStreamed_in: [BigInt!]
   totalCFAAmountStreamed_not_in: [BigInt!]
-  totalGDAAmountStreamed: BigInt
-  totalGDAAmountStreamed_not: BigInt
-  totalGDAAmountStreamed_gt: BigInt
-  totalGDAAmountStreamed_lt: BigInt
-  totalGDAAmountStreamed_gte: BigInt
-  totalGDAAmountStreamed_lte: BigInt
-  totalGDAAmountStreamed_in: [BigInt!]
-  totalGDAAmountStreamed_not_in: [BigInt!]
   totalAmountTransferred: BigInt
   totalAmountTransferred_not: BigInt
   totalAmountTransferred_gt: BigInt
@@ -1051,8 +878,6 @@ enum AccountTokenSnapshotLog_orderBy {
   activeCFAOutgoingStreamCount
   activeGDAOutgoingStreamCount
   activeIncomingStreamCount
-  activeCFAIncomingStreamCount
-  activeGDAIncomingStreamCount
   totalNumberOfClosedStreams
   totalCFANumberOfClosedStreams
   totalGDANumberOfClosedStreams
@@ -1060,8 +885,6 @@ enum AccountTokenSnapshotLog_orderBy {
   inactiveCFAOutgoingStreamCount
   inactiveGDAOutgoingStreamCount
   inactiveIncomingStreamCount
-  inactiveCFAIncomingStreamCount
-  inactiveGDAIncomingStreamCount
   totalSubscriptionsWithUnits
   totalApprovedSubscriptions
   totalMembershipsWithUnits
@@ -1072,22 +895,15 @@ enum AccountTokenSnapshotLog_orderBy {
   totalGDADeposit
   totalNetFlowRate
   totalCFANetFlowRate
-  totalGDANetFlowRate
   totalInflowRate
-  totalCFAInflowRate
-  totalGDAInflowRate
   totalOutflowRate
   totalCFAOutflowRate
   totalGDAOutflowRate
   totalAmountStreamedIn
-  totalCFAAmountStreamedIn
-  totalGDAAmountStreamedIn
   totalAmountStreamedOut
   totalCFAAmountStreamedOut
-  totalGDAAmountStreamedOut
   totalAmountStreamed
   totalCFAAmountStreamed
-  totalGDAAmountStreamed
   totalAmountTransferred
   account
   account__id
@@ -1120,8 +936,6 @@ enum AccountTokenSnapshotLog_orderBy {
   accountTokenSnapshot__activeCFAOutgoingStreamCount
   accountTokenSnapshot__activeGDAOutgoingStreamCount
   accountTokenSnapshot__activeIncomingStreamCount
-  accountTokenSnapshot__activeCFAIncomingStreamCount
-  accountTokenSnapshot__activeGDAIncomingStreamCount
   accountTokenSnapshot__totalNumberOfClosedStreams
   accountTokenSnapshot__totalCFANumberOfClosedStreams
   accountTokenSnapshot__totalGDANumberOfClosedStreams
@@ -1129,8 +943,6 @@ enum AccountTokenSnapshotLog_orderBy {
   accountTokenSnapshot__inactiveCFAOutgoingStreamCount
   accountTokenSnapshot__inactiveGDAOutgoingStreamCount
   accountTokenSnapshot__inactiveIncomingStreamCount
-  accountTokenSnapshot__inactiveCFAIncomingStreamCount
-  accountTokenSnapshot__inactiveGDAIncomingStreamCount
   accountTokenSnapshot__totalSubscriptionsWithUnits
   accountTokenSnapshot__totalApprovedSubscriptions
   accountTokenSnapshot__totalMembershipsWithUnits
@@ -1141,22 +953,15 @@ enum AccountTokenSnapshotLog_orderBy {
   accountTokenSnapshot__totalGDADeposit
   accountTokenSnapshot__totalNetFlowRate
   accountTokenSnapshot__totalCFANetFlowRate
-  accountTokenSnapshot__totalGDANetFlowRate
   accountTokenSnapshot__totalInflowRate
-  accountTokenSnapshot__totalCFAInflowRate
-  accountTokenSnapshot__totalGDAInflowRate
   accountTokenSnapshot__totalOutflowRate
   accountTokenSnapshot__totalCFAOutflowRate
   accountTokenSnapshot__totalGDAOutflowRate
   accountTokenSnapshot__totalAmountStreamedInUntilUpdatedAt
-  accountTokenSnapshot__totalCFAAmountStreamedInUntilUpdatedAt
-  accountTokenSnapshot__totalGDAAmountStreamedInUntilUpdatedAt
   accountTokenSnapshot__totalAmountStreamedOutUntilUpdatedAt
   accountTokenSnapshot__totalCFAAmountStreamedOutUntilUpdatedAt
-  accountTokenSnapshot__totalGDAAmountStreamedOutUntilUpdatedAt
   accountTokenSnapshot__totalAmountStreamedUntilUpdatedAt
   accountTokenSnapshot__totalCFAAmountStreamedUntilUpdatedAt
-  accountTokenSnapshot__totalGDAAmountStreamedUntilUpdatedAt
   accountTokenSnapshot__totalAmountTransferredUntilUpdatedAt
 }
 
@@ -1253,22 +1058,6 @@ input AccountTokenSnapshot_filter {
   activeIncomingStreamCount_lte: Int
   activeIncomingStreamCount_in: [Int!]
   activeIncomingStreamCount_not_in: [Int!]
-  activeCFAIncomingStreamCount: Int
-  activeCFAIncomingStreamCount_not: Int
-  activeCFAIncomingStreamCount_gt: Int
-  activeCFAIncomingStreamCount_lt: Int
-  activeCFAIncomingStreamCount_gte: Int
-  activeCFAIncomingStreamCount_lte: Int
-  activeCFAIncomingStreamCount_in: [Int!]
-  activeCFAIncomingStreamCount_not_in: [Int!]
-  activeGDAIncomingStreamCount: Int
-  activeGDAIncomingStreamCount_not: Int
-  activeGDAIncomingStreamCount_gt: Int
-  activeGDAIncomingStreamCount_lt: Int
-  activeGDAIncomingStreamCount_gte: Int
-  activeGDAIncomingStreamCount_lte: Int
-  activeGDAIncomingStreamCount_in: [Int!]
-  activeGDAIncomingStreamCount_not_in: [Int!]
   totalNumberOfClosedStreams: Int
   totalNumberOfClosedStreams_not: Int
   totalNumberOfClosedStreams_gt: Int
@@ -1325,22 +1114,6 @@ input AccountTokenSnapshot_filter {
   inactiveIncomingStreamCount_lte: Int
   inactiveIncomingStreamCount_in: [Int!]
   inactiveIncomingStreamCount_not_in: [Int!]
-  inactiveCFAIncomingStreamCount: Int
-  inactiveCFAIncomingStreamCount_not: Int
-  inactiveCFAIncomingStreamCount_gt: Int
-  inactiveCFAIncomingStreamCount_lt: Int
-  inactiveCFAIncomingStreamCount_gte: Int
-  inactiveCFAIncomingStreamCount_lte: Int
-  inactiveCFAIncomingStreamCount_in: [Int!]
-  inactiveCFAIncomingStreamCount_not_in: [Int!]
-  inactiveGDAIncomingStreamCount: Int
-  inactiveGDAIncomingStreamCount_not: Int
-  inactiveGDAIncomingStreamCount_gt: Int
-  inactiveGDAIncomingStreamCount_lt: Int
-  inactiveGDAIncomingStreamCount_gte: Int
-  inactiveGDAIncomingStreamCount_lte: Int
-  inactiveGDAIncomingStreamCount_in: [Int!]
-  inactiveGDAIncomingStreamCount_not_in: [Int!]
   totalSubscriptionsWithUnits: Int
   totalSubscriptionsWithUnits_not: Int
   totalSubscriptionsWithUnits_gt: Int
@@ -1421,14 +1194,6 @@ input AccountTokenSnapshot_filter {
   totalCFANetFlowRate_lte: BigInt
   totalCFANetFlowRate_in: [BigInt!]
   totalCFANetFlowRate_not_in: [BigInt!]
-  totalGDANetFlowRate: BigInt
-  totalGDANetFlowRate_not: BigInt
-  totalGDANetFlowRate_gt: BigInt
-  totalGDANetFlowRate_lt: BigInt
-  totalGDANetFlowRate_gte: BigInt
-  totalGDANetFlowRate_lte: BigInt
-  totalGDANetFlowRate_in: [BigInt!]
-  totalGDANetFlowRate_not_in: [BigInt!]
   totalInflowRate: BigInt
   totalInflowRate_not: BigInt
   totalInflowRate_gt: BigInt
@@ -1437,22 +1202,6 @@ input AccountTokenSnapshot_filter {
   totalInflowRate_lte: BigInt
   totalInflowRate_in: [BigInt!]
   totalInflowRate_not_in: [BigInt!]
-  totalCFAInflowRate: BigInt
-  totalCFAInflowRate_not: BigInt
-  totalCFAInflowRate_gt: BigInt
-  totalCFAInflowRate_lt: BigInt
-  totalCFAInflowRate_gte: BigInt
-  totalCFAInflowRate_lte: BigInt
-  totalCFAInflowRate_in: [BigInt!]
-  totalCFAInflowRate_not_in: [BigInt!]
-  totalGDAInflowRate: BigInt
-  totalGDAInflowRate_not: BigInt
-  totalGDAInflowRate_gt: BigInt
-  totalGDAInflowRate_lt: BigInt
-  totalGDAInflowRate_gte: BigInt
-  totalGDAInflowRate_lte: BigInt
-  totalGDAInflowRate_in: [BigInt!]
-  totalGDAInflowRate_not_in: [BigInt!]
   totalOutflowRate: BigInt
   totalOutflowRate_not: BigInt
   totalOutflowRate_gt: BigInt
@@ -1485,22 +1234,6 @@ input AccountTokenSnapshot_filter {
   totalAmountStreamedInUntilUpdatedAt_lte: BigInt
   totalAmountStreamedInUntilUpdatedAt_in: [BigInt!]
   totalAmountStreamedInUntilUpdatedAt_not_in: [BigInt!]
-  totalCFAAmountStreamedInUntilUpdatedAt: BigInt
-  totalCFAAmountStreamedInUntilUpdatedAt_not: BigInt
-  totalCFAAmountStreamedInUntilUpdatedAt_gt: BigInt
-  totalCFAAmountStreamedInUntilUpdatedAt_lt: BigInt
-  totalCFAAmountStreamedInUntilUpdatedAt_gte: BigInt
-  totalCFAAmountStreamedInUntilUpdatedAt_lte: BigInt
-  totalCFAAmountStreamedInUntilUpdatedAt_in: [BigInt!]
-  totalCFAAmountStreamedInUntilUpdatedAt_not_in: [BigInt!]
-  totalGDAAmountStreamedInUntilUpdatedAt: BigInt
-  totalGDAAmountStreamedInUntilUpdatedAt_not: BigInt
-  totalGDAAmountStreamedInUntilUpdatedAt_gt: BigInt
-  totalGDAAmountStreamedInUntilUpdatedAt_lt: BigInt
-  totalGDAAmountStreamedInUntilUpdatedAt_gte: BigInt
-  totalGDAAmountStreamedInUntilUpdatedAt_lte: BigInt
-  totalGDAAmountStreamedInUntilUpdatedAt_in: [BigInt!]
-  totalGDAAmountStreamedInUntilUpdatedAt_not_in: [BigInt!]
   totalAmountStreamedOutUntilUpdatedAt: BigInt
   totalAmountStreamedOutUntilUpdatedAt_not: BigInt
   totalAmountStreamedOutUntilUpdatedAt_gt: BigInt
@@ -1517,14 +1250,6 @@ input AccountTokenSnapshot_filter {
   totalCFAAmountStreamedOutUntilUpdatedAt_lte: BigInt
   totalCFAAmountStreamedOutUntilUpdatedAt_in: [BigInt!]
   totalCFAAmountStreamedOutUntilUpdatedAt_not_in: [BigInt!]
-  totalGDAAmountStreamedOutUntilUpdatedAt: BigInt
-  totalGDAAmountStreamedOutUntilUpdatedAt_not: BigInt
-  totalGDAAmountStreamedOutUntilUpdatedAt_gt: BigInt
-  totalGDAAmountStreamedOutUntilUpdatedAt_lt: BigInt
-  totalGDAAmountStreamedOutUntilUpdatedAt_gte: BigInt
-  totalGDAAmountStreamedOutUntilUpdatedAt_lte: BigInt
-  totalGDAAmountStreamedOutUntilUpdatedAt_in: [BigInt!]
-  totalGDAAmountStreamedOutUntilUpdatedAt_not_in: [BigInt!]
   totalAmountStreamedUntilUpdatedAt: BigInt
   totalAmountStreamedUntilUpdatedAt_not: BigInt
   totalAmountStreamedUntilUpdatedAt_gt: BigInt
@@ -1541,14 +1266,6 @@ input AccountTokenSnapshot_filter {
   totalCFAAmountStreamedUntilUpdatedAt_lte: BigInt
   totalCFAAmountStreamedUntilUpdatedAt_in: [BigInt!]
   totalCFAAmountStreamedUntilUpdatedAt_not_in: [BigInt!]
-  totalGDAAmountStreamedUntilUpdatedAt: BigInt
-  totalGDAAmountStreamedUntilUpdatedAt_not: BigInt
-  totalGDAAmountStreamedUntilUpdatedAt_gt: BigInt
-  totalGDAAmountStreamedUntilUpdatedAt_lt: BigInt
-  totalGDAAmountStreamedUntilUpdatedAt_gte: BigInt
-  totalGDAAmountStreamedUntilUpdatedAt_lte: BigInt
-  totalGDAAmountStreamedUntilUpdatedAt_in: [BigInt!]
-  totalGDAAmountStreamedUntilUpdatedAt_not_in: [BigInt!]
   totalAmountTransferredUntilUpdatedAt: BigInt
   totalAmountTransferredUntilUpdatedAt_not: BigInt
   totalAmountTransferredUntilUpdatedAt_gt: BigInt
@@ -1622,8 +1339,6 @@ enum AccountTokenSnapshot_orderBy {
   activeCFAOutgoingStreamCount
   activeGDAOutgoingStreamCount
   activeIncomingStreamCount
-  activeCFAIncomingStreamCount
-  activeGDAIncomingStreamCount
   totalNumberOfClosedStreams
   totalCFANumberOfClosedStreams
   totalGDANumberOfClosedStreams
@@ -1631,8 +1346,6 @@ enum AccountTokenSnapshot_orderBy {
   inactiveCFAOutgoingStreamCount
   inactiveGDAOutgoingStreamCount
   inactiveIncomingStreamCount
-  inactiveCFAIncomingStreamCount
-  inactiveGDAIncomingStreamCount
   totalSubscriptionsWithUnits
   totalApprovedSubscriptions
   totalMembershipsWithUnits
@@ -1643,22 +1356,15 @@ enum AccountTokenSnapshot_orderBy {
   totalGDADeposit
   totalNetFlowRate
   totalCFANetFlowRate
-  totalGDANetFlowRate
   totalInflowRate
-  totalCFAInflowRate
-  totalGDAInflowRate
   totalOutflowRate
   totalCFAOutflowRate
   totalGDAOutflowRate
   totalAmountStreamedInUntilUpdatedAt
-  totalCFAAmountStreamedInUntilUpdatedAt
-  totalGDAAmountStreamedInUntilUpdatedAt
   totalAmountStreamedOutUntilUpdatedAt
   totalCFAAmountStreamedOutUntilUpdatedAt
-  totalGDAAmountStreamedOutUntilUpdatedAt
   totalAmountStreamedUntilUpdatedAt
   totalCFAAmountStreamedUntilUpdatedAt
-  totalGDAAmountStreamedUntilUpdatedAt
   totalAmountTransferredUntilUpdatedAt
   account
   account__id
@@ -1764,6 +1470,11 @@ enum Account_orderBy {
   tokenUpgradedEvents
   tokenDowngradedEvents
   accountTokenSnapshots
+}
+
+enum Aggregation_interval {
+  hour
+  day
 }
 
 type AgreementClassRegisteredEvent implements Event {
@@ -5644,8 +5355,6 @@ enum FlowOperator_orderBy {
   accountTokenSnapshot__activeCFAOutgoingStreamCount
   accountTokenSnapshot__activeGDAOutgoingStreamCount
   accountTokenSnapshot__activeIncomingStreamCount
-  accountTokenSnapshot__activeCFAIncomingStreamCount
-  accountTokenSnapshot__activeGDAIncomingStreamCount
   accountTokenSnapshot__totalNumberOfClosedStreams
   accountTokenSnapshot__totalCFANumberOfClosedStreams
   accountTokenSnapshot__totalGDANumberOfClosedStreams
@@ -5653,8 +5362,6 @@ enum FlowOperator_orderBy {
   accountTokenSnapshot__inactiveCFAOutgoingStreamCount
   accountTokenSnapshot__inactiveGDAOutgoingStreamCount
   accountTokenSnapshot__inactiveIncomingStreamCount
-  accountTokenSnapshot__inactiveCFAIncomingStreamCount
-  accountTokenSnapshot__inactiveGDAIncomingStreamCount
   accountTokenSnapshot__totalSubscriptionsWithUnits
   accountTokenSnapshot__totalApprovedSubscriptions
   accountTokenSnapshot__totalMembershipsWithUnits
@@ -5665,22 +5372,15 @@ enum FlowOperator_orderBy {
   accountTokenSnapshot__totalGDADeposit
   accountTokenSnapshot__totalNetFlowRate
   accountTokenSnapshot__totalCFANetFlowRate
-  accountTokenSnapshot__totalGDANetFlowRate
   accountTokenSnapshot__totalInflowRate
-  accountTokenSnapshot__totalCFAInflowRate
-  accountTokenSnapshot__totalGDAInflowRate
   accountTokenSnapshot__totalOutflowRate
   accountTokenSnapshot__totalCFAOutflowRate
   accountTokenSnapshot__totalGDAOutflowRate
   accountTokenSnapshot__totalAmountStreamedInUntilUpdatedAt
-  accountTokenSnapshot__totalCFAAmountStreamedInUntilUpdatedAt
-  accountTokenSnapshot__totalGDAAmountStreamedInUntilUpdatedAt
   accountTokenSnapshot__totalAmountStreamedOutUntilUpdatedAt
   accountTokenSnapshot__totalCFAAmountStreamedOutUntilUpdatedAt
-  accountTokenSnapshot__totalGDAAmountStreamedOutUntilUpdatedAt
   accountTokenSnapshot__totalAmountStreamedUntilUpdatedAt
   accountTokenSnapshot__totalCFAAmountStreamedUntilUpdatedAt
-  accountTokenSnapshot__totalGDAAmountStreamedUntilUpdatedAt
   accountTokenSnapshot__totalAmountTransferredUntilUpdatedAt
   flowOperatorUpdatedEvents
 }
@@ -13481,6 +13181,10 @@ type SFMeta {
   The branch the current deployment is coming from.
   """
   branch: String!
+  """
+  The subgraph package.json semver version of the current deployment.
+  """
+  packageVersion: String!
 }
 
 input SFMeta_filter {
@@ -13548,6 +13252,26 @@ input SFMeta_filter {
   branch_ends_with_nocase: String
   branch_not_ends_with: String
   branch_not_ends_with_nocase: String
+  packageVersion: String
+  packageVersion_not: String
+  packageVersion_gt: String
+  packageVersion_lt: String
+  packageVersion_gte: String
+  packageVersion_lte: String
+  packageVersion_in: [String!]
+  packageVersion_not_in: [String!]
+  packageVersion_contains: String
+  packageVersion_contains_nocase: String
+  packageVersion_not_contains: String
+  packageVersion_not_contains_nocase: String
+  packageVersion_starts_with: String
+  packageVersion_starts_with_nocase: String
+  packageVersion_not_starts_with: String
+  packageVersion_not_starts_with_nocase: String
+  packageVersion_ends_with: String
+  packageVersion_ends_with_nocase: String
+  packageVersion_not_ends_with: String
+  packageVersion_not_ends_with_nocase: String
   """
   Filter for the block changed event.
   """
@@ -13562,6 +13286,7 @@ enum SFMeta_orderBy {
   blockNumber
   configuration
   branch
+  packageVersion
 }
 
 type SentEvent implements Event {
@@ -18686,10 +18411,6 @@ type TokenStatistic {
   """
   totalCFAAmountStreamedUntilUpdatedAt: BigInt!
   """
-  The all-time total amount streamed (outflows) until the `updatedAtTimestamp`/`updatedAtBlock` for the GDA.
-  """
-  totalGDAAmountStreamedUntilUpdatedAt: BigInt!
-  """
   The all-time total amount transferred until the `updatedAtTimestamp`/`updatedAtBlock`.
   """
   totalAmountTransferredUntilUpdatedAt: BigInt!
@@ -18818,10 +18539,6 @@ type TokenStatisticLog {
   The all-time total amount of `token` streamed (outflows) until the `timestamp`/`block` for the CFA.
   """
   totalCFAAmountStreamed: BigInt!
-  """
-  The all-time total amount of `token` streamed (outflows) until the `timestamp`/`block` for the GDA.
-  """
-  totalGDAAmountStreamed: BigInt!
   """
   The all-time total amount of `token` transferred until the `timestamp`/`block`.
   """
@@ -19093,14 +18810,6 @@ input TokenStatisticLog_filter {
   totalCFAAmountStreamed_lte: BigInt
   totalCFAAmountStreamed_in: [BigInt!]
   totalCFAAmountStreamed_not_in: [BigInt!]
-  totalGDAAmountStreamed: BigInt
-  totalGDAAmountStreamed_not: BigInt
-  totalGDAAmountStreamed_gt: BigInt
-  totalGDAAmountStreamed_lt: BigInt
-  totalGDAAmountStreamed_gte: BigInt
-  totalGDAAmountStreamed_lte: BigInt
-  totalGDAAmountStreamed_in: [BigInt!]
-  totalGDAAmountStreamed_not_in: [BigInt!]
   totalAmountTransferred: BigInt
   totalAmountTransferred_not: BigInt
   totalAmountTransferred_gt: BigInt
@@ -19221,7 +18930,6 @@ enum TokenStatisticLog_orderBy {
   totalGDAOutflowRate
   totalAmountStreamed
   totalCFAAmountStreamed
-  totalGDAAmountStreamed
   totalAmountTransferred
   totalAmountDistributed
   totalSupply
@@ -19264,7 +18972,6 @@ enum TokenStatisticLog_orderBy {
   tokenStatistic__totalGDAOutflowRate
   tokenStatistic__totalAmountStreamedUntilUpdatedAt
   tokenStatistic__totalCFAAmountStreamedUntilUpdatedAt
-  tokenStatistic__totalGDAAmountStreamedUntilUpdatedAt
   tokenStatistic__totalAmountTransferredUntilUpdatedAt
   tokenStatistic__totalAmountDistributedUntilUpdatedAt
   tokenStatistic__totalSupply
@@ -19473,14 +19180,6 @@ input TokenStatistic_filter {
   totalCFAAmountStreamedUntilUpdatedAt_lte: BigInt
   totalCFAAmountStreamedUntilUpdatedAt_in: [BigInt!]
   totalCFAAmountStreamedUntilUpdatedAt_not_in: [BigInt!]
-  totalGDAAmountStreamedUntilUpdatedAt: BigInt
-  totalGDAAmountStreamedUntilUpdatedAt_not: BigInt
-  totalGDAAmountStreamedUntilUpdatedAt_gt: BigInt
-  totalGDAAmountStreamedUntilUpdatedAt_lt: BigInt
-  totalGDAAmountStreamedUntilUpdatedAt_gte: BigInt
-  totalGDAAmountStreamedUntilUpdatedAt_lte: BigInt
-  totalGDAAmountStreamedUntilUpdatedAt_in: [BigInt!]
-  totalGDAAmountStreamedUntilUpdatedAt_not_in: [BigInt!]
   totalAmountTransferredUntilUpdatedAt: BigInt
   totalAmountTransferredUntilUpdatedAt_not: BigInt
   totalAmountTransferredUntilUpdatedAt_gt: BigInt
@@ -19577,7 +19276,6 @@ enum TokenStatistic_orderBy {
   totalGDAOutflowRate
   totalAmountStreamedUntilUpdatedAt
   totalCFAAmountStreamedUntilUpdatedAt
-  totalGDAAmountStreamedUntilUpdatedAt
   totalAmountTransferredUntilUpdatedAt
   totalAmountDistributedUntilUpdatedAt
   totalSupply

@@ -54,9 +54,9 @@ export const PoolMemberPageContent: FC<{
   const poolQuery = sfGdaSubgraph.usePoolQuery(
     poolMember
       ? {
-          chainId: network.chainId,
-          id: poolMember.pool
-        }
+        chainId: network.chainId,
+        id: poolMember.pool
+      }
       : skipToken
   )
 
@@ -69,6 +69,15 @@ export const PoolMemberPageContent: FC<{
       take: 10
     })
   )
+
+  console.log({
+    poolMemberId,
+    poolMember,
+    pool,
+    network
+    // poolId: poolMember.pool
+  })
+
   const [
     poolMemberUnitsUpdatedEventPagingOrdering,
     setPoolMemberUnitsUpdatedEventOrdering
@@ -190,7 +199,7 @@ export const PoolMemberPageContent: FC<{
                             members.{' '}
                             <AppLink
                               data-cy={'admin-tooltip-link'}
-                              href="https://docs.superfluid.finance/superfluid/protocol-overview/in-depth-overview/super-agreements/streaming-distributions-coming-soon"
+                              href="https://docs.superfluid.finance/docs/category/distributions"
                               target="_blank"
                             >
                               Read more
@@ -201,11 +210,8 @@ export const PoolMemberPageContent: FC<{
                     </>
                   }
                   primary={
-                    poolMember ? (
-                      <AccountAddress
-                        network={network}
-                        address={poolMember.admin}
-                      />
+                    pool ? (
+                      <AccountAddress network={network} address={pool.admin} />
                     ) : (
                       <SkeletonAddress />
                     )
@@ -389,7 +395,7 @@ export const PoolMemberPageContent: FC<{
                 members for a given pool using the Superfluid GDA.{' '}
                 <AppLink
                   data-cy={'flow-distributions-tooltip-link'}
-                  href="https://docs.superfluid.finance/superfluid/protocol-overview/in-depth-overview/super-agreements/streaming-distributions-coming-soon"
+                  href="https://docs.superfluid.finance/docs/category/distributions"
                   target="_blank"
                 >
                   Read more
@@ -419,7 +425,7 @@ export const PoolMemberPageContent: FC<{
                       pool of members for a given pool using the Superfluid GDA.{" "}
                       <AppLink
                         data-cy={"distributions-tooltip-link"}
-                        href="https://docs.superfluid.finance/superfluid/protocol-overview/in-depth-overview/super-agreements/streaming-distributions-coming-soon#gda-examples-by-illustration"
+                        href="https://docs.superfluid.finance/docs/category/distributions"
                         target="_blank"
                       >
                         Read more

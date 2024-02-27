@@ -2,9 +2,9 @@ import { Pagination } from '@mui/material'
 import {
   DataGrid,
   DataGridProps,
+  gridClasses,
   GridColumns,
-  GridRowsProp
-} from '@mui/x-data-grid'
+  GridRowsProp} from '@mui/x-data-grid'
 import {
   ILightEntity,
   Ordering,
@@ -70,7 +70,16 @@ export const AppDataGrid: FC<Props> = ({
               orderDirection: sortModel[0].sort! // TODO(KK): Forbidden
             }
           : undefined
-      )
+      ),
+    sx: {
+      [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]: {
+        outline: 'none'
+      },
+      [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
+        {
+          outline: 'none'
+        }
+    }
   }
 
   const finalDataGridProps = _.merge(defaultDataGridProps, dataGridProps)

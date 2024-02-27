@@ -25,15 +25,10 @@ import set from 'lodash/fp/set'
 import isEqual from 'lodash/isEqual'
 import { FC, FormEvent, useEffect, useRef, useState } from 'react'
 
-import { AccountAddressFormatted } from '../../../components/Address/AccountAddressFormatted'
-import FlowingBalanceWithToken from '../../../components/Amount/FlowingBalanceWithToken'
 import AppLink from '../../../components/AppLink/AppLink'
-import DetailsButton from '../../../components/Details/DetailsButton'
 import InfoTooltipBtn from '../../../components/Info/InfoTooltipBtn'
-import { PoolPercentage } from '../../../components/PoolPercentage/PoolPercentage'
 import InfinitePagination from '../../../components/Table/InfinitePagination'
 import TableLoader from '../../../components/Table/TableLoader'
-import TimeAgo from '../../../components/TimeAgo/TimeAgo'
 import useDebounce from '../../../hooks/useDebounce'
 import { Network } from '../../../redux/networks'
 import { sfGdaSubgraph } from '../../../redux/store'
@@ -42,9 +37,8 @@ import {
   PoolMember_OrderBy
 } from '../../../subgraphs/gda/.graphclient'
 import { PoolMembersQuery } from '../../../subgraphs/gda/endpoints/entityArgs'
-import { PoolMemberDetailsDialog } from '../pool-members/PoolMemberDetails'
-import { PoolMemberTotalAmountReceived } from '../pool-members/PoolMemberTotalAmountReceived'
 import { UnitsStatus } from './AccountPoolAdminsTable'
+import { AccountPoolMemberRow } from './AccountPoolMemberRow'
 
 enum MemberStatus {
   IsConnected,
@@ -287,7 +281,7 @@ const AccountPoolMembersTable: FC<AccountPoolMembersTableProps> = ({
                 they own in and pool.{' '}
                 <AppLink
                   data-cy={'members-tooltip-link'}
-                  href="https://docs.superfluid.finance/superfluid/protocol-overview/in-depth-overview/super-agreements/streaming-distributions-coming-soon"
+                  href="https://docs.superfluid.finance/docs/category/distributions"
                   target="_blank"
                 >
                   Read more
@@ -476,7 +470,7 @@ const AccountPoolMembersTable: FC<AccountPoolMembersTableProps> = ({
                     pool of members and flow/distribute funds to members.{' '}
                     <AppLink
                       data-cy="gda-admin-tooltip-link"
-                      href="https://docs.superfluid.finance/superfluid/protocol-overview/in-depth-overview/super-agreements/streaming-distributions-coming-soon"
+                      href="https://docs.superfluid.finance/docs/category/distributions"
                       target="_blank"
                     >
                       Read more
@@ -519,19 +513,6 @@ const AccountPoolMembersTable: FC<AccountPoolMembersTableProps> = ({
                 />
               </TableSortLabel>
             </TableCell>
-            {/* <TableCell>
-              <TableSortLabel
-                active={order?.orderBy === 'totalAmountClaimed'}
-                direction={
-                  order?.orderBy === 'totalAmountClaimed'
-                    ? order?.orderDirection
-                    : 'desc'
-                }
-                onClick={onSortClicked('totalAmountClaimed')}
-              >
-                Amount Claimed
-              </TableSortLabel>
-            </TableCell> */}
             <TableCell>
               <TableSortLabel
                 active={order?.orderBy === 'units'}
@@ -561,74 +542,11 @@ const AccountPoolMembersTable: FC<AccountPoolMembersTableProps> = ({
         </TableHead>
         <TableBody data-cy="pool-members-table">
           {tableRows.map((member) => (
-            <TableRow key={member.id} hover>
-              <TableCell data-cy={'pool-id'} className="address">
-                <AccountAddressFormatted
-                  network={network}
-                  address={member.pool}
-                  ellipsis={6}
-                />
-              </TableCell>
-
-              <TableCell data-cy={'amount-received'}>
-                <PoolMemberTotalAmountReceived
-                  member={member}
-                  pool={{
-                    flowRate: member.pool_flowRate,
-                    totalAmountDistributedUntilUpdatedAt:
-                      member.pool_totalAmountDistributedUntilUpdatedAt,
-                    totalUnits: member.pool_totalUnits,
-                    updatedAtTimestamp: member.pool_updatedAtTimestamp
-                  }}
-                >
-                  {({
-                    memberCurrentTotalAmountReceived,
-                    timestamp,
-                    memberFlowRate
-                  }) => (
-                    <FlowingBalanceWithToken
-                      balance={memberCurrentTotalAmountReceived}
-                      balanceTimestamp={timestamp}
-                      flowRate={memberFlowRate}
-                      TokenChipProps={{
-                        network: network,
-                        tokenAddress: member.token
-                      }}
-                    />
-                  )}
-                </PoolMemberTotalAmountReceived>
-              </TableCell>
-
-              <TableCell data-cy={'connected-status'}>
-                {member.isConnected ? 'Yes' : 'No'}
-              </TableCell>
-              {/* <TableCell data-cy={'amount-claimed'}>
-                <BalanceWithToken
-                  network={network}
-                  tokenAddress={member.token}
-                  wei={BigNumber.from(member.totalAmountClaimed)}
-                />
-              </TableCell> */}
-              <TableCell data-cy={'member-units'}>
-                <PoolPercentage
-                  totalUnits={member.pool_totalUnits}
-                  individualUnits={member.units}
-                />
-              </TableCell>
-
-              <TableCell>
-                <TimeAgo subgraphTime={member.updatedAtTimestamp} />
-              </TableCell>
-
-              <TableCell align="right">
-                <PoolMemberDetailsDialog
-                  network={network}
-                  poolMemberId={member.id.toString()}
-                >
-                  {(onClick) => <DetailsButton onClick={onClick} />}
-                </PoolMemberDetailsDialog>
-              </TableCell>
-            </TableRow>
+            <AccountPoolMemberRow
+              network={network}
+              member={member}
+              key={member.id}
+            />
           ))}
 
           {queryResult.isSuccess && tableRows.length === 0 && (
