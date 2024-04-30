@@ -24,7 +24,7 @@ const getMetadata = memoize((chainId: number) => {
 
 const getRpcUrl = (chainId: number) => {
   const metadata = getMetadata(chainId)
-  return `https://rpc-endpoints.superfluid.dev/${metadata.name}`
+    return `https://rpc-endpoints.superfluid.dev/${metadata.name}`
 }
 
 const getSubgraphUrl = (chainId: number) => {
@@ -157,6 +157,19 @@ export const networks = [
       `https://basescan.org/address/${address}`
   },
   {
+    isTestnet: false,
+    supportsGDA: getSupportsGDA(666666666),
+    chainId: 666666666,
+    slugName: 'degen',
+    displayName: 'Degen Chain',
+    rpcUrl: getRpcUrl(666666666),
+    subgraphUrl: getSubgraphUrl(666666666),
+    getLinkForTransaction: (txHash: string): string =>
+      `https://explorer.degen.tips/tx/${txHash}`,
+    getLinkForAddress: (address: string): string =>
+      `https://explorer.degen.tips/address/${address}`
+  },
+  {
     displayName: 'Scroll',
     isTestnet: false,
     supportsGDA: getSupportsGDA(534352),
@@ -221,7 +234,7 @@ export const networks = [
       `https://sepolia.scrollscan.com/tx/${txHash}`,
     getLinkForAddress: (address: string): string =>
       `https://sepolia.scrollscan.com/address/${address}`
-  }
+  },
 ] as const
 
 export type ChainId = (typeof networks)[number]['chainId']
