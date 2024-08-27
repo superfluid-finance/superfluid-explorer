@@ -4035,6 +4035,11 @@
   resolved "https://registry.yarnpkg.com/@superfluid-finance/metadata/-/metadata-1.4.0.tgz#0a6839d3e281d11fcfefc745adebee852ca13b43"
   integrity sha512-SvzYzisFo6T4GGfginjowUpoGn0RXoLS+vbroQhVSDst8zf5f4/noJ/Z2rPboMUnQLbqN13BGk6d1zxsFpv5Zw==
 
+"@superfluid-finance/metadata@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@superfluid-finance/metadata/-/metadata-1.4.1.tgz#79c1448ae99ab430996f6e768039b5dc0b005eb2"
+  integrity sha512-5CXnKQfOXj8w/PoK26VpMNgKxc6sRgPtsWfXVEYOYPIdEiTdXVUETqBUTZn8Nkeeeq/U3S2VpUNEnzOK5IDV6Q==
+
 "@superfluid-finance/sdk-core@^0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@superfluid-finance/sdk-core/-/sdk-core-0.8.0.tgz#c4d6c11e56a4fe328f085b3b88a453ee6be2de07"
