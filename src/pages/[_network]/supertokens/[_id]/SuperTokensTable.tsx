@@ -30,7 +30,7 @@ import { TokensQuery } from '@superfluid-finance/sdk-redux'
 import isEqual from 'lodash/fp/isEqual'
 import omit from 'lodash/fp/omit'
 import set from 'lodash/fp/set'
-import { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, FC, FormEvent, useEffect, useMemo, useRef, useState } from 'react'
 
 import AppLink from '../../../../components/AppLink/AppLink'
 import InfoTooltipBtn from '../../../../components/Info/InfoTooltipBtn'
@@ -40,6 +40,7 @@ import TableLoader from '../../../../components/Table/TableLoader'
 import useDebounce from '../../../../hooks/useDebounce'
 import { Network } from '../../../../redux/networks'
 import { sfSubgraph } from '../../../../redux/store'
+import { findTokenFromTokenList } from '../../../../hooks/useTokenQuery'
 
 export enum ListedStatus {
   Listed,
@@ -81,7 +82,19 @@ const SuperTokensTable: FC<SuperTokensTableProps> = ({ network }) => {
   const [queryArg, setQueryArg] =
     useState<RequiredTokensQuery>(createDefaultArg())
 
-  const [queryTrigger, queryResult] = sfSubgraph.useLazyTokensQuery()
+  const [queryTrigger, queriedTokens] = sfSubgraph.useLazyTokensQuery()
+
+  const tokens = useMemo(() => (queriedTokens.data?.items || []).map(token => {
+    const tokenFromTokenList = findTokenFromTokenList({
+      chainId: network.chainId,
+      address: token.id
+    })
+    return {
+      ...token,
+      symbol: tokenFromTokenList?.symbol ?? token.symbol,
+      name: tokenFromTokenList?.name ?? token.name
+    }
+  }), [queriedTokens.data?.items]);
 
   const queryTriggerDebounced = useDebounce(queryTrigger, 250)
 
@@ -89,8 +102,8 @@ const SuperTokensTable: FC<SuperTokensTableProps> = ({ network }) => {
     setQueryArg(newArgs)
 
     if (
-      queryResult.originalArgs &&
-      !isEqual(queryResult.originalArgs.filter, newArgs.filter)
+      queriedTokens.originalArgs &&
+      !isEqual(queriedTokens.originalArgs.filter, newArgs.filter)
     ) {
       queryTriggerDebounced(newArgs, true)
     } else {
@@ -205,14 +218,12 @@ const SuperTokensTable: FC<SuperTokensTableProps> = ({ network }) => {
     closeFilter()
   }
 
-  const hasNextPage = !!queryResult.data?.nextPaging
-
-  const tokens = queryResult.data?.data || []
+  const hasNextPage = !!queriedTokens.data?.nextPaging
 
   const { filter, order, pagination } = queryArg
 
   const { skip = defaultPaging.skip, take = defaultPaging.take } =
-    queryResult.data?.paging || {}
+    queriedTokens.data?.paging || {}
 
   return (
     <>
@@ -450,7 +461,7 @@ const SuperTokensTable: FC<SuperTokensTableProps> = ({ network }) => {
             </TableRow>
           ))}
 
-          {queryResult.isSuccess && tokens.length === 0 && (
+          {queriedTokens.isSuccess && tokens.length === 0 && (
             <TableRow>
               <TableCell
                 colSpan={3}
@@ -463,7 +474,7 @@ const SuperTokensTable: FC<SuperTokensTableProps> = ({ network }) => {
           )}
 
           <TableLoader
-            isLoading={queryResult.isLoading || queryResult.isFetching}
+            isLoading={queriedTokens.isLoading || queriedTokens.isFetching}
             showSpacer={tokens.length === 0}
           />
         </TableBody>
@@ -475,7 +486,7 @@ const SuperTokensTable: FC<SuperTokensTableProps> = ({ network }) => {
                 <InfinitePagination
                   page={skip / take + 1}
                   pageSize={pagination.take}
-                  isLoading={queryResult.isFetching}
+                  isLoading={queriedTokens.isFetching}
                   hasNext={hasNextPage}
                   onPageChange={setPage}
                   onPageSizeChange={setPageSize}
